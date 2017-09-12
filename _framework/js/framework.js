@@ -532,6 +532,9 @@ $(document).ready(function() {
 			overflowBehavior : { y : 'hidden' } 
 		})
 		_mainScrollElement.options({ 
+			nativeScrollbarsOverlaid : {
+				initialize : false
+			},
 			callbacks : { 
 				onScroll : function() { 
 					updateContentNavigation();
