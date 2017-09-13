@@ -24,28 +24,34 @@ $(document).ready(function() {
 	var _hasherPrepareHash = '!';
 	var _hasherSeparator = '/';
 	var _nav;
+	var _window;
 	var _header;
 	var _content;
 	var _footer;
 	var _loading;
 	var _loadingTimeoutId;
 	var _mainNavigationItems;
-	var _mainScrollElement = $('body').overlayScrollbars({ }).overlayScrollbars();
 	var _fourZeroFourPath = '../_framework/html/404' + _htmlExtension;
 	var _fourZeroFourFaces = [ 
 		" ಠ_ಠ ", "(＃｀д´)ﾉ", "ლ(ಠ_ಠლ)", "(；￣Д￣）", "¯\\_(ツ)_/¯", "ᕕ( ͡° ͜ʖ ͡° )ᕗ", "(☞ﾟヮﾟ)☞    ☜(ﾟヮﾟ☜)", "͡° ͜ʖ ͡°", "ヽ( ಠ益ಠ )ﾉ", " (╯°□°）╯︵ ┻━┻", "(ಠ_ಠ)",
 		"(`･Д･)ノ=☆", "★≡≡＼（`△´＼）", "（◞‸◟）", "(／‵Д′)／~ ╧╧", "┻━┻ ︵﻿ ¯\\_༼ᴼل͜ᴼ༽_/¯ ︵ ┻━┻", "¯\\_(⊙_ʖ⊙)_/¯", "┐(´～｀)┌", "乁( ⁰͡  Ĺ̯ ⁰͡ ) ㄏ", "(；・∀・)", "(^◇^；)"
 	];
-	
+	var _mainScrollElement = $('body').overlayScrollbars({
+		nativeScrollbarsOverlaid : {
+			initialize : false
+		}
+	}).overlayScrollbars();
 	
 	function showLoading() {
-		_mainScrollElement.sleep(); //put to sleep
+		if(_mainScrollElement)
+			_mainScrollElement.sleep(); //put to sleep
 		_loading.addClass(_strActive);
 		_content.css('opacity', 0); 
 	}
 	
 	function hideLoading() {
-		_mainScrollElement.update(); //wakeup from sleeping
+		if(_mainScrollElement)
+			_mainScrollElement.update(); //wakeup from sleeping
 		_nav.overlayScrollbars().options('overflowBehavior.x', 'scroll');
 		_nav.overlayScrollbars().update(true); //FF fix for fixed elements.
 		if(!_header.hasClass('shrinked')) {
@@ -53,6 +59,28 @@ $(document).ready(function() {
 		}
 		_loading.removeClass(_strActive);
 		_content.css('opacity', 1); 
+	}
+	
+	function setBodyScrollbars() {
+		if(_mainScrollElement) {
+			_mainScrollElement.options({
+				callbacks : { 
+					onScroll : function() { 
+						updateContentNavigation();
+					},
+					onHostSizeChanged : function() {
+						updateContentNavigation();
+					},
+					onContentSizeChanged : function() {
+						updateContentNavigation();
+					}
+				}
+			});
+		}
+		else {
+			_window.off('scroll', updateContentNavigation).on('scroll', updateContentNavigation);
+			_window.off('resize', updateContentNavigation).on('resize', updateContentNavigation);
+		}
 	}
 	
 	function onHashChange(newHash, oldHash){
@@ -112,7 +140,10 @@ $(document).ready(function() {
 				}
 				
 				//scroll To top:
-				_mainScrollElement.scroll({ y : 0 });
+				if(_mainScrollElement)
+					_mainScrollElement.scroll({ y : 0 });
+				else
+					_window.scrollTop(0);
 			});
 		}
 		else
@@ -355,7 +386,10 @@ $(document).ready(function() {
 			var action = function() {
 				target.stop().fadeIn(_tabsFadeDuration).addClass(_strActive);
 				if(doScroll) {
-					_mainScrollElement.scroll({ y : 0 });
+					if(_mainScrollElement)
+						_mainScrollElement.scroll({ y : 0 });
+					else
+						_window.scrollTop(0);
 				}
 			};
 			if(currActive.length === 0)
@@ -456,7 +490,7 @@ $(document).ready(function() {
 		var viewportHeight = $(window).height();
 		var contentNavHeight = contentNav.height();
 		var contentNavWrapperHeight = _content.height();
-		var scrollTop = _mainScrollElement.scroll().y.position;
+		var scrollTop = _mainScrollElement ? _mainScrollElement.scroll().y.position : _window.scrollTop();
 		var navHeight = _nav.height();;
 		var maxHeight = Math.min(viewportHeight - navHeight, contentNavWrapperHeight - scrollTop);
 		
@@ -505,11 +539,13 @@ $(document).ready(function() {
 		_finalConfig = $.extend(true, { }, _defaultConfig, config);
 		_defaultHash = _finalConfig.defaultHash;
 		_mainNavigationItems = $('[' + _dataAttrNavigation + ']');
+		_window = $(window);
 		_header = $('#header');
 		_nav = $('#navigation');
 		_content = $('#content');
 		_footer = $('#footer');
 		_loading = $('#loading');
+		
 		
 		//setup hasher
 		hasher.prependHash = _hasherPrepareHash;
@@ -530,23 +566,8 @@ $(document).ready(function() {
 		_nav.overlayScrollbars({ 
 			className : 'os-theme-light',
 			overflowBehavior : { y : 'hidden' } 
-		})
-		_mainScrollElement.options({ 
-			nativeScrollbarsOverlaid : {
-				initialize : false
-			},
-			callbacks : { 
-				onScroll : function() { 
-					updateContentNavigation();
-				},
-				onHostSizeChanged : function() {
-					updateContentNavigation();
-				},
-				onContentSizeChanged : function() {
-					updateContentNavigation();
-				}
-			}
 		});
+		setBodyScrollbars();
 	};
 	
 	window._framework = _base;	
