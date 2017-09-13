@@ -17,17 +17,17 @@ html.os-html,
 html.os-html > .os-host {
     display: block;
     box-sizing: border-box;
-    overflow: visible !important;
+    overflow: hidden;
     height: 100% !important;
     width: 100% !important;
     min-width: 100% !important;
     min-height: 100% !important;
     margin: 0 !important;
-    position: fixed !important;
+    position: absolute !important;
     /* could be position: fixed; but it causes issues on iOS (-webkit-overflow-scrolling: touch) */
 }
 html.os-html > .os-host > .os-padding {
-    position: fixed;
+    position: absolute;
     /* could be position: fixed; but it causes issues on iOS (-webkit-overflow-scrolling: touch) */
 }
 body.os-dragging,
