@@ -23,11 +23,11 @@ html.os-html > .os-host {
     min-width: 100% !important;
     min-height: 100% !important;
     margin: 0 !important;
-    position: absolute !important;
+    position: fixed !important;
     /* could be position: fixed; but it causes issues on iOS (-webkit-overflow-scrolling: touch) */
 }
 html.os-html > .os-host > .os-padding {
-    position: absolute;
+    position: fixed;
     /* could be position: fixed; but it causes issues on iOS (-webkit-overflow-scrolling: touch) */
 }
 body.os-dragging,
