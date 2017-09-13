@@ -38,7 +38,7 @@ $(document).ready(function() {
 	];
 	var _mainScrollElement = $('body').overlayScrollbars({
 		nativeScrollbarsOverlaid : {
-			initialize : false
+			initialize : true
 		}
 	}).overlayScrollbars();
 	
