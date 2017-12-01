@@ -551,7 +551,7 @@ $(document).ready(function() {
 		hasher.prependHash = _hasherPrepareHash;
 		hasher.separator = _hasherSeparator;
 		if (hasher.getURL() === hasher.getBaseURL())
-			hasher.setHash(_defaultHash);
+			hasher.replaceHash(_defaultHash);
 		hasher.initialized.add(onHashChange); //parse initial hash
 		hasher.changed.add(onHashChange); //parse hash changes
 		hasher.init(); //start listening for hash changes
