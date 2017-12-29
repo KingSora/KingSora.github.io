@@ -29,7 +29,7 @@ basicDemoCodeMirror.on("change", function(obj) {
 				};
 				try {
 				window.eval("try { " +
-							"var options = $.extend(true, { }, window.overlayScrollbarsDefaultOptions(), " + basicDemoCodeMirror.getValue() + "); " + 
+							"var options = $.extend(true, { }, OverlayScrollbars.defaultOptions(), " + basicDemoCodeMirror.getValue() + "); " + 
 								"$('#basicdemo-options-codemirror-result-target').overlayScrollbars(options); " + 
 							"} catch(e) { " +
 								"$('#basicdemo-options-codemirror').addClass('codemirror-error'); " +
@@ -723,7 +723,7 @@ var gradientBot = $('<div id="theme-demo-plugin-four-graidient-bottom"></div>');
 var show = false;
 var onScrollCallback = function() {
 	var instance = this;
-	var host = instance.getElements().host;
+	var host = $(instance.getElements().host);
 	var scrollInfo = instance.scroll();
 	host.css({ 
 		//'background' : 'rgba(' + Math.min(Math.round(54 * scrollInfo.y.ratio), 255) + ', ' + Math.max((255 - Math.round(190 * scrollInfo.y.ratio)), Math.round(190 * scrollInfo.y.ratio)) + ', ' + Math.max(Math.round(253 * scrollInfo.y.ratio), 30) + ', ' + 1 + ')',
@@ -859,6 +859,10 @@ $('#scroll-demo-calc').on('click', function() {
 $('#scroll-demo-easing').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;
 	scrollDemoCodeMirror.getDoc().setValue('scroll({ x : "50%", y : "50%" }, 5000, "easeOutElastic");');
+});
+$('#scroll-demo-specialeasing').on('click', function() {
+	scrollCodeMirrorChangeTimeoutDelay = 0;
+	scrollDemoCodeMirror.getDoc().setValue('scroll("100%", 3300, [ "linear", "easeOutBounce" ]);');
 });
 $('#scroll-demo-elementwmargin').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;

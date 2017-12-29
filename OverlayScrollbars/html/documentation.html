@@ -20,10 +20,13 @@
 				<span>Supported Elements</span>
 			</div>
 			<div class="content-navigation-item content-navigation-item-info">
-				<span>jQuery:</span>
+				<span>Initialization:</span>
 			</div>
-			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="jquery-initialization" data-navigation="[1]initialization">
-				<span>initialization</span>
+            <div class="content-navigation-item content-navigation-item-clickable" data-tab-key="initialization-default" data-navigation="[1]initialization">
+				<span>Default</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="initialization-jquery" data-navigation="[1]initialization-jquery">
+				<span>jQuery</span>
 			</div>
 			<div class="content-navigation-item content-navigation-item-info">
 				<span>Instance Methods:</span>
@@ -1174,16 +1177,81 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 				If you need support for a yet unsupported element, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a>.
 			</div>
 		
-			<div id="jquery-initialization" data-tab-value="jquery-initialization">
-				<div class="content-navigation-main-caption">Initialization</div>
-				<div class="content-navigation-sub-caption">Basic initialization</div>
+            <div id="initialization-default" data-tab-value="initialization-default">
+				<div class="content-navigation-main-caption">Default initialization</div>
+				<div class="content-navigation-sub-caption">Single element</div>
+				<b class="txtc-primary-color">The initialization</b> of the plugin for a cerain element is very easy:
+				<div class="txtbox txtbox-red txtc-red">
+					<i class="mdi mdi-alert-circle-outline"></i>
+					<span><b>In order to initialize the plugin, you have to pass at least a empty object as second argument.</b></span>
+				</div>
+<pre><code class="js">//initializes the plugin to a single element and returns its instance
+var instance = OverlayScrollbars(document.getElementById(id), { /* your options */ }); 
+</code></pre>
+                The first argument is the element or the elements to which the plugin shall be initialized.
+				The second argument represents the options with which the plugin shall be initialized.<br>
+                If you initialize the plugin to a single element, this method will return the instance of the plugin.<br><br>
+				
+				You can get the <b class="txtc-primary-color">current instance</b> with the same method.
+				<div class="txtbox txtbox-red txtc-red">
+					<i class="mdi mdi-alert-circle-outline"></i>
+					<span><b>If you don't pass a object as second argument, the method returns the instance.</b></span>
+				</div>
+<pre><code class="js">//returns the plugin instance or undefined if the element has no instance
+var instance = OverlayScrollbars(document.getElementById(id));
+</code></pre><br>
+				If you have initialized the plugin and try to initialize it again, it will be handled as if you call the options method:
+				<pre><code class="js"> //initializes plugin
+OverlayScrollbars(document.getElementById(id), { }); 
+
+//... later
+//is the same as .options({ resize : "both" }) because the plugin is initialized already
+OverlayScrollbars(document.getElementById(id), { resize : "both" }); 
+</code></pre>
+				
+				<div class="content-navigation-sub-caption">Multiple elements</div>
+				The <b class="txtc-primary-color">initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
+<pre><code class="js">//initialize plugin with custom options on all div elements and return all instances as array
+var instances = OverlayScrollbars(document.querySelectorAll("div"), { }); 
+</code></pre>
+            <br>
+            If you need the <b class="txtc-primary-color">instances of multiple element</b> you can do it the same way as for a single element:
+<pre><code class="js">//get the instance information of all elements on your page and store it into a variable
+//the array can contain undefined entries
+var instances = OverlayScrollbars(document.querySelectorAll("*")); 
+
+for(var i = 0; i < instances.length; i++) {
+    //check for validity
+    if(instances[i] !== undefined) {
+        //do domething with the instance
+    }
+}
+</code></pre>
+			I've built-in a filtering possibility, if you want a array only with not undefined instances:
+			<div class="txtbox txtbox-orange txtc-orange">
+				<i class="mdi mdi-information-outline"></i>
+				<span><b>This will only work if the first argument returns multiple HTML elements.</b></span>
+			</div>
+<pre><code class="js">//returns a array with all instances which are not undefined
+var instances = OverlayScrollbars(document.querySelectorAll("*"), "!"); 
+
+for(var i = 0; i < instances.length; i++) {
+    //do something with the instance
+}
+</code></pre>
+			</div>
+		
+        
+			<div id="initialization-jquery" data-tab-value="initialization-jquery">
+				<div class="content-navigation-main-caption">jQuery initialization</div>
+				<div class="content-navigation-sub-caption">Single element</div>
 				<b class="txtc-primary-color">The initialization</b> of the plugin for a cerain element is very easy and it won't break the jQuery chain:
 				<div class="txtbox txtbox-red txtc-red">
 					<i class="mdi mdi-alert-circle-outline"></i>
 					<span><b>You have to pass at least a empty object in order to initialize the plugin.</b></span>
 				</div>
 <pre><code class="js">//initializes the plugin with empty options
-$(selector).overlayScrollbars({ /* your options */ }); 
+$(id).overlayScrollbars({ /* your options */ }); 
 </code></pre>
 				The object which is passed to this method represents the options with which the plugin shall be initialized.<br><br>
 				
@@ -1193,36 +1261,38 @@ $(selector).overlayScrollbars({ /* your options */ });
 					<span><b>If you don't pass a object the method returns the instance.</b></span>
 				</div>
 <pre><code class="js">//returns the plugin instance or undefined if the element has no instance
-$(selector).overlayScrollbars(); 
+var instance = $(id).overlayScrollbars(); 
 </code></pre><br>
 				Due to the fact that the initialization wont break the jQuery chain you can <b class="txtc-primary-color">initialize and store the instance</b> in just one line:
 <pre><code class="js"> //initializes plugin and stores the instance into a variable
-var instance = $(selector).overlayScrollbars({ }).overlayScrollbars();
+var instance = $(id).overlayScrollbars({ }).overlayScrollbars();
 </code></pre>
 				<br>
 				If you have initialized the plugin and try to initialize it again, it will be handled as if you call the options method:
 				<pre><code class="js"> //initializes plugin
-$(selector).overlayScrollbars({ });
+$(id).overlayScrollbars({ });
 
 //... later
-//is the same as .options({ className : 'both' }) because the plugin is initialized already
-$(selector).overlayScrollbars({ className : 'both' });
+//is the same as .options({ resize : "both" }) because the plugin is initialized already
+$(id).overlayScrollbars({ resize : "both" });
 </code></pre>
 				
 				<div class="content-navigation-sub-caption">Multiple elements</div>
-				The initialization for multiple element works like the initialization for a single element. The only difference is, that the method which shall return the instance of the element will now return a array of the instances of your elements.
-<pre><code class="js">//initialize plugin with custom options on all div elements
-$("div").overlayScrollbars({ resize : "both" }); 
-
-//get the instance information of all elements on your page and store it into a variable
-//the array can contain undefined entries since only div elements have a instance
+				The <b class="txtc-primary-color">initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
+<pre><code class="js">//initialize plugin with custom options on all div elements and return all instances as array
+var instances = $("div").overlayScrollbars({ }).overlayScrollbars(); 
+</code></pre>
+                <br>
+                If you need the <b class="txtc-primary-color">instances of multiple element</b> you can do it the same way as for a single element:
+<pre><code class="js">//get the instance information of all elements on your page and store it into a variable
+//the array can contain undefined entries
 var instances = $("*").overlayScrollbars();
 
 $.each(instances, function(index, instance) {
-	//check for validity
-	if(instance !== undefined) {
-		//do domething with the instance
-	}
+    //check for validity
+    if(instance !== undefined) {
+        //do domething with the instance
+    }
 });
 </code></pre>
 			I've built-in a filtering possibility, if you want a array only with not undefined instances:
@@ -1230,8 +1300,12 @@ $.each(instances, function(index, instance) {
 				<i class="mdi mdi-information-outline"></i>
 				<span><b>This will only work if the jQuery selectors targets more than one element.</b></span>
 			</div>
-			<pre><code class="js">//will return a array with all instances which are not undefined
+			<pre><code class="js">//returns a array with all instances which are not undefined
 var instances = $("*").overlayScrollbars("!");
+
+$.each(instances, function(index, instance) {
+    //do domething with the instance
+});
 </code></pre>
 			</div>
 		
@@ -1380,11 +1454,8 @@ instance.options("overflowBehavior.y", "hidden");
 						</div>
 						<div class="method-documentation-box-description-wrapper">
 							<span>example:</span>
-							<pre><code class="js">//initialize the plugin
-$(selector).overlayScrollbars({ });
-
-//get the instance of the plugin
-var instance = $(selector).overlayScrollbars();
+							<pre><code class="js">//initialize the plugin and get its instance
+var instance = OverlayScrollbars(document.getElementById(id), { });
 
 //put the instance to sleep
 instance.sleep();
@@ -1417,11 +1488,8 @@ instance.update();
 						Puts the instance to sleep. It wont respond to any changes in the DOM and won't update.
 						<div class="method-documentation-box-description-wrapper">
 							<span>example:</span>
-							<pre><code class="js">//initialize the plugin
-$(selector).overlayScrollbars({ });
-
-//get the instance of the plugin
-var instance = $(selector).overlayScrollbars();
+							<pre><code class="js">//initialize the plugin and get its instance
+var instance = OverlayScrollbars(document.getElementById(id), { });
 
 //put the instance to sleep
 instance.sleep();
@@ -1950,9 +2018,12 @@ instance.scroll({ y : "-= 50px"  });
 							</div>
 							<div class="method-documentation-box-description-param">
 								<p>easing</p>
-								<p>Type: string</p>
+								<p>Type: string || string[]</p>
 								<div>
-									The easing of the scroll-animation. If undefined the easing is "swing".
+									The easing of the scroll-animation.<br>
+                                    A single string represents the easing for both axis.<br>
+                                    If you pass a string array, the first entry is the easing for the x axis and the second entry is the easing for the y axis.<br>
+                                    If undefined the easing is "swing".
 								</div>
 							</div>
 							<div class="method-documentation-box-description-param">
@@ -1974,9 +2045,13 @@ instance.scroll({ x : "50%", y : "50%" }, 1000);
 //scroll to 0 on the x-axis and to 100% on the y-axis with a duration of 2500ms
 instance.scroll([ 0, "100%" ], 2500);
 
+//scroll to 50% on both axis with a duration of 5500ms
+//use a "linear" easing on the x axis and a "easeOutElastic" easing on the y axis
+instance.scroll("50%", 5500, [ "linear", "easeOutElastic" ]);
+
 //set the x-axis scroll-offset to 0 and add a calculatd value to the y-axis scroll-offset
 //with a duration of 1500ms
-//with a "easeOutElastic" easing
+//with a "easeOutElastic" easing for both axis
 instance.scroll({ x : 0, y : "+= 30% - 25px" }, 1500, "easeOutElastic");
 
 //scroll to the left top corner of the passed element
@@ -2078,22 +2153,22 @@ instance.scroll({ y : "100%" }, 1000);
 								<div>
 									Structure:
 									<pre><code class="js">{
-	target   : <span class="txtc-secondary-color">jQueryElement</span>,
-	host     : <span class="txtc-secondary-color">jQueryElement</span>,
-	padding  : <span class="txtc-secondary-color">jQueryElement</span>,
-	viewport : <span class="txtc-secondary-color">jQueryElement</span>,
-	content  : <span class="txtc-secondary-color">jQueryElement</span>,
+	target   : <span class="txtc-secondary-color">HTMLElement</span>,
+	host     : <span class="txtc-secondary-color">HTMLElement</span>,
+	padding  : <span class="txtc-secondary-color">HTMLElement</span>,
+	viewport : <span class="txtc-secondary-color">HTMLElement</span>,
+	content  : <span class="txtc-secondary-color">HTMLElement</span>,
 	scrollbarHorizontal : {
-		scrollbar : <span class="txtc-secondary-color">jQueryElement</span>,
-		track     : <span class="txtc-secondary-color">jQueryElement</span>,
-		handle    : <span class="txtc-secondary-color">jQueryElement</span>
+		scrollbar : <span class="txtc-secondary-color">HTMLElement</span>,
+		track     : <span class="txtc-secondary-color">HTMLElement</span>,
+		handle    : <span class="txtc-secondary-color">HTMLElement</span>
 	},
 	scrollbarVertical : {
-		scrollbar : <span class="txtc-secondary-color">jQueryElement</span>,
-		track     : <span class="txtc-secondary-color">jQueryElement</span>,
-		handle    : <span class="txtc-secondary-color">jQueryElement</span>
+		scrollbar : <span class="txtc-secondary-color">HTMLElement</span>,
+		track     : <span class="txtc-secondary-color">HTMLElement</span>,
+		handle    : <span class="txtc-secondary-color">HTMLElement</span>
 	},
-	scrollbarCorner : <span class="txtc-secondary-color">jQueryElement</span>
+	scrollbarCorner : <span class="txtc-secondary-color">HTMLElement</span>
 }</code></pre>
 									Description:
 									<div class="plainobjectproperty-documentation-box">
@@ -2485,17 +2560,14 @@ var contentScrollHeight  = instance.getState("contentScrollSize.height");
 						Destroys the current instance and resets the DOM of the target-element to the state before the initialization.
 						<div class="method-documentation-box-description-wrapper">
 							<span>example:</span>
-							<pre><code class="js">//initialize the plugin
-$(selector).overlayScrollbars({ });
-
-//get the instance of the plugin
-var instance = $(selector).overlayScrollbars();
+							<pre><code class="js">//initialize the plugin and get its instance
+var instance = OverlayScrollbars(document.getElementById(id), { });
 
 //destroy the instance
 instance.destroy();
 
 //try to get the instance of the plugin again, but it's undefined
-instance = $(selector).overlayScrollbars();
+instance = var instance = OverlayScrollbars(document.getElementById(id));
 </code></pre>
 						</div>
 					</div>
@@ -2503,13 +2575,13 @@ instance = $(selector).overlayScrollbars();
 			</div>
 		
 			<div id="global-defaultOptions" data-tab-value="global-defaultOptions">
-				<div class="content-navigation-main-caption">OverlayScrollbarsDefaultOptions Method</div>
+				<div class="content-navigation-main-caption">OverlayScrollbars.defaultOptions Method</div>
 				<div class="content-navigation-sub-caption">Description</div>
 				Returns or Sets the default options for each new plugin initialization.
 				<div class="content-navigation-sub-caption">Signatures</div>
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						.overlayScrollbarsDefaultOptions()
+						OverlayScrollbars.defaultOptions()
 					</div>
 					<div class="method-documentation-box-description">
 						Returns the default options object.
@@ -2525,7 +2597,7 @@ instance = $(selector).overlayScrollbars();
 						<div class="method-documentation-box-description-wrapper">
 							<span>examples:</span>
 							<pre><code class="js">//Gets the current defaultOptions
-var defaultOptions = window.overlayScrollbarsDefaultOptions();
+var defaultOptions = OverlayScrollbars.defaultOptions();
 </code></pre>
 						</div>
 					</div>
@@ -2533,7 +2605,7 @@ var defaultOptions = window.overlayScrollbarsDefaultOptions();
 				
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						.overlayScrollbarsDefaultOptions(<span>newDefaultOptions</span>)
+						OverlayScrollbars.defaultOptions(<span>newDefaultOptions</span>)
 					</div>
 					<div class="method-documentation-box-description">
 						Sets the default options via a plain object.
@@ -2551,9 +2623,9 @@ var defaultOptions = window.overlayScrollbarsDefaultOptions();
 						<div class="method-documentation-box-description-wrapper">
 							<span>examples:</span>
 							<pre><code class="js">//this instance has the default defaultOptions.
-$(selector).overlayScrollbars({ }).overlayScrollbars();
+OverlayScrollbars(document.getElementById(id), { });
 							
-window.overlayScrollbarsDefaultOptions({
+OverlayScrollbars.defaultOptions({
 	className : "my-custom-class",
 	resize    : "both"
 });
@@ -2562,7 +2634,7 @@ window.overlayScrollbarsDefaultOptions({
 //className = "my-custom-class"
 //resize = "both"
 //are set automatically even without custom options in the constructor
-$(otherSelector).overlayScrollbars({ }).overlayScrollbars();
+OverlayScrollbars(document.getElementById(otherId), { });
 </code></pre>
 						</div>
 					</div>
@@ -2570,13 +2642,13 @@ $(otherSelector).overlayScrollbars({ }).overlayScrollbars();
 			</div>
 		
 			<div id="global-getGlobals" data-tab-value="global-getGlobals">
-				<div class="content-navigation-main-caption">OverlayScrollbarsGlobals Method</div>
+				<div class="content-navigation-main-caption">OverlayScrollbars.globals Method</div>
 				<div class="content-navigation-sub-caption">Description</div>
 				Returns a plain object which contains global information about the plugin and each instance of it.
 				<div class="content-navigation-sub-caption">Signatures</div>
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						.overlayScrollbarsGlobals()
+						OverlayScrollbars.globals()
 					</div>
 					<div class="method-documentation-box-description">
 						Returns a object which contains global information about the plugin and each instance of it. <br>
@@ -2622,7 +2694,7 @@ $(otherSelector).overlayScrollbars({ }).overlayScrollbars();
 											defaultOptions
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											The default options for each new plugin initialization. This is object the same as the returned object from the <code class="code-inline js">window.overlayScrollbarsDefaultOptions()</code> function.
+											The default options for each new plugin initialization. This is object the same as the returned object from the <code class="code-inline js">OverlayScrollbars.defaultOptions()</code> function.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2776,7 +2848,7 @@ $(otherSelector).overlayScrollbars({ }).overlayScrollbars();
 						<div class="method-documentation-box-description-wrapper">
 							<span>examples:</span>
 							<pre><code class="js">//returns a object which represents global infromation about the plugin
-var globals = window.overlayScrollbarsGlobals();</code></pre>
+var globals = OverlayScrollbars.globals(();</code></pre>
 						</div>
 					
 					</div>
@@ -2800,7 +2872,7 @@ var globals = window.overlayScrollbarsGlobals();</code></pre>
 				<br>
 				Here is a quick demo of this theme:
 				<pre><code class="js">//initializes the plugin with "none" -theme
-$(selector).overlayScrollbars({ className : null }); 
+OverlayScrollbars(document.getElementById(id), { className : null });
 </code></pre>
 				<div id="builtinthemes-theme-demo-none" class="builtinthemes-theme-demo">
 					<div class="builtinthemes-theme-demo-content">
@@ -2820,7 +2892,7 @@ $(selector).overlayScrollbars({ className : null });
 				<br>
 				Here is a quick demo of this theme:
 				<pre><code class="js">//initializes the plugin with "dark" -theme
-$(selector).overlayScrollbars({ className : "os-theme-dark" }); 
+OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark" }); 
 </code></pre>
 				<div id="builtinthemes-theme-demo-dark" class="builtinthemes-theme-demo">
 					<div class="builtinthemes-theme-demo-content">
@@ -2840,7 +2912,7 @@ $(selector).overlayScrollbars({ className : "os-theme-dark" });
 				<br>
 				Here is a quick demo of this theme:
 				<pre><code class="js">//initializes the plugin with "light" -theme
-$(selector).overlayScrollbars({ className : "os-theme-light" }); 
+OverlayScrollbars(document.getElementById(id), { className : "os-theme-light" }); 
 </code></pre>
 				<div id="builtinthemes-theme-demo-light" class="builtinthemes-theme-demo">
 					<div class="builtinthemes-theme-demo-content">
@@ -2857,7 +2929,7 @@ $(selector).overlayScrollbars({ className : "os-theme-light" });
 				Now you can do something like that:
 				
 				<pre><code class="js">//initialize the plugin with custom classnames
-$(selector).overlayScrollbars({ className : "os-theme-dark os-theme-dark-edgy" });
+OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-theme-dark-edgy" });
 </code></pre>
 				After this command your host-element has the "dark" -theme applied but has also the class <code class="scss code-inline">.os-theme-dark-edgy</code>.<br>
 				Now you can define some additional style rules:

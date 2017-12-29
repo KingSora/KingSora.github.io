@@ -97,6 +97,7 @@
 					<li>Two different padding variants.</li>
 					<li>Ability to completely ignore the overflow of a specified axis.</li>
 					<li>Provides callbacks for any situation.</li>
+                    <li>You can use the plugin without any dependencies or with jQuery.</li>
 				</ul>
 			</div>
 		</div>
@@ -222,49 +223,93 @@
 				Implementation
 			</h3>
 			<div class="content-message-content">
-			
-				Download the Plugin and <b class="txtc-primary-color">extract</b> the Javascript and CSS files to your desired location.<br><br>
-				The next step is to <b class="txtc-primary-color">implement</b> jQuery and the plugin to your Page.<br>
-				To do that, you have to include all necessary files to the head tag in your HTML document:<br>
-				<div class="txtbox txtbox-primary-color">
-					<i class="mdi mdi-alert-circle-outline""></i>
-					<span>
-						<b class="txtc-primary-color">Load your CSS file(s) before the JS file(s), to prevent unexpected bugs.</b>
-					</span>
-				</div>
-				
-				<pre><code class="html">&lt;html&gt;
-	&lt;head&gt;
-		&lt;!-- Plugin CSS --&gt;
-		&lt;link type=&quot;text/css&quot; href=&quot;path/to/jquery.overlayScrollbars.css&quot; rel=&quot;stylesheet&quot;/&gt;
-		&lt;!-- jQuery JS --&gt;
-		&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.js&quot;&gt;&lt;/script&gt;
-		&lt;!-- Plugin JS --&gt;
-		&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.overlayScrollbars.js&quot;&gt;&lt;/script&gt;
-	&lt;/head&gt;
-	&lt;body&gt;
-	&lt;/body&gt;
+                <a class="inline-btn" href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip">Download</a> the Plugin manually and <b class="txtc-primary-color">extract</b> the Javascript and CSS files to your desired location.<br>
+                You can also use <a class="inline-btn" target="_blank" href="https://www.npmjs.com/package/overlayscrollbars">npm</a> to download it:
+                <pre><code class="html code-noscroll">npm install overlayScrollbars</code></pre> 
+                The plugin has two versions:
+                <ul>
+					<li>The default version without any dependencies: <b>OverlayScrollbars.js</b></li>
+					<li>The jQuery version with jQuery as dependency: <b>jquery.overlayScrollbars.js</b></li>
+				</ul>
+                Both versions are capable of the same, but the jQuery version is a bit smaller in size.
+                <br>
+                <br>
+                <br>
+                The next step is to <b class="txtc-primary-color">implement</b> the plugin to your Page.<br>
+                To do that, you have to include all necessary files to the head tag in your HTML document.<br>
+                If you are using jQuery, please use the file prefixed with "jquery".<br>
+                Please make sure to load all CSS file(s) before the JS file(s), to prevent unexpected bugs.
+                <div class="tab-control">
+                    <div class="tab-button-bar">
+                        <div class="tab-button-bar-center">
+                            <div class="tab-button active" data-tab-key="implementation-default">Default</div>
+                            <div class="tab-button" data-tab-key="implementation-jquery">jQuery</div>
+                        </div>
+                    </div>
+                    <div id="implementation-default" class="active" data-tab-value="implementation-default">
+                        <pre><code class="html code-noscroll">&lt;html&gt;
+    &lt;head&gt;
+        &lt;!-- Plugin CSS --&gt;
+        &lt;link type=&quot;text/css&quot; href=&quot;path/to/OverlayScrollbars.css&quot; rel=&quot;stylesheet&quot;/&gt;
+        &lt;!-- Plugin JS --&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/OverlayScrollbars.js&quot;&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
 &lt;/html&gt;
-</code></pre>
+</code></pre>             
+                    </div>
+                    <div id="implementation-jquery" data-tab-value="implementation-jquery">
+                        <pre><code class="html code-noscroll">&lt;html&gt;
+    &lt;head&gt;
+        &lt;!-- Plugin CSS --&gt;
+        &lt;link type=&quot;text/css&quot; href=&quot;path/to/OverlayScrollbars.css&quot; rel=&quot;stylesheet&quot;/&gt;
+        &lt;!-- jQuery JS --&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.js&quot;&gt;&lt;/script&gt;
+        &lt;!-- Plugin JS --&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/jquery.overlayScrollbars.js&quot;&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>      
+                    </div>
+                </div>
 				<br>
 				Now the plugin is ready to be <b class="txtc-primary-color">initialized</b>.<br>
-				Just append the following lines after all the file inclusions in the head tag of your HTML document:<br>
-				<div class="txtbox txtbox-primary-color">
-					<i class="mdi mdi-alert-circle-outline"></i>
-					<span>
-						<b class="txtc-primary-color">Initialize the plugin after your document has been fully loaded.</b>
-					</span>
-				</div>
-				<pre><code class="html">&lt;script type=&quot;text/javascript&quot;&gt;
+                Please initialize the plugin only after your document has been fully loaded. <br>
+                Just append the following lines after all the file inclusions in the head tag of your HTML document.<br>
+                <div class="tab-control">
+                    <div class="tab-button-bar">
+                        <div class="tab-button-bar-center">
+                            <div class="tab-button active" data-tab-key="initialization-default">Default</div>
+                            <div class="tab-button" data-tab-key="initialization-jquery">jQuery</div>
+                        </div>
+                    </div>
+                    <div id="initialization-default" class="active" data-tab-value="initialization-default">
+                        <pre><code class="html code-noscroll">&lt;script type=&quot;text/javascript&quot;&gt;
+    $(function() {
+        //The first argument are the elements to which the plugin shall be initialized
+        //The second argument has to be at least a empty object or a object with your desired options
+        OverlayScrollbars(document.querySelectorAll('body'), { });
+    });
+&lt;/script&gt;
+</code></pre>
+                        For further and more detailed information to the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization">this section</a> in the documentation.<br>
+                    </div>
+                    <div id="initialization-jquery" data-tab-value="initialization-jquery">
+                        <pre><code class="html code-noscroll">&lt;script type=&quot;text/javascript&quot;&gt;
     $(function() {
         //The passed argument has to be at least a empty object or a object with your desired options
         $('body').overlayScrollbars({ });
     });
 &lt;/script&gt;
 </code></pre>
-				For further and more detailed information to the initialization and the initialization possibilities please read  <a class="inline-btn" data-navigation="documentation/initialization">this section</a> in the documentation.
-			</div>
-		</div>
+                        For further and more detailed information to the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization-jquery">this section</a> in the documentation.<br>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 </div>
 
@@ -312,7 +357,6 @@
 				The future plans are:
 				<ul>
 					<li>Minimize the code as much as possible.</li>
-					<li>If desired by the community I'll write and provide a jQuery independent version of the plugin.</li>
 					<li>Frequent updates in terms of bugsfixes and enhancements.</li>
 					<li>Enhancements on this page to provide the best possible documentation and presentation.</li>
 				</ul>

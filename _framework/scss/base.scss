@@ -1143,6 +1143,76 @@ body:not(.ready) * {
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 
+//TABS
+.tab-button-bar {
+	display: block;
+	width: 100%;
+    border-bottom: 1px solid $border-color;
+    margin: 20px 0px;
+}
+.tab-button-bar:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+.tab-button-bar .tab-button {
+	float: left;
+}
+.tab-button-bar > .tab-button-bar-center {
+	width: auto;
+    height: 100%;
+    display: table;
+    margin: 0px auto;
+}
+.tab-button {
+    position: relative;
+    width: auto;
+    min-width: 100px;
+    padding: 0px 14px;
+    line-height: 42px;
+    height: 42px;
+    display: block;
+	font-weight: 600;
+    cursor: pointer;
+    color: $text-color-gray;
+    text-align: center;
+	outline: none !important;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+.tab-button:after {
+	content: '';
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    width: 0;
+    background: $text-color-dark;
+    height: 2px;
+    transform: translate(-50%, 0);
+    transition: width 0.3s;
+}
+.tab-button:hover {
+	color: $text-color-dark;
+}
+.tab-button.active {
+	color: $text-color-dark;
+    text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.05);
+}
+.tab-button.active:after {
+    width: 100%;
+}
+.tab-button-bar.txtc-primary-color .tab-button:hover,
+.tab-button-bar.txtc-primary-color .tab-button.active {
+	color: $primary-color;
+}
+.tab-button-bar.txtc-primary-color .tab-button:after {
+	background: $primary-color;
+}
+
 //RADIO BUTTON
 .radio-button-bar {
 	display: block;

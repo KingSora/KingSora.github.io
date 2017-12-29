@@ -397,7 +397,7 @@ $(document).ready(function() {
 			else
 				currActive.stop().fadeOut(_tabsFadeDuration, action);
 			
-			$('[' + _dataAttrTabKey + ']').removeClass(_strActive);
+			currElem.parent().find('[' + _dataAttrTabKey + ']').removeClass(_strActive);
 			currElem.addClass(_strActive);
 		});
 		
