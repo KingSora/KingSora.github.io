@@ -5761,4 +5761,5 @@
             _pluginGlobals.defaultOptions = helper.extend(true, { }, currDefaultOptions , newDefaultOptions);
         };
     })(COMPATIBILITY, INSTANCES, HELPER, BYPROPERTYPATH);
+    return window[PLUGINNAME];
 })));
