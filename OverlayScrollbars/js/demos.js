@@ -910,3 +910,200 @@ $('#scroll-demo-rtl').on('change', function() {
 
 
 $('.nesting-demo-element-plugin').overlayScrollbars({ });
+
+
+
+
+
+
+var inputElement = $('.content-demo-input');
+var inputIconElement = $('.content-demo-input-user-icon');
+var chatElement = $('.content-demo-chat-content');
+var backgroundUrl = "url(img/";
+var possibleLeftUsers = [ 
+	{ n: "Reiner Braun", i: backgroundUrl + "demo_content_reiner.png)" , m: "Good day, %!<br>How are you doing? Any plans for tonight?" },
+	{ n: "Eren Jäger", i: backgroundUrl + "demo_content_eren.png)", m: "Whats up %.<br>Wanna talk about our god and savior?" },
+	{ n: "Levi Ackerman", i: backgroundUrl + "demo_content_levi.png)", m: "Hi %." },
+	{ n: "Sasha Braus", i: backgroundUrl + "demo_content_sasha.png)", m: "Yo, %!<br>Do you know what is my favorite food?" },
+];
+var possibleRightUsers = [ 
+	{ n: "Annie Leonhardt", i: backgroundUrl + "demo_content_annie.png)", 
+		m: [ "Hi %.<br>That's none of your business.", "%, have you gone crazy?", "%.<br> What do you want?", "%. Honestly, I don't care." ] 
+	},
+	{ n: "Connie Springer", i: backgroundUrl + "demo_content_connie.png)", 
+		m: [ "Yo %.<br>Nah nothing, do you have any bright ideas?", "What the heck %, are you alright?", "%, please help me!<br>Some weird guys are stalking me, and I dont know what to do!", "%, everyone knows that you love any kind of food." ] 
+	},
+	{ n: "Mikasa Ackerman", i: backgroundUrl + "demo_content_mikasa.png)", 
+		m: [ "...%...<br>Are you trying to ask me out? Not interested.", "%, since when are you religious?<br>Do you have any hobbies I don't know about?", "Hi %?", "Well %, your nickname is \"Potatoegirl\"." ] 
+	},
+	{ n: "Erwin Smith", i: backgroundUrl + "demo_content_erwin.png)", 
+		m: [ "%, I am your supervisor and not your buddy.", "What a silly question %. I am not religious.", "%, you are making a very good Job. Your'e indeed mankinds strongest soldier.", "Well, I know you like potatoes, but your favorite food is meat.<br>Am I right??" ] 
+	},
+];
+var leftUser = possibleLeftUsers[Math.floor((Math.random() * (possibleLeftUsers.length)))];
+var rightUser = possibleRightUsers[Math.floor((Math.random() * (possibleRightUsers.length)))];
+var getCurrentInputUser = function() {
+	if(inputElement.hasClass('content-demo-input-right'))
+		return rightUser;
+	return leftUser;
+};
+var updateInputUserIcons = function() { 
+	var user = getCurrentInputUser();
+	inputIconElement.css("background", user.i);
+};
+var setChatHead = function() { 
+	$('.content-demo-chat-head-datetime').text(moment().format('LL'));
+	var leftUserElements = $('.content-demo-chat-head-users-user-left');
+	var rightUserElements = $('.content-demo-chat-head-users-user-right');
+	var iconElementSelector = '.content-demo-chat-head-users-user-icon';
+	var nameElementSelector = '.content-demo-chat-head-users-user-name';
+	leftUserElements.find(iconElementSelector).css("background", leftUser.i);
+	rightUserElements.find(iconElementSelector).css("background", rightUser.i);
+	leftUserElements.find(nameElementSelector).text(leftUser.n);
+	rightUserElements.find(nameElementSelector).text(rightUser.n);
+};
+var leftUserMessageGroups = [ ];
+var rightUserMessageGroups = [ ];
+var allUsersMessageGroups = [ ];
+var getUserLastMessageGroup = function(user) {
+	if(user === leftUser) {
+		if(leftUserMessageGroups.length === 0)
+			return null;
+		return leftUserMessageGroups[leftUserMessageGroups.length -1];
+	}
+	else {
+		if(rightUserMessageGroups.length === 0)
+			return null;
+		return rightUserMessageGroups[rightUserMessageGroups.length -1];
+	}
+};
+var getUserLastMessageGroupList = function(user) {
+	if(user === leftUser)
+		return leftUserMessageGroups;
+	else
+		return rightUserMessageGroups;
+};
+var sendNewMessageGroup = function(user, message) { 
+	var messageGroupList = getUserLastMessageGroupList(user);
+	var groupSuffix = user === leftUser ? 'left' : 'right';
+	var element = $('<div class="content-demo-chat-message-group-' + groupSuffix + ' content-demo-chat-message-group"></div>');
+	var msgGroup = { 
+		time : moment(),
+		user : user,
+		elem : element,
+		messages : [ message ]
+	};
+	messageGroupList.push(msgGroup);
+	allUsersMessageGroups.push(msgGroup);
+	element.append(
+		'<div class="content-demo-chat-message-group-head">' +
+			'<span class="content-demo-chat-message-group-head-username">' + msgGroup.user.n + '</span>, <span class="content-demo-chat-message-group-head-datetime">' + msgGroup.time.format('LT') + '</span>' +
+		'</div>' +
+		'<div class="content-demo-chat-message-group-user-icon" style="background:' + msgGroup.user.i + '">' +
+		'</div>' +
+		'<div class="content-demo-chat-message-group-content">' +
+			'<div class="content-demo-chat-message-group-content-item">' +
+				'<div class="content-demo-chat-message-group-content-item-datetime">' +
+					msgGroup.messages[0].time.format('LTS') +
+				'</div>' +
+				'<div class="content-demo-chat-message-group-content-item-content">' +
+					msgGroup.messages[0].content +
+				'</div>' +
+			'</div>' +
+		'</div>'
+	);
+	chatElement.append(element);
+};
+var appendToMessageGroup = function(messageGroup, message) {
+	var el = messageGroup.elem;
+	var msgSlot = el.find('.content-demo-chat-message-group-content').first();
+	messageGroup.messages.push(message);
+	msgSlot.append(
+		'<div class="content-demo-chat-message-group-content-item">' +
+			'<div class="content-demo-chat-message-group-content-item-datetime">' +
+				message.time.format('LTS') +
+			'</div>' +
+			'<div class="content-demo-chat-message-group-content-item-content">' +
+				message.content +
+			'</div>' +
+		'</div>'
+	);
+}
+var sendMessage = function(user, content) { 
+	var lastMessageGroup = getUserLastMessageGroup(user);
+	var message = { time : moment(), content : content };
+	if(lastMessageGroup == null || allUsersMessageGroups[allUsersMessageGroups.length -1] !== lastMessageGroup) {
+		sendNewMessageGroup(user, message);
+	}
+	else {
+		var messageGroupEndTime = lastMessageGroup.time.endOf('minute');
+		if(message.time > messageGroupEndTime) {
+			sendNewMessageGroup(user, message);
+		} 
+		else {
+			appendToMessageGroup(lastMessageGroup, message);
+		}
+	}
+};
+var sendFirstMessages = function() { 
+	sendMessage(leftUser, leftUser.m.replace("%", rightUser.n.split(' ')[0]));
+	sendMessage(rightUser, rightUser.m[possibleLeftUsers.indexOf(leftUser)].replace("%", leftUser.n.split(' ')[0]));
+};
+
+
+var scroll;
+var anim = false;
+var setDoScroll = function() {
+	console.log(this.scroll());
+	if(!anim)
+		scroll = this.scroll().y.ratio === 1;
+	else
+		scroll = true;
+};
+var performScroll = function() { 
+	anim = true;
+	chatOS.scrollStop();
+	chatOS.scroll({ y : '100%' }, 250, 'swing', function() { anim = false; });
+};
+var chatOS = $('.content-demo-chat').overlayScrollbars({ 
+	callbacks : { 
+		onContentSizeChanged : function() { 
+			if(scroll)
+				performScroll();
+		},
+		onScroll : setDoScroll,
+		onInitialized : setDoScroll,
+		onOverflowChanged : function(e) {	
+			if(e.y) 
+				performScroll();
+		},
+	}
+}).overlayScrollbars();
+var chatInputOS = $('.content-demo-input-textarea-plugin').overlayScrollbars({ paddingAbsolute : true }).overlayScrollbars();
+$('.content-demo-input-textarea-plugin').on('focus', function() { 
+	$('.content-demo-input-textarea').addClass('focus');
+}).on('focusout', function() { 
+	$('.content-demo-input-textarea').removeClass('focus');
+});
+$('.content-demo-input-switch').on('click', function() { 
+	inputElement.toggleClass('content-demo-input-right');
+	updateInputUserIcons();
+	$('.content-demo-input textarea').focus();
+});
+$('.content-demo-input textarea').on('keydown', function(e) { 
+	var value = $('.content-demo-input textarea').val();
+	if (e.keyCode === 13 && !e.shiftKey) {
+		if (value && value.replace(/(?:\r\n|\r|\n)/g, '').trim().length > 0) {
+			value = value.replace(/(?:\r\n|\r|\n)/g, '<br/>').trim();
+			sendMessage(getCurrentInputUser(), value);
+			$('.content-demo-input textarea').val("");
+			chatInputOS.update();
+		}
+		return false;
+	}
+    else
+        return true;
+});
+updateInputUserIcons();
+setChatHead();
+sendFirstMessages();

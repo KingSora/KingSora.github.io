@@ -61,8 +61,8 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-defaultOptions" data-navigation="[1]gmethod-defaultoptions">
 				<span>defaultOptions</span>
 			</div>
-			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-getGlobals" data-navigation="[1]gmethod-getglobals">
-				<span>getGlobals</span>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-globals" data-navigation="[1]gmethod-globals">
+				<span>globals</span>
 			</div>
 			<div class="content-navigation-item content-navigation-item-caption">
 				<span>Themes & Styling:</span>
@@ -793,7 +793,7 @@
 										<br>
 										<code class="code-inline js">onScrollStart : function(eventArgs) { }</code>
 										<br>
-										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://api.jquery.com/scroll/" target="_blank" class="inline-btn">Read more about it</a>
+										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://developer.mozilla.org/en-US/docs/Web/Events/scroll" target="_blank" class="inline-btn">Read more about it</a>
 									</div>
 								</td>
 							</tr>
@@ -810,7 +810,7 @@
 										<br>
 										<code class="code-inline js">onScroll : function(eventArgs) { }</code>
 										<br>
-										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://api.jquery.com/scroll/" target="_blank" class="inline-btn">Read more about it</a>
+										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://developer.mozilla.org/en-US/docs/Web/Events/scroll" target="_blank" class="inline-btn">Read more about it</a>
 									</div>
 								</td>
 							</tr>
@@ -827,7 +827,7 @@
 										<br>
 										<code class="code-inline js">onScrollStop : function(eventArgs) { }</code>
 										<br>
-										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://api.jquery.com/scroll/" target="_blank" class="inline-btn">Read more about it</a>
+										The passed argument is the scroll argument which gets also passed to the "native" scroll callback. <a href="https://developer.mozilla.org/en-US/docs/Web/Events/scroll" target="_blank" class="inline-btn">Read more about it</a>
 									</div>
 								</td>
 							</tr>
@@ -2641,7 +2641,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 				</div>
 			</div>
 		
-			<div id="global-getGlobals" data-tab-value="global-getGlobals">
+			<div id="global-globals" data-tab-value="global-globals">
 				<div class="content-navigation-main-caption">OverlayScrollbars.globals Method</div>
 				<div class="content-navigation-sub-caption">Description</div>
 				Returns a plain object which contains global information about the plugin and each instance of it.
@@ -2669,6 +2669,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 	supportPassiveEvents    : <span class="txtc-secondary-color">boolean</span>,
 	supportTransform        : <span class="txtc-secondary-color">boolean</span>,
 	supportTransition       : <span class="txtc-secondary-color">boolean</span>,
+	restrictedMeasuring     : <span class="txtc-secondary-color">boolean</span>,
 	nativeScrollbarStyling  : <span class="txtc-secondary-color">boolean</span>,
 	cssCalc                 : <span class="txtc-secondary-color">string</span>,
 	nativeScrollbarSize : {
@@ -2744,7 +2745,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 											supportTransform
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether your brwoser is supporting CSS3 Transforms.
+											Indicates whether your browser is supporting CSS3 Transforms.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2752,7 +2753,15 @@ OverlayScrollbars(document.getElementById(otherId), { });
 											supportTransition
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether your brwoser is supporting CSS3 Transitions.
+											Indicates whether your browser is supporting CSS3 Transitions.
+										</div>
+									</div>
+									<div class="plainobjectproperty-documentation-box">
+										<div class="plainobjectproperty-documentation-box-title">
+											restrictedMeasuring
+										</div>
+										<div class="plainobjectproperty-documentation-box-content">
+											Indicates whether the scrollSize calculation is only correct if certain CSS properties are set. <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1439305" target="_blank" class="inline-btn">More info</a>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2760,7 +2769,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 											nativeScrollbarStyling
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether your brwoser is capable of <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar" target="_blank" class="inline-btn">scrollbar styling</a>.
+											Indicates whether your browser is capable of <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::-webkit-scrollbar" target="_blank" class="inline-btn">scrollbar styling</a>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">

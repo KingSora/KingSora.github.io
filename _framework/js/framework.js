@@ -491,10 +491,24 @@ $(document).ready(function() {
 		var contentNavHeight = contentNav.height();
 		var contentNavWrapperHeight = _content.height();
 		var scrollTop = _mainScrollElement ? _mainScrollElement.scroll().y.position : _window.scrollTop();
+		var scrollLeft = _mainScrollElement ? _mainScrollElement.scroll().x.position : _window.scrollLeft();
 		var navHeight = _nav.height();;
 		var maxHeight = Math.min(viewportHeight - navHeight, contentNavWrapperHeight - scrollTop);
 		
+		
+		if(OverlayScrollbars.globals().supportTransform) {
+			translateElement(contentNav, -scrollLeft, 0);
+		}
+		else {
+			contentNav.css('left', -scrollLeft);
+		}
+
 		contentNav.css('max-height', maxHeight);
+		
+		if(_nav.overlayScrollbars())
+			_nav.overlayScrollbars().scroll([ scrollLeft , 0 ]);
+		else 
+			_nav.scrollLeft(scrollLeft);
 	}
 	
 	function generateHashArray(navigationValue) {
@@ -535,6 +549,12 @@ $(document).ready(function() {
 		}
 	}
 	
+	function translateElement(element, x, y) {
+		var vendors = [ '', '-webkit-', '-moz-', '-o-', '-ms-' ];
+		for(var i = 0; i < vendors.length; i++)
+			element.css('transform', vendors[i] + 'translate(' + (x) + 'px, ' + (y) + 'px)');
+	}
+	
 	_base.buildPage = function(config, callback) { 
 		_finalConfig = $.extend(true, { }, _defaultConfig, config);
 		_defaultHash = _finalConfig.defaultHash;
@@ -565,6 +585,10 @@ $(document).ready(function() {
 		});
 		_nav.overlayScrollbars({ 
 			className : 'os-theme-light',
+			scrollbars : {
+				visibility : "hidden",
+				autoHide : "leave"
+			},
 			overflowBehavior : { y : 'hidden' } 
 		});
 		setBodyScrollbars();

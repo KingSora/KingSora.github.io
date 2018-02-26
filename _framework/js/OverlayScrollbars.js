@@ -13,15 +13,15 @@
 
 (function (global, factory) {
     if (typeof define === 'function' && define.amd)
-        define(['jquery'], function(jQuery) { return factory(global, global.document, undefined, jQuery); });
+        define(function() { return factory(global, global.document, undefined); });
     else if (typeof exports === 'object')
-        module.exports = factory(global, global.document, undefined, require('jquery'));
+        module.exports = factory(global, global.document, undefined);
     else
-        factory(global, global.document, undefined, global.jQuery);
-}(typeof window !== 'undefined' ? window : this, (function(window, document, undefined, jQuery) {
+        factory(global, global.document, undefined);
+}(typeof window !== 'undefined' ? window : this, (function(window, document, undefined) {
     'use-strict';
     var PLUGINNAME = 'OverlayScrollbars';
-
+	
     var TYPES = {
         o : 'object',
         f : 'function',
@@ -199,26 +199,997 @@
             return fBound;
         }
     };
-    var HELPER = (function(jQuery) {
+    var HELPER = (function(compatibility) {
+        var _rnothtmlwhite = ( /[^\x20\t\r\n\f]+/g );
+        var _toStr = Object.prototype.toString;
+        var _strSpace = ' ';
+        var _strEmpty = '';
+        var _animations = [ ];
+        var _cssNumber = {
+            "animationIterationCount": true,
+            "columnCount": true,
+            "fillOpacity": true,
+            "flexGrow": true,
+            "flexShrink": true,
+            "fontWeight": true,
+            "lineHeight": true,
+            "opacity": true,
+            "order": true,
+            "orphans": true,
+            "widows": true,
+            "zIndex": true,
+            "zoom": true
+        };
+        var _easings = {
+            /*
+             x : current percent (0 - 1),
+             t : current time (duration * percent),
+             b : start value (from),
+             c : end value (to),
+             d : duration
 
-        /**
-         * The jQuery initialization interface.
-         * @param options The initial options for the construction of the plugin. To initialize the plugin, this option has to be a object! If it isn't a object, the instance(s) are returned and the plugin wont be initialized.
-         * @returns {*} After initialization it returns the jQuery element array, else it returns the instance(s) of the elements which are selected.
-         */
-        jQuery.fn.overlayScrollbars = function (options) {
-            var _elements = this;
-            if(jQuery.isPlainObject(options)) {
-                jQuery.each(_elements, function() { window[PLUGINNAME](this, options); });
-                return _elements;
+             easingName : function(x, t, b, c, d) { return easedValue; }
+             */
+
+            swing: function (x, t, b, c, d) {
+                return 0.5 - Math.cos(x * Math.PI) / 2;
+            },
+            linear: function(x, t, b, c, d) {
+                return x;
+            },
+            easeInQuad: function (x, t, b, c, d) {
+                return c*(t/=d)*t + b;
+            },
+            easeOutQuad: function (x, t, b, c, d) {
+                return -c *(t/=d)*(t-2) + b;
+            },
+            easeInOutQuad: function (x, t, b, c, d) {
+                if ((t/=d/2) < 1) return c/2*t*t + b;
+                return -c/2 * ((--t)*(t-2) - 1) + b;
+            },
+            easeInCubic: function (x, t, b, c, d) {
+                return c*(t/=d)*t*t + b;
+            },
+            easeOutCubic: function (x, t, b, c, d) {
+                return c*((t=t/d-1)*t*t + 1) + b;
+            },
+            easeInOutCubic: function (x, t, b, c, d) {
+                if ((t/=d/2) < 1) return c/2*t*t*t + b;
+                return c/2*((t-=2)*t*t + 2) + b;
+            },
+            easeInQuart: function (x, t, b, c, d) {
+                return c*(t/=d)*t*t*t + b;
+            },
+            easeOutQuart: function (x, t, b, c, d) {
+                return -c * ((t=t/d-1)*t*t*t - 1) + b;
+            },
+            easeInOutQuart: function (x, t, b, c, d) {
+                if ((t/=d/2) < 1) return c/2*t*t*t*t + b;
+                return -c/2 * ((t-=2)*t*t*t - 2) + b;
+            },
+            easeInQuint: function (x, t, b, c, d) {
+                return c*(t/=d)*t*t*t*t + b;
+            },
+            easeOutQuint: function (x, t, b, c, d) {
+                return c*((t=t/d-1)*t*t*t*t + 1) + b;
+            },
+            easeInOutQuint: function (x, t, b, c, d) {
+                if ((t/=d/2) < 1) return c/2*t*t*t*t*t + b;
+                return c/2*((t-=2)*t*t*t*t + 2) + b;
+            },
+            easeInSine: function (x, t, b, c, d) {
+                return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+            },
+            easeOutSine: function (x, t, b, c, d) {
+                return c * Math.sin(t/d * (Math.PI/2)) + b;
+            },
+            easeInOutSine: function (x, t, b, c, d) {
+                return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+            },
+            easeInExpo: function (x, t, b, c, d) {
+                return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+            },
+            easeOutExpo: function (x, t, b, c, d) {
+                return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+            },
+            easeInOutExpo: function (x, t, b, c, d) {
+                if (t==0) return b;
+                if (t==d) return b+c;
+                if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+                return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+            },
+            easeInCirc: function (x, t, b, c, d) {
+                return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
+            },
+            easeOutCirc: function (x, t, b, c, d) {
+                return c * Math.sqrt(1 - (t=t/d-1)*t) + b;
+            },
+            easeInOutCirc: function (x, t, b, c, d) {
+                if ((t/=d/2) < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
+                return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
+            },
+            easeInElastic: function (x, t, b, c, d) {
+                var s=1.70158;var p=0;var a=c;
+                if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+                if (a < Math.abs(c)) { a=c; var s=p/4; }
+                else var s = p/(2*Math.PI) * Math.asin (c/a);
+                return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+            },
+            easeOutElastic: function (x, t, b, c, d) {
+                var s=1.70158;var p=0;var a=c;
+                if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
+                if (a < Math.abs(c)) { a=c; var s=p/4; }
+                else var s = p/(2*Math.PI) * Math.asin (c/a);
+                return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b;
+            },
+            easeInOutElastic: function (x, t, b, c, d) {
+                var s=1.70158;var p=0;var a=c;
+                if (t==0) return b;  if ((t/=d/2)==2) return b+c;  if (!p) p=d*(.3*1.5);
+                if (a < Math.abs(c)) { a=c; var s=p/4; }
+                else var s = p/(2*Math.PI) * Math.asin (c/a);
+                if (t < 1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+                return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+            },
+            easeInBack: function (x, t, b, c, d, s) {
+                if (s == undefined) s = 1.70158;
+                return c*(t/=d)*t*((s+1)*t - s) + b;
+            },
+            easeOutBack: function (x, t, b, c, d, s) {
+                if (s == undefined) s = 1.70158;
+                return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+            },
+            easeInOutBack: function (x, t, b, c, d, s) {
+                if (s == undefined) s = 1.70158;
+                if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+                return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+            },
+            easeInBounce: function (x, t, b, c, d) {
+                return c - this.easeOutBounce (x, d-t, 0, c, d) + b;
+            },
+            easeOutBounce: function (x, t, b, c, d) {
+                if ((t/=d) < (1/2.75)) {
+                    return c*(7.5625*t*t) + b;
+                } else if (t < (2/2.75)) {
+                    return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+                } else if (t < (2.5/2.75)) {
+                    return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+                } else {
+                    return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+                }
+            },
+            easeInOutBounce: function (x, t, b, c, d) {
+                if (t < d/2) return this.easeInBounce (x, t*2, 0, c, d) * .5 + b;
+                return this.easeOutBounce (x, t*2-d, 0, c, d) * .5 + c*.5 + b;
             }
-            else
-                return window[PLUGINNAME](_elements, options);
         };
 
-        return jQuery;
-    })(jQuery);
-    var INSTANCES = (function(helper) {
+        var FakejQuery = function (selector) {
+            var jQQ = FakejQuery;
+            var elments;
+            var elms;
+            var el;
+            var i = 0;
+            if(jQQ.type(selector) === TYPES.s) {
+                elments = [ ];
+                elms;
+                if(selector.charAt(0) === '<') {
+                    el = document.createElement('div');
+                    el.innerHTML = selector;
+                    elms = el.children;
+                }
+                else {
+                    elms = document.querySelectorAll(selector);
+                }
+
+                for(; i < elms.length; i++)
+                    elments.push(elms[i]);
+                return new FakeJQueryInstance(elments);
+            }
+            else {
+                return new FakeJQueryInstance(selector);
+            }
+        };
+
+        var extend = FakejQuery.extend = function() {
+            var src, copyIsArray, copy, name, options, clone, target = arguments[0] || {},
+                i = 1,
+                length = arguments.length,
+                deep = false;
+
+            // Handle a deep copy situation
+            if (typeof target === "boolean") {
+                deep = target;
+                target = arguments[1] || {};
+                // skip the boolean and the target
+                i = 2;
+            }
+
+            // Handle case when target is a string or something (possible in deep copy)
+            if (typeof target !== TYPES.o && !FakejQuery.type(target) === TYPES.f) {
+                target = {};
+            }
+
+            // extend jQuery itself if only one argument is passed
+            if (length === i) {
+                target = FakejQuery;
+                --i;
+            }
+
+            for (; i < length; i++) {
+                // Only deal with non-null/undefined values
+                if ((options = arguments[i]) != null) {
+                    // Extend the base object
+                    for (name in options) {
+                        src = target[name];
+                        copy = options[name];
+
+                        // Prevent never-ending loop
+                        if (target === copy) {
+                            continue;
+                        }
+
+                        // Recurse if we're merging plain objects or arrays
+                        if (deep && copy && (FakejQuery.isPlainObject(copy) || (copyIsArray = FakejQuery.isArray(copy)))) {
+                            if (copyIsArray) {
+                                copyIsArray = false;
+                                clone = src && FakejQuery.isArray(src) ? src : [];
+
+                            } else {
+                                clone = src && FakejQuery.isPlainObject(src) ? src : {};
+                            }
+
+                            // Never move original objects, clone them
+                            target[name] = FakejQuery.extend(deep, clone, copy);
+
+                            // Don't bring in undefined values
+                        } else if (copy !== undefined) {
+                            target[name] = copy;
+                        }
+                    }
+                }
+            }
+
+            // Return the modified object
+            return target;
+        };
+
+        var type = FakejQuery.type = function(obj) {
+            if (obj === undefined)
+                return obj + _strEmpty;
+            if (obj === null)
+                return obj + _strEmpty;
+            return _toStr.call(obj).replace(/^\[object (.+)\]$/, '$1').toLowerCase();
+        };
+
+        var isFunction = FakejQuery.isFunction = function(obj) {
+            return type(obj) === TYPES.f;
+        };
+
+        var isArray = FakejQuery.isArray = function(arr) {
+            return type(arr) === TYPES.a;
+        };
+
+        var isEmptyObject = FakejQuery.isEmptyObject = function(obj) {
+            for (var name in obj )
+                return false;
+            return true;
+        };
+
+        var isPlainObject = FakejQuery.isPlainObject = function(obj) {
+            if (!obj || type(obj) !== TYPES.o)
+                return false;
+
+            var key;
+            var hasOwnProperty = Object.prototype.hasOwnProperty;
+            var hasOwnConstructor = hasOwnProperty.call(obj, 'constructor');
+            var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf');
+
+            if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+                return false;
+            }
+
+
+            for (key in obj) { /**/ }
+
+            return typeof key === TYPES.u || hasOwnProperty.call(obj, key);
+        };
+
+        var inArray = FakejQuery.inArray = function(item, arr) {
+            for (var i = 0; i < arr.length; i++)
+                if (arr[i] === item)
+                    return i;
+            return -1;
+        };
+
+        var each = FakejQuery.each = function(obj, callback) {
+            var i = 0;
+
+            if (isArrayLike(obj)) {
+                for (; i < obj.length; i++) {
+                    if (callback.call(obj[i], i, obj[i]) === false)
+                        break;
+                }
+            }
+            else {
+                for (i in obj) {
+                    if (callback.call(obj[i], i, obj[i]) === false)
+                        break;
+                }
+            }
+
+            return obj;
+        };
+
+        function isArrayLike(obj) {
+            var length = !!obj && "length" in obj && obj.length;
+            var t = type(obj);
+
+            return isFunction(t) ? false : (t === TYPES.a || length === 0 || typeof length === TYPES.n && length > 0 && (length - 1) in obj);
+        }
+
+        function stripAndCollapse(value) {
+            var tokens = value.match(_rnothtmlwhite) || [];
+            return tokens.join(_strSpace);
+        }
+
+        function matches(elem, selector) {
+            var nodeList = (elem.parentNode || document).querySelectorAll(selector) || [];
+            var i = nodeList.length;
+
+            while (i--)
+                if (nodeList[i] == elem)
+                    return true;
+
+            return false;
+        }
+
+        function insertAdjacentElement(el, strategy, child) {
+            if(FakejQuery.type(child) === TYPES.s)
+                el.insertAdjacentHTML(strategy, child);
+            else if(child.nodeType)
+                el.insertAdjacentElement(strategy, child);
+            else
+                el.insertAdjacentElement(strategy, child[0]);
+        }
+
+        function setCSSVal(el, prop, val) {
+            try {
+                if(el.style[prop] !== undefined)
+                    el.style[prop] = parseCSSVal(prop, val);
+            } catch(e) { }
+        }
+
+        function parseCSSVal(prop, val) {
+            if(!_cssNumber[prop.toLowerCase()] && FakejQuery.type(val) === TYPES.n)
+                val = val += 'px';
+            return val;
+        }
+
+        function startNextAnimationInQ(animObj, removeFromQ) {
+            var index;
+            var nextAnim;
+            if(removeFromQ !== false)
+                animObj.q.splice(0, 1);
+            if(animObj.q.length > 0) {
+                nextAnim = animObj.q[0];
+                animate(animObj.el, nextAnim.props, nextAnim.duration, nextAnim.easing, nextAnim.complete, true);
+            }
+            else {
+                index = FakejQuery.inArray(animObj, _animations);
+                if(index > -1)
+                    _animations.splice(index, 1);
+            }
+        }
+
+        function setAnimationValue(el, prop, value) {
+            if(prop === 'scrollLeft')
+                el[prop] = value;
+            else if(prop === 'scrollTop')
+                el[prop] = value;
+            else
+                setCSSVal(el, prop, value);
+        }
+
+        function animate(el, props, options, easing, complete, guaranteedNext) {
+            var from = { };
+            var to = { };
+            var key;
+            var animObj;
+            var i = 0;
+            var start;
+            var progress;
+            var step;
+            var specialEasing;
+            var duration;
+            var hasOptions = FakejQuery.isPlainObject(options);
+            if(hasOptions) {
+                easing = options.easing;
+                start = options.start;
+                progress = options.progress;
+                step = options.step;
+                specialEasing = options.specialEasing;
+                complete = options.complete;
+                duration = options.duration;
+            }
+            else
+                duration = options;
+            specialEasing = specialEasing || { };
+            duration = duration || 400;
+            easing = easing || 'swing';
+            guaranteedNext = guaranteedNext || false;
+
+            for(; i < _animations.length; i++) {
+                if(_animations[i].el === el) {
+                    animObj = _animations[i];
+                    break;
+                }
+            }
+
+            if(!animObj) {
+                animObj = {
+                    el : el,
+                    q : [],
+                };
+                _animations.push(animObj);
+            }
+
+            for (key in props) {
+                if(key === 'scrollLeft' || key === 'scrollTop')
+                    from[key] = el[key];
+                else
+                    from[key] = new FakeJQueryInstance(el).css(key);
+            }
+
+            for (key in from)
+                if(from[key] !== props[key])
+                    to[key] = props[key];
+
+            if(!FakejQuery.isEmptyObject(to)) {
+                var timeNow;
+                var end;
+                var percent;
+                var fromVal;
+                var toVal;
+                var easedVal;
+                var timeStart;
+                var frame;
+                var elapsed;
+                var qPos = guaranteedNext ? 0 : FakejQuery.inArray(qObj, animObj.q);
+                var qObj = {
+                    props : to,
+                    duration : hasOptions ? options : duration,
+                    easing : easing,
+                    complete : complete,
+                };
+                if (qPos === -1) {
+                    qPos = animObj.q.length;
+                    animObj.q.push(qObj);
+                }
+
+                if(qPos === 0) {
+                    if(duration > 0) {
+                        timeStart = compatibility.now();
+                        frame = function() {
+                            timeNow = compatibility.now();
+                            elapsed = (timeNow - timeStart);
+                            end = qObj.stop || elapsed >= duration;
+                            percent = 1 - ((Math.max(0, timeStart + duration - timeNow) / duration) || 0);
+
+                            for(key in to) {
+                                fromVal = from[key];
+                                toVal = to[key];
+                                easedVal = (toVal - fromVal) * _easings[specialEasing[key] || easing](percent, percent * duration, 0, 1, duration) + fromVal;
+                                setAnimationValue(el, key, easedVal);
+                                if(isFunction(step)) {
+                                    step(easedVal, {
+                                        elem : el,
+                                        prop : key,
+                                        start : fromVal,
+                                        now : easedVal,
+                                        end : toVal,
+                                        pos : percent,
+                                        options : {
+                                            easing : easing,
+                                            speacialEasing : specialEasing,
+                                            duration : duration,
+                                            complete : complete,
+                                            step : step
+                                        },
+                                        startTime : timeStart
+                                    });
+                                }
+                            }
+
+                            if(isFunction(progress))
+                                progress({ }, percent, Math.max(0, duration - elapsed));
+
+                            if (end) {
+                                startNextAnimationInQ(animObj);
+                                if(isFunction(complete))
+                                    complete();
+                            }
+                            else
+                                qObj.frame = compatibility.rAF()(frame);
+                        };
+                        qObj.frame = compatibility.rAF()(frame);
+                    }
+                    else {
+                        for(key in to)
+                            setAnimationValue(el, key, to[key]);
+                        startNextAnimationInQ(animObj);
+                    }
+                }
+            }
+            else if(guaranteedNext)
+                startNextAnimationInQ(animObj);
+        }
+
+        function stop(el, clearQ, jumpToEnd) {
+            var animObj;
+            var qObj;
+            var key;
+            var i = 0;
+            for(; i < _animations.length; i++) {
+                animObj = _animations[i];
+                if(animObj.el === el) {
+                    if(animObj.q.length > 0) {
+                        qObj = animObj.q[0];
+                        qObj.stop = true;
+                        compatibility.cAF()(qObj.frame);
+                        animObj.q.splice(0, 1);
+
+                        if(jumpToEnd)
+                            for(key in qObj.props)
+                                setAnimationValue(el, key, qObj.props[key]);
+
+                        if(clearQ)
+                            animObj.q = [ ];
+                        else
+                            startNextAnimationInQ(animObj, false);
+                    }
+                    break;
+                }
+            }
+        }
+
+        function FakeJQueryInstance(elements) {
+            var _base = this;
+            if(FakejQuery.type(elements) !== TYPES.s && !elements.length)
+                elements = [ elements ];
+
+            for(var i = 0; i < elements.length; i++)
+                _base[i] = elements[i];
+            _base.length = elements.length;
+            return _base;
+        }
+
+        FakeJQueryInstance.prototype = {
+            each : function(callback) {
+                return each(this, callback);
+            },
+
+            append : function(child) {
+                return this.each(function() { insertAdjacentElement(this, 'beforeend', child); });
+            },
+
+            prepend : function(child) {
+                return this.each(function() { insertAdjacentElement(this, 'afterbegin', child); });
+            },
+
+            before : function(child) {
+                return this.each(function() { insertAdjacentElement(this, 'beforebegin', child); });
+            },
+
+            after : function(child) {
+                return this.each(function() { insertAdjacentElement(this, 'afterend', child); });
+            },
+
+            hover: function(over, out) {
+                return this.on('mouseenter', over).on('mouseleave', out || over);
+            },
+
+            first : function() {
+                return new FakeJQueryInstance(this[0]);
+            },
+
+            last : function() {
+                return new FakeJQueryInstance(this[this.length - 1]);
+            },
+
+            find : function(selector) {
+                var children = [ ];
+                var i;
+                this.each(function() {
+                    var el = this;
+                    var ch = el.querySelectorAll(selector);
+                    for(i = 0; i < ch.length; i++)
+                        children.push(ch[i]);
+                });
+                return new FakeJQueryInstance(children);
+            },
+
+            hide : function() {
+                return this.each(function() { this.style.display = 'none'; });
+            },
+
+            show : function() {
+                return this.each(function() { this.style.display = 'block'; });
+            },
+
+            attr : function(attrName, value) {
+                for(var i = 0; i < this.length; i++) {
+                    var el = this[i];
+                    if(value === undefined)
+                        return el.getAttribute(attrName);
+                    el.setAttribute(attrName, value);
+                }
+                return this;
+            },
+
+            removeAttr : function(attrName) {
+                return this.each(function() { this.removeAttribute(attrName); });
+            },
+
+            prop : function(propertyName, value) {
+                for(var i = 0; i < this.length; i++) {
+                    var el = this[i];
+                    if(value === undefined)
+                        return el[propertyName];
+                    el[propertyName] = value;
+                }
+                return this;
+            },
+
+            val : function(value) {
+                var el = this[0];
+                if(!value)
+                    return el.value;
+                el.value = value;
+                return this;
+            },
+
+            scrollLeft : function(value) {
+                for(var i = 0; i < this.length; i++) {
+                    var el = this[i];
+                    if(value === undefined)
+                        return el.scrollLeft;
+                    el.scrollLeft = value;
+                }
+                return this;
+            },
+
+            scrollTop : function(value) {
+                for(var i = 0; i < this.length; i++) {
+                    var el = this[i];
+                    if(value === undefined)
+                        return el.scrollTop;
+                    el.scrollTop = value;
+                }
+                return this;
+            },
+
+            children : function(selector) {
+                var children = [ ];
+                var el;
+                var ch;
+                var i;
+
+                this.each(function() {
+                    el = this;
+                    ch = el.children;
+
+                    for(i = 0; i < ch.length; i++) {
+                        var el = ch[i];
+                        if(selector) {
+                            if((el.matches && el.matches(selector)) || matches(el, selector))
+                                children.push(el);
+                        }
+                        else
+                            children.push(el);
+                    }
+                });
+                return new FakeJQueryInstance(children);
+            },
+
+            on : function(eventName, handler) {
+                eventName = (eventName || _strEmpty).match(_rnothtmlwhite) || [_strEmpty];
+
+                var i;
+                var el;
+                return this.each(function() {
+                    el = this;
+                    if (el.addEventListener) {
+                        for (i = 0; i < eventName.length; i++)
+                            el.addEventListener(eventName[i], handler);
+                    }
+                    else {
+                        for (i = 0; i < eventName.length; i++)
+                            el.attachEvent('on' + eventName[i], handler);
+                    }
+                });
+            },
+
+            off : function(eventName, handler) {
+                eventName = (eventName || _strEmpty).match(_rnothtmlwhite) || [_strEmpty];
+
+                var i;
+                var el;
+                return this.each(function() {
+                    var el = this;
+                    if (el.removeEventListener) {
+                        for (i = 0; i < eventName.length; i++)
+                            el.removeEventListener(eventName[i], handler);
+                    }
+                    else {
+                        for (i = 0; i < eventName.length; i++)
+                            el.detachEvent('on' + eventName[i], handler);
+                    }
+                });
+            },
+
+            trigger : function(eventName) {
+                var el;
+                var event;
+                return this.each(function() {
+                    el = this;
+                    if (document.createEvent) {
+                        event = document.createEvent('HTMLEvents');
+                        event.initEvent(eventName, true, false);
+                        el.dispatchEvent(event);
+                    }
+                    else {
+                        el.fireEvent("on" + eventName);
+                    }
+                });
+            },
+
+            hasClass : function(className) {
+                var elem, i = 0;
+                var classNamePrepared = _strSpace + className + _strSpace;
+
+                while ((elem = this[ i++ ])) {
+                    if(elem.classList) {
+                        if(elem.classList.contains(className))
+                            return true;
+                    }
+                    else if (elem.nodeType === 1 && (_strSpace + stripAndCollapse(elem.className) + _strSpace).indexOf(classNamePrepared) > -1 )
+                        return true;
+                }
+
+                return false;
+            },
+
+            addClass : function(className) {
+                var classes;
+                var elem;
+                var cur;
+                var curValue;
+                var clazz;
+                var finalValue;
+                var supportClassList = null;
+                var i = 0;
+                var v = 0;
+
+                if (className) {
+                    classes = className.match( _rnothtmlwhite ) || [];
+
+                    while ((elem = this[i++])) {
+                        if(supportClassList === undefined)
+                            supportClassList = elem.classList !== undefined;
+
+                        if(supportClassList) {
+                            while ((clazz = classes[v++]))
+                                elem.classList.add(clazz);
+                        }
+                        else {
+                            curValue = elem.className;
+                            cur = elem.nodeType === 1 && (_strSpace + stripAndCollapse(curValue) + _strSpace);
+
+                            if (cur) {
+                                while ((clazz = classes[v++]))
+                                    if (cur.indexOf(_strSpace + clazz + _strSpace) < 0)
+                                        cur += clazz + _strSpace;
+
+                                finalValue = stripAndCollapse(cur);
+                                if (curValue !== finalValue)
+                                    elem.className = finalValue;
+                            }
+                        }
+                    }
+                }
+
+                return this;
+            },
+
+            removeClass : function(className) {
+                var classes;
+                var elem;
+                var cur;
+                var curValue;
+                var clazz;
+                var finalValue;
+                var supportClassList = null;
+                var i = 0;
+                var v = 0;
+
+                if (className) {
+                    classes = className.match(_rnothtmlwhite) || [];
+
+                    while ((elem = this[i++])) {
+                        if(supportClassList === undefined)
+                            supportClassList = elem.classList !== undefined;
+
+                        if(supportClassList) {
+                            while ((clazz = classes[v++]))
+                                elem.classList.remove(clazz);
+                        }
+                        else {
+                            curValue = elem.className;
+                            cur = elem.nodeType === 1 && (_strSpace + stripAndCollapse(curValue) + _strSpace);
+
+                            if (cur) {
+                                while ((clazz = classes[v++]))
+                                    while (cur.indexOf(_strSpace + clazz + _strSpace) > -1)
+                                        cur = cur.replace(_strSpace + clazz + _strSpace, _strSpace);
+
+                                finalValue = stripAndCollapse(cur);
+                                if (curValue !== finalValue)
+                                    elem.className = finalValue;
+                            }
+                        }
+                    }
+                }
+
+                return this;
+            },
+
+            remove : function() {
+                return this.each(function() {
+                    var el = this;
+                    if(el.parentNode != null)
+                        el.parentNode.removeChild(el);
+                });
+            },
+
+            offset : function() {
+                var el = this[0];
+                var rect = el.getBoundingClientRect();
+                var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                return {
+                    top: rect.top + scrollTop,
+                    left: rect.left + scrollLeft
+                };
+            },
+
+            css : function(styles, val) {
+                var el;
+                var key;
+
+                if(FakejQuery.type(styles) === TYPES.s) {
+                    if(val === undefined) {
+                        el = this[0];
+                        return window.getComputedStyle ? window.getComputedStyle(el, null).getPropertyValue(styles) : el.currentStyle[styles];
+                    }
+                    else {
+                        return this.each(function() {
+                            setCSSVal(this, styles, val);
+                        });
+                    }
+                }
+                else {
+                    return this.each(function() {
+                        for(key in styles)
+                            setCSSVal(this, key, styles[key]);
+                    });
+                }
+            },
+
+            unwrap : function() {
+                var parents = [ ];
+                var i;
+                var el;
+                var parent;
+
+                this.each(function() {
+                    parent = this.parentNode;
+                    if(FakejQuery.inArray(parent, parents) === - 1)
+                        parents.push(parent);
+                });
+
+                for(i = 0; i < parents.length; i++) {
+                    el = parents[i];
+                    parent = el.parentNode;
+                    while (el.firstChild)
+                        parent.insertBefore(el.firstChild, el);
+                    parent.removeChild(el);
+                }
+
+                return this;
+            },
+
+            wrapAll : function(wrapperHTML) {
+                var i;
+                var nodes = this;
+                var wrapper = new FakejQuery(wrapperHTML)[0];
+                var deepest = wrapper;
+                var parent = nodes[0].parentNode;
+                var previousSibling = nodes[0].previousSibling;
+                while(deepest.childNodes.length > 0)
+                    deepest = deepest.childNodes[0];
+
+                for (i = 0; nodes.length - i; deepest.firstChild === nodes[0] && i++)
+                    deepest.appendChild(nodes[i]);
+
+                var nextSibling = previousSibling ? previousSibling.nextSibling : parent.firstChild;
+                parent.insertBefore(wrapper, nextSibling);
+
+                return this;
+            },
+
+            wrapInner : function(wrapperHTML) {
+                return this.each(function() {
+                    var el = new FakeJQueryInstance(this);
+                    var contents = el.contents();
+
+                    if (contents.length)
+                        contents.wrapAll(wrapperHTML);
+                    else
+                        el.append(wrapperHTML);
+                });
+            },
+
+            wrap : function(wrapperHTML) {
+                return this.each(function() { new FakejQuery(this).wrapAll(wrapperHTML); });
+            },
+
+            contents : function() {
+                var contents = [ ];
+                var childs;
+                var i;
+
+                this.each(function() {
+                    childs = this.childNodes;
+                    for(i = 0; i < childs.length; i++)
+                        contents.push(childs[i]);
+                });
+
+                return new FakeJQueryInstance(contents);
+            },
+
+            parent : function() {
+                var parents = [ ];
+                this.each(function() { parents.push(this.parentNode); });
+                return new FakeJQueryInstance(parents);
+            },
+
+            is : function(selector) {
+                var el;
+                var i;
+                for(i = 0; i < this.length; i++) {
+                    el = this[i];
+                    if(selector === ":visible")
+                        return el.style.display !== 'none';
+                    if(selector === ":hidden")
+                        return el.style.display === 'none';
+                    if((el.matches && el.matches(selector)) || matches(el, selector))
+                        return true;
+                }
+                return false;
+            },
+
+            animate : function(props, duration, easing, complete) {
+                return this.each(function() { animate(this, props, duration, easing, complete); });
+            },
+
+            stop : function(clearQ, jump) {
+                return this.each(function() { stop(this, clearQ, jump); });
+            }
+        };
+
+        return FakejQuery;
+    })(COMPATIBILITY);
+	var INSTANCES = (function(helper) {
         var _targets = [ ];
         var _instancePropertyString = '__overlayScrollbars__';
 
@@ -1808,7 +2779,6 @@
 
                 //get and apply intended handle length
                 var handleRatio = Math.min(1, (_hostSizeCache[scrollbarVars._wh] - (_paddingAbsoluteCache ? (isHorizontal ? _paddingX : _paddingY) : 0)) / _contentScrollSizeCache[scrollbarVars._wh]);
-				handleRatio = isNaN(handleRatio) ? 0 : handleRatio;
                 handleCSS[scrollbarVars.wh] = (Math.floor(handleRatio * 100 * 100000) / 100000) + "%"; //the last * 100000 / 100000 is for flooring to the 4th digit
 
                 if (!nativeOverlayScrollbarsAreActive())
@@ -3266,7 +4236,7 @@
                     var strOverflowY = strOverflow + '-y';
                     var strHidden = 'hidden';
                     var strVisible = 'visible';
-                    var hideOverflow4CorrectMeasuring = _restrictedMeasuring ? (_nativeScrollbarIsOverlaid.x || _nativeScrollbarIsOverlaid.y) || (_viewportSize.w < _nativeScrollbarMinSize.y || _viewportSize.h < _nativeScrollbarMinSize.x) : false;
+                    var hideOverflow4CorrectMeasuring = _restrictedMeasuring ? (_nativeScrollbarIsOverlaid.x || _nativeScrollbarIsOverlaid.y) || (_viewportSize.w < _nativeScrollbarMinSize.y || _viewportSize.h < _nativeScrollbarMinSize.x) : false;;
 
                     //Reset the viewport (very important for natively overlaid scrollbars and zoom change
                     var viewportElementResetCSS = {};
@@ -3281,7 +4251,7 @@
                     //measure several sizes:
                     var contentMeasureElement = getContentMeasureElement();
                     //in Firefox content element has to have overflow hidden, else element margins aren't calculated properly, this element prevents this bug, but only if scrollbars aren't overlaid
-                    var contentMeasureElementGuaranty = _restrictedMeasuring && !hideOverflow4CorrectMeasuring ? _viewportElement[0] : contentMeasureElement;
+                    var contentMeasureElementGuaranty = hideOverflow4CorrectMeasuring ? contentMeasureElement : _viewportElement[0];
                     var clientSize = {
                         w: contentMeasureElement[WORDING.cW],
                         h: contentMeasureElement[WORDING.cH]
@@ -4838,5 +5808,24 @@
             _pluginGlobals.defaultOptions = helper.extend(true, { }, currDefaultOptions , newDefaultOptions);
         };
     })(COMPATIBILITY, INSTANCES, HELPER, BYPROPERTYPATH);
-    return window[PLUGINNAME];
+	
+	var jQuery = window.jQuery;
+	if(jQuery && jQuery.fn) {
+		/**
+		 * The jQuery initialization interface.
+		 * @param options The initial options for the construction of the plugin. To initialize the plugin, this option has to be a object! If it isn't a object, the instance(s) are returned and the plugin wont be initialized.
+		 * @returns {*} After initialization it returns the jQuery element array, else it returns the instance(s) of the elements which are selected.
+		 */
+		jQuery.fn.overlayScrollbars = function (options) {
+			var _elements = this;
+			if(jQuery.isPlainObject(options)) {
+				jQuery.each(_elements, function() { window[PLUGINNAME](this, options); });
+				return _elements;
+			}
+			else
+				return window[PLUGINNAME](_elements, options);
+		};
+	}
+	
+	return window[PLUGINNAME];
 })));

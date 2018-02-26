@@ -20,6 +20,10 @@ $header-accent-color:  rgb($header-accent-color-r, $header-accent-color-g, $head
 $header-accent-gradient-1: rgba($header-accent-color-r, $header-accent-color-g, $header-accent-color-b, 1);
 $header-accent-gradient-0: rgba($header-accent-color-r, $header-accent-color-g, $header-accent-color-b, 0);
 
+$header-box-shadow: 0 15px 20px -15px rgba(57, 120, 253, 0.25), 0 55px 50px -35px rgba(47, 78, 249, 0.1);
+$header-content-box-shadow: 0 15px 20px -15px rgba(0, 0, 255, 0.3), 0 55px 50px -35px rgba(0, 0, 255, 0.3);
+$header-content-text-shadow: 0px 1px 5px rgba(0, 0, 255, 0.2);
+
 $text-color-dark: #31485B;
 $text-color-gray: #555E6B;
 $text-color-light: #A5A5AF;
@@ -31,7 +35,7 @@ $content-navigation-border-size: 6px;
 
 $footer-color: #323750;
 
-$min-width: 850px;
+$min-width: 992px;
 $font-family: 'Raleway', sans-serif;
 
 $navigation-height: 76px;
