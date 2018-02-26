@@ -365,7 +365,7 @@
 	position: relative;
 	height: 100%;
 	width: 100%;
-	padding: 5px;
+	padding: 5px 10px;
 	border: 2px solid $border-color;
 	border-radius: 4px;
 	transition: border-color 0.3s;
@@ -407,7 +407,7 @@
 	right: auto;
 }
 .content-demo-input-right .content-demo-input-textarea > .os-host-textarea {
-	direction: rtl;
+	text-align: right;
 }
 .content-demo-input-right .content-demo-input-textarea:before,
 .content-demo-input-right .content-demo-input-textarea:after {

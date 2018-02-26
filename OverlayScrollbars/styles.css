@@ -8295,7 +8295,7 @@ a.button-dontate:hover:after {
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 5px;
+  padding: 5px 10px;
   border: 2px solid #D6D6D6;
   border-radius: 4px;
   transition: border-color 0.3s; }
@@ -8337,7 +8337,7 @@ a.button-dontate:hover:after {
   right: auto; }
 
 .content-demo-input-right .content-demo-input-textarea > .os-host-textarea {
-  direction: rtl; }
+  text-align: right; }
 
 .content-demo-input-right .content-demo-input-textarea:before,
 .content-demo-input-right .content-demo-input-textarea:after {
@@ -8746,15 +8746,15 @@ a.button-dontate:hover:after {
 
 #theme-demo-plugin-four-graidient-top {
   top: 0;
-  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
-  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 100%); }
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); }
 
 #theme-demo-plugin-four-graidient-bottom {
   bottom: 0;
-  background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
-  background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.45) 100%); }
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%);
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%); }
 
 .textarea-demo-left,
 .textarea-demo-right {
