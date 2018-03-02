@@ -577,15 +577,15 @@
 								<td>autoHide</td>
 								<td>string</td>
 								<td>
-									<p><code class="code-inline js">[ "never", "scroll", "leave" ]</code></p>
-									<p>shorthand: <code class="code-inline js">[ "n", "s", "l"  ]</code></p>
+									<p><code class="code-inline js">[ "never", "scroll", "leave", "move" ]</code></p>
+									<p>shorthand: <code class="code-inline js">[ "n", "s", "l", "m" ]</code></p>
 								</td>
 								<td>"never"</td>
 							</tr>
 							<tr>
 								<td colspan="4">	
 									<div>
-										The possibility to hide visible scrollbars after a certain action.
+										The possibility to hide visible scrollbars automatically after a certain action.
 										<div class="plainobjectpropertyvalue-documentation-box">
 											<div class="plainobjectpropertyvalue-documentation-box-title">
 												"never"
@@ -608,6 +608,14 @@
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
 												The scrollbars gets hidden automatically after the mouse has left the host-element.
+											</div>
+										</div>
+                                        <div class="plainobjectpropertyvalue-documentation-box">
+											<div class="plainobjectpropertyvalue-documentation-box-title">
+												"move"
+											</div>
+											<div class="plainobjectpropertyvalue-documentation-box-content">
+												The scrollbars gets hidden automatically after a scroll and after the mouse has stopped moving. <code class="code-inline">added in v1.4.0</code>
 											</div>
 										</div>
 									</div>
