@@ -336,7 +336,7 @@ body:not(.ready) *:after {
 	margin-bottom: 0;
 }
 #header:before {
-	content: '';
+	//content: '';
 	position: absolute;
 	width: 100vw;
 	background: #fff;
