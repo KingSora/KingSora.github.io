@@ -1054,7 +1054,6 @@ var sendFirstMessages = function() {
 var scroll;
 var anim = false;
 var setDoScroll = function() {
-	console.log(this.scroll());
 	if(!anim)
 		scroll = this.scroll().y.ratio === 1;
 	else

@@ -592,6 +592,8 @@ $(document).ready(function() {
 			overflowBehavior : { y : 'hidden' } 
 		});
 		setBodyScrollbars();
+		_header.scrollLeft(0);
+		_header.scrollTop(0);
 	};
 	
 	window._framework = _base;	
