@@ -350,10 +350,10 @@ body:not(.ready) *:after {
 	height: 45px;
 	left: 50%;
 	transform: translate(-50%, 0);
-	transition: transform 0.3s;
+	transition: transform 0.3s, height 0.3s;
 }
 #header.shrinked  > #header-edge {
-	transform: translate(-50%, 100%);
+	height: 0;
 }
 #header > .header-shining {
 	display: block;
@@ -1001,8 +1001,11 @@ body:not(.ready) *:after {
 	border-width: 7.5px 6px 7.5px 0;
 	border-color: transparent #ffffff transparent transparent;
 }
-/*
 @media (max-width:$min-width) {
+	#header-edge {
+		height: 0;
+	}
+	/*
 	#content-navigation {
 		max-height: none !important;
 		left: -$content-navigation-width;
@@ -1034,8 +1037,8 @@ body:not(.ready) *:after {
 	#content-navigation-main {
 		margin-left: 0px;
 	}
+	*/
 }
-*/
 
 
 //FOOTER
