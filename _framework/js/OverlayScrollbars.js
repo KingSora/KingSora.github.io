@@ -1909,6 +1909,7 @@
             var _swallowedUpdateParams = { };
             var _swallowedUpdateTimeout;
             var _swallowUpdateLag = 33;
+            var _imgs = [ ];
 
             //DOM elements:
             var _windowElement;
@@ -2070,7 +2071,7 @@
                 element = element[0];
                 var events = eventNames.split(_strSpace);
                 for (var i = 0; i < events.length; i++)
-                    element.removeEventListener(events[i], listener, {passive: true});
+                    element.removeEventListener(events[i], listener);
             }
 
             /**
@@ -2714,6 +2715,13 @@
             }
 
             /**
+             * A callback which will be called after a img element has downloaded its src asynchronous.
+             */
+            function onImgLoad() {
+                update();
+            }
+            
+            /**
              * Determines whether native overlay scrollbars are active.
              * @returns {boolean} True if native overlay scrollbars are active, false otherwise.
              */
@@ -2959,15 +2967,15 @@
                         removePassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
                         removePassiveEventListener(_documentElement, _strKeyDownEvent, documentKeyDown);
                         removePassiveEventListener(_documentElement, _strKeyUpEvent, documentKeyUp);
-                        removePassiveEventListener(_documentElement, _strSelectStartEvent, onSelectStart);
                     }
                     else {
                         _documentElement.off(_strMouseTouchMoveEvent, handleDragMove);
                         _documentElement.off(_strMouseTouchUpEvent, documentMouseTouchUp);
                         _documentElement.off(_strKeyDownEvent, documentKeyDown);
                         _documentElement.off(_strKeyUpEvent, documentKeyUp);
-                        _documentElement.off(_strSelectStartEvent, onSelectStart);
                     }
+                    _documentElement.off(_strSelectStartEvent, onSelectStart);
+                    
                     decreaseTrackScrollAmount();
                     mouseDownScroll = undefined;
                     mouseDownOffset = undefined;
@@ -3015,15 +3023,14 @@
                         scrollbarVars.s.addClass(strActive);
 
                         if (_supportPassiveEvents) {
-                            addPassiveEventListener(_documentElement, _strSelectStartEvent, onSelectStart);
                             addPassiveEventListener(_documentElement, _strMouseTouchMoveEvent, handleDragMove);
                             addPassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
                         }
                         else {
-                            _documentElement.on(_strSelectStartEvent, onSelectStart);
                             _documentElement.on(_strMouseTouchMoveEvent, handleDragMove);
                             _documentElement.on(_strMouseTouchUpEvent, documentMouseTouchUp);
                         }
+                        _documentElement.on(_strSelectStartEvent, onSelectStart);
                         compatibility.prvD(event);
                     }
                 });
@@ -3089,17 +3096,16 @@
                         scrollbarVars.s.addClass(strActive);
 
                         if (_supportPassiveEvents) {
-                            addPassiveEventListener(_documentElement, _strSelectStartEvent, onSelectStart);
                             addPassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
                             addPassiveEventListener(_documentElement, _strKeyDownEvent, documentKeyDown);
                             addPassiveEventListener(_documentElement, _strKeyUpEvent, documentKeyUp);
                         }
                         else {
-                            _documentElement.on(_strSelectStartEvent, onSelectStart);
                             _documentElement.on(_strMouseTouchUpEvent, documentMouseTouchUp);
                             _documentElement.on(_strKeyDownEvent, documentKeyDown);
                             _documentElement.on(_strKeyUpEvent, documentKeyUp);
                         }
+                        _documentElement.on(_strSelectStartEvent, onSelectStart);
 
                         scrollAction();
                         compatibility.prvD(event);
@@ -3159,7 +3165,7 @@
             }
 
             /**
-             * The mouse leave event of the host element. This event is only needed for the autoHide feature.
+             * The mouse move event of the host element. This event is only needed for the autoHide "move" feature.
              */
             function hostOnMouseMove() {
                 if (_scrollbarsAutoHideMove) {
@@ -4257,9 +4263,9 @@
                     var strVisible = 'visible';
                     //decide whether the content overflow must get hidden for correct overflow measuring, it MUST be always hidden if the height is auto
                     var hideOverflow4CorrectMeasuring = _restrictedMeasuring ?
-                    (_nativeScrollbarIsOverlaid.x || _nativeScrollbarIsOverlaid.y) || //it must be hidden if native scrollbars are overlaid
-                    (_viewportSize.w < _nativeScrollbarMinSize.y || _viewportSize.h < _nativeScrollbarMinSize.x) || //it must be hidden if host-element is too small
-                    heightAuto //it must be hidden if height is auto
+                        (_nativeScrollbarIsOverlaid.x || _nativeScrollbarIsOverlaid.y) || //it must be hidden if native scrollbars are overlaid
+                        (_viewportSize.w < _nativeScrollbarMinSize.y || _viewportSize.h < _nativeScrollbarMinSize.x) || //it must be hidden if host-element is too small
+                        heightAuto //it must be hidden if height is auto
                         : heightAuto; //if there is not the restricted Measuring bug, it must be hidden if the height is auto
 
                     //Reset the viewport (very important for natively overlaid scrollbars and zoom change
@@ -4905,19 +4911,34 @@
              * if this is the case then before a real update the content size and host element attributes gets checked, and if they changed only then the update method will be called.
              */
             _base.update = function (force) {
+                var attrsChanged;
+                var contentSizeC;
+                var isZoom = force === 'zoom';
+                var imgElementSelector = 'img';
+                var imgElementLoadEvent = 'load';
                 if (force === _strAuto) {
-                    var attrsChanged = meaningfulAttrsChanged();
-                    var contentSizeC = updateAutoContentSizeChanged();
+                    attrsChanged = meaningfulAttrsChanged();
+                    contentSizeC = updateAutoContentSizeChanged();
                     if (attrsChanged || contentSizeC)
                         update(false, contentSizeC);
                 }
-                else if (force === 'zoom') {
+                else if (isZoom) {
                     update(true, true);
                 }
                 else {
                     force = _isSleeping || force;
                     _isSleeping = false;
                     update(false, false, force);
+                }
+                if(!_isTextarea && !isZoom) {  
+                    _contentElement.find(imgElementSelector).each(function(i, el) { 
+                        var index = helper.inArray(el, _imgs);
+                        if (index === -1) {
+                            el = helper(el);
+                            el.off(imgElementLoadEvent, onImgLoad);
+                            el.on(imgElementLoadEvent, onImgLoad);
+                        }
+                    });
                 }
             };
 
