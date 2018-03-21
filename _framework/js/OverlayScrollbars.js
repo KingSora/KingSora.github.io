@@ -4420,8 +4420,8 @@
                      * };
                      */
                     var overflowAmount = {
-                        x: Math.max(0, contentScrollSize.w - hostSize.w + (paddingAbsolute ? _paddingX : 0)),
-                        y: Math.max(0, contentScrollSize.h - hostSize.h + (paddingAbsolute ? _paddingY : 0))
+                        x: Math.max(0, Math.round((contentScrollSize.w - hostSize.w + (paddingAbsolute ? _paddingX : 0)) * 100) / 100),
+                        y: Math.max(0, Math.round((contentScrollSize.h - hostSize.h + (paddingAbsolute ? _paddingY : 0)) * 100) / 100)
                     };
                     var hideOverflowForceTextarea = _isTextarea && (_viewportSize.w === 0 || _viewportSize.h === 0);
                     if (hideOverflowForceTextarea) {
