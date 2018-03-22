@@ -1949,20 +1949,33 @@ instance.scroll({ y : "-= 50px"  });
 														Both axis shall be docked to the "end" edge. - The element will be docked to the bottom and right edge of the viewport. (If direction is RTL to the bottom and left edge.)
 													</div>
 												</div>
+                                                <div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														"center"
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														The element gets centered horizontally and vertically.
+													</div>
+												</div>
+                                                <div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														"nearest"
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														The element gets docked to the nearest edges.
+													</div>
+												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
 														string Array
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
 														With this array you are able to specify the edge for each axis individually.<br>
-														The array has to have a size of two, the first item represents the x-and the second element the y-axis.<br>
-														"Begin" for the x-axis means, that the element will be docked to the left edge of the viewport.<br>
-														"End" for the x-axis means, that the element will be docked to the right edge of the viewport.<br>
-														"Begin" for the y-axis means, that the element will be docked to the top edge of the viewport.<br>
-														"End" for the y-axis means, that the element will be docked to the bottom edge of the viewport.<br>
 														If the direction is RTL, the x-axis values are inverted ("begin" = dock to right, "end" = dock to left).<br>
 														A example: <code class="js code-inline">[ "begin", "end" ]</code> -
-														with this array the element will be docked to the left and bottom edge of the viewport.
+														with this array the element will be docked to the left and bottom edge of the viewport.<br>
+                                                        A second example: <code class="js code-inline">[ "center", "begin" ]</code> -
+														with this array the element will be docked to the top edge of the viewport and is centered horizontally.
 													</div>
 												</div>
 											</div>
