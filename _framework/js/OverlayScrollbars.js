@@ -902,7 +902,7 @@
                         for (i = 0; i < eventName.length; i++)
                             el.addEventListener(eventName[i], handler);
                     }
-                    else {
+                    else if(el.detachEvent) {
                         for (i = 0; i < eventName.length; i++)
                             el.attachEvent('on' + eventName[i], handler);
                     }
@@ -915,12 +915,12 @@
                 var i;
                 var el;
                 return this.each(function() {
-                    var el = this;
+                    el = this;
                     if (el.removeEventListener) {
                         for (i = 0; i < eventName.length; i++)
                             el.removeEventListener(eventName[i], handler);
                     }
-                    else {
+                    else if(el.detachEvent) {
                         for (i = 0; i < eventName.length; i++)
                             el.detachEvent('on' + eventName[i], handler);
                     }
@@ -5051,7 +5051,7 @@
                 }
                 
                 for(var i = 0; i < _imgs.length; i++)
-                    $(_imgs[i]).off('load', onImgLoad);
+                    helper(_imgs[i]).off('load', onImgLoad);
                 _imgs = undefined;
                 
                 instances.rem(pluginTargetElement);
@@ -5189,7 +5189,7 @@
                 var elementObjSettingsBlockValues = [strBegin, strEnd, strCenter, strNearest];
                 var coordinatesIsElementObj = coordinates.hasOwnProperty('el');
                 var possibleElement = coordinatesIsElementObj ? coordinates.el : coordinates;
-                var possibleElementIsJQuery = possibleElement instanceof helper;
+                var possibleElementIsJQuery = possibleElement instanceof helper || possibleElement instanceof window.jQuery;
                 var possibleElementIsHTMLElement = possibleElementIsJQuery ? false : isHTMLElement(possibleElement);
                 var checkSettingsStringValue = function (currValue, allowedValues) {
                     for (i = 0; i < allowedValues.length; i++) {
