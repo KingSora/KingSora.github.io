@@ -3244,28 +3244,30 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 $theme-name: os-theme-custom;
 
 //horizontal scrollbar
-$scrollbar-horizontal-size: 10px; //horizontal scrollbar height
+$scrollbar-horizontal-size: 6px; //horizontal scrollbar height
 $scrollbar-horizontal-padding: 2px;
-$scrollbar-horizontal-track-background: rgba(0, 0, 0, 0.15);
-$scrollbar-horizontal-track-background-hover: rgba(0, 0, 0, 0.15);
-$scrollbar-horizontal-track-background-active: rgba(0, 0, 0, 0.15);
+$scrollbar-horizontal-inner-expansion: 6px;
+$scrollbar-horizontal-track-background: transparent;
+$scrollbar-horizontal-track-background-hover: transparent;
+$scrollbar-horizontal-track-background-active: transparent;
 $scrollbar-horizontal-track-transition: background-color 0.3s;
 $scrollbar-horizontal-handle-min-size: 30px; //horizontal scrollbar handle min width
-$scrollbar-horizontal-handle-max-size: 30px; //horizontal scrollbar handle max width
+$scrollbar-horizontal-handle-max-size: none; //horizontal scrollbar handle max width
 $scrollbar-horizontal-handle-background: rgba(0, 0, 0, 0.4);
 $scrollbar-horizontal-handle-background-hover: rgba(0, 0, 0, 0.6);
 $scrollbar-horizontal-handle-background-active: rgba(0, 0, 0, 1);
 $scrollbar-horizontal-handle-transition: background-color 0.3s;
 
 //vertical scrollbar
-$scrollbar-vertical-size: 10px; //vertical scrollbar width
+$scrollbar-vertical-size: 6px; //vertical scrollbar width
 $scrollbar-vertical-padding: 2px;
-$scrollbar-vertical-track-background: rgba(0, 0, 0, 0.15);
-$scrollbar-vertical-track-background-hover: rgba(0, 0, 0, 0.15);
-$scrollbar-vertical-track-background-active: rgba(0, 0, 0, 0.15);
+$scrollbar-vertical-inner-expansion: 6px;
+$scrollbar-vertical-track-background: transparent;
+$scrollbar-vertical-track-background-hover: transparent;
+$scrollbar-vertical-track-background-active: transparent;
 $scrollbar-vertical-track-transition: background-color 0.3s;
 $scrollbar-vertical-handle-min-size: 30px; //vertical scrollbar handle min height
-$scrollbar-vertical-handle-max-size: 30px; //vertical scrollbar handle max height
+$scrollbar-vertical-handle-max-size: none; //vertical scrollbar handle max height
 $scrollbar-vertical-handle-background: rgba(0, 0, 0, 0.4);
 $scrollbar-vertical-handle-background-hover: rgba(0, 0, 0, 0.6);
 $scrollbar-vertical-handle-background-active: rgba(0, 0, 0, 1);
@@ -3273,82 +3275,109 @@ $scrollbar-vertical-handle-transition: background-color 0.3s;
 
 //scrollbar corner
 $scrollbar-corner-background-color: transparent;
-			
 
 .#{$theme-name} > .os-scrollbar-horizontal {
-	right: $scrollbar-vertical-size;
-	height: $scrollbar-horizontal-size;
-	padding: $scrollbar-horizontal-padding;
+    right: $scrollbar-vertical-size + ($scrollbar-vertical-padding * 2);
+    height: $scrollbar-horizontal-size;
+    padding: $scrollbar-horizontal-padding;
 }
 .#{$theme-name} > .os-scrollbar-vertical {
-	bottom: $scrollbar-horizontal-size;
-	width: $scrollbar-vertical-size;
-	padding: $scrollbar-vertical-padding;
+    bottom: $scrollbar-horizontal-size + ($scrollbar-horizontal-padding * 2);
+    width: $scrollbar-vertical-size;
+    padding: $scrollbar-vertical-padding;
 }
 .#{$theme-name}.os-host-rtl > .os-scrollbar-horizontal {
-	left: $scrollbar-vertical-size;
-	right: 0;
+    left: $scrollbar-vertical-size + ($scrollbar-vertical-padding * 2);
+    right: 0;
 }
 .#{$theme-name} > .os-scrollbar-corner {
-	height: $scrollbar-horizontal-size;
-	width: $scrollbar-vertical-size;
-	background-color: $scrollbar-corner-background-color;
+    height: $scrollbar-horizontal-size + ($scrollbar-horizontal-padding * 2);
+    width: $scrollbar-vertical-size + ($scrollbar-vertical-padding * 2);
+    background-color: $scrollbar-corner-background-color;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track {
-	background: $scrollbar-horizontal-track-background;
+    background: $scrollbar-horizontal-track-background;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track {
-	background: $scrollbar-vertical-track-background;
+    background: $scrollbar-vertical-track-background;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track:hover {
-	background: $scrollbar-horizontal-track-background-hover;
+    background: $scrollbar-horizontal-track-background-hover;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track:hover {
-	background: $scrollbar-vertical-track-background-hover;
+    background: $scrollbar-vertical-track-background-hover;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track.active {
-	background: $scrollbar-horizontal-track-background-active;
+    background: $scrollbar-horizontal-track-background-active;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track.active {
-	background: $scrollbar-vertical-track-background-active;
+    background: $scrollbar-vertical-track-background-active;
 }
 .#{$theme-name}.os-host-transition > .os-scrollbar-horizontal > .os-scrollbar-track {
-	-webkit-transition: $scrollbar-horizontal-track-transition;
-	        transition: $scrollbar-horizontal-track-transition;
+    -webkit-transition: $scrollbar-horizontal-track-transition;
+            transition: $scrollbar-horizontal-track-transition;
 }
 .#{$theme-name}.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track {
-	-webkit-transition: $scrollbar-vertical-track-transition;
-	        transition: $scrollbar-vertical-track-transition;
+    -webkit-transition: $scrollbar-vertical-track-transition;
+            transition: $scrollbar-vertical-track-transition;
+}
+.#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:before,
+.#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: block;
+}
+.#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:before {
+    top: -$scrollbar-horizontal-inner-expansion;
+    bottom: -$scrollbar-horizontal-padding;
+}
+.#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
+    left: -$scrollbar-vertical-inner-expansion;
+    right: -$scrollbar-vertical-padding;
+}
+.#{$theme-name}.os-host-rtl > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
+    right: -$scrollbar-vertical-inner-expansion;
+    left: -$scrollbar-vertical-padding;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
-	min-width: $scrollbar-horizontal-handle-min-size;
-	max-width: $scrollbar-horizontal-handle-max-size;
-	background: $scrollbar-horizontal-handle-background;
+    border-radius: $scrollbar-horizontal-size;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
-	min-height: $scrollbar-vertical-handle-min-size;
-	max-height: $scrollbar-vertical-handle-max-size;
-	background: $scrollbar-vertical-handle-background;
+    border-radius: $scrollbar-vertical-size;
+}
+.#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
+    min-width: $scrollbar-horizontal-handle-min-size;
+    max-width: $scrollbar-horizontal-handle-max-size;
+    background: $scrollbar-horizontal-handle-background;
+}
+.#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
+    min-height: $scrollbar-vertical-handle-min-size;
+    max-height: $scrollbar-vertical-handle-max-size;
+    background: $scrollbar-vertical-handle-background;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:hover {
-	background: $scrollbar-horizontal-handle-background-hover;
+    background: $scrollbar-horizontal-handle-background-hover;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:hover {
-	background: $scrollbar-vertical-handle-background-hover;
+    background: $scrollbar-vertical-handle-background-hover;
 }
 .#{$theme-name} > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle.active {
-	background: $scrollbar-horizontal-handle-background-active;
+    background: $scrollbar-horizontal-handle-background-active;
 }
 .#{$theme-name} > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle.active {
-	background: $scrollbar-vertical-handle-background-active;
+    background: $scrollbar-vertical-handle-background-active;
 }
 .#{$theme-name}.os-host-transition > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
-	-webkit-transition: $scrollbar-horizontal-handle-transition;
-	        transition: $scrollbar-horizontal-handle-transition;
+    -webkit-transition: $scrollbar-horizontal-handle-transition;
+            transition: $scrollbar-horizontal-handle-transition;
 }
 .#{$theme-name}.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
-	-webkit-transition: $scrollbar-vertical-handle-transition;
-	        transition: $scrollbar-vertical-handle-transition;
+    -webkit-transition: $scrollbar-vertical-handle-transition;
+            transition: $scrollbar-vertical-handle-transition;
 }
 </code></pre>
 				<br>
