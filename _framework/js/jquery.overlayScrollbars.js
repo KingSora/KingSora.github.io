@@ -2,19 +2,19 @@
  * OverlayScrollbars
  * https://github.com/KingSora/OverlayScrollbars
  *
- * Version: 1.4.4
+ * Version: 1.4.5
  *
  * Copyright KingSora.
  * https://github.com/KingSora
  *
  * Released under the MIT license.
- * Date: 06.05.2018
+ * Date: 17.05.2018
  */
 
 (function (global, factory) {
-    //if (typeof define === 'function' && define.amd)
-    //    define(['jquery'], function(jQuery) { return factory(global, global.document, undefined, jQuery); });
-    if (typeof module === 'object' && typeof module.exports === 'object')
+    if (typeof define === 'function' && define.amd)
+        define(['jquery'], function(framework) { return factory(global, global.document, undefined, framework); });
+    else if (typeof module === 'object' && typeof module.exports === 'object')
         module.exports = factory(global, global.document, undefined, require('jquery'));
     else
         factory(global, global.document, undefined, global.jQuery);
@@ -124,7 +124,7 @@
              * @param e The event of which the default action shall be prevented.
              */
             prvD: function(e) {
-                if(e.preventDefault)
+                if(e.preventDefault && e.cancelable)
                     e.preventDefault();
                 else
                     e.returnValue = false;
@@ -489,7 +489,7 @@
                 var bodyElement = helper('body');
                 var scrollbarDummyElement = helper('<div id="hs-dummy-scrollbar-size"><div style="height: 200%; width: 200%; margin: 10px 0;"></div></div>');
                 var scrollbarDummyElement0 = scrollbarDummyElement[0];
-                var dummyContainerChild = helper(scrollbarDummyElement.children('div').first());
+                var dummyContainerChild = helper(scrollbarDummyElement.children('div').eq(0));
                 var IEBUGFIX = scrollbarDummyElement0[LEXICON.oH]; //IE9 causes a bug where offsetHeight is zero for no reason
 
                 bodyElement.append(scrollbarDummyElement);
@@ -1073,7 +1073,7 @@
                 function addPassiveEventListener(element, eventNames, listener) {
                     var events = eventNames.split(_strSpace);
                     for (var i = 0; i < events.length; i++)
-                        element[0].addEventListener(events[i], listener, {passive: true});
+                        element[0].addEventListener(events[i].trim(), listener, {passive: true});
                 }
 
                 /**
@@ -1085,7 +1085,7 @@
                 function removePassiveEventListener(element, eventNames, listener) {
                     var events = eventNames.split(_strSpace);
                     for (var i = 0; i < events.length; i++)
-                        element[0].removeEventListener(events[i], listener);
+                        element[0].removeEventListener(events[i].trim(), listener, {passive: true});
                 }
 
 
@@ -1249,7 +1249,7 @@
                                     css[_strRight] = 0;
                                     scrollLeftValue = _rtlScrollBehavior.n ? -constMaximum : _rtlScrollBehavior.i ? 0 : constMaximum;
                                 }
-                                _sizeObserverElement.children().first().css(css);
+                                _sizeObserverElement.children().eq(0).css(css);
                                 targetElement[_strScrollLeft](scrollLeftValue)[_strScrollTop](constMaximum);
                                 _cssDirectionDetectedCache = dir;
                                 result = true;
@@ -1278,7 +1278,7 @@
                         delete element[_strResizeObserverProperty];
                     }
                     else {
-                        remove(targetElement.children(_strDot + _classNameResizeObserverElement).first());
+                        remove(targetElement.children(_strDot + _classNameResizeObserverElement).eq(0));
                     }
                 }
 
@@ -1294,7 +1294,7 @@
                         }
                         /*
                          else {
-                         targetElement = targetElement.children(_strDot + _classNameResizeObserverElement).first();
+                         targetElement = targetElement.children(_strDot + _classNameResizeObserverElement).eq(0);
                          var w = targetElement.css(_strWidth);
                          var h = targetElement.css(_strHeight);
                          var css = {};
@@ -1321,7 +1321,7 @@
                          var css = { };
                          css[_strHeight] = _strEmpty;
                          css[_strWidth] = _strEmpty;
-                         targetElement.children(_strDot + _classNameResizeObserverElement).first().css(css);
+                         targetElement.children(_strDot + _classNameResizeObserverElement).eq(0).css(css);
                          }
                          */
                     }
@@ -1417,7 +1417,7 @@
                         refreshScrollbarsAutoHide(true);
                         clearTimeout(_scrollbarsAutoHideMoveTimeoutId);
                         _scrollbarsAutoHideMoveTimeoutId = setTimeout(function () {
-                            if (_scrollbarsAutoHideMove)
+                            if (_scrollbarsAutoHideMove && !_destroyed)
                                 refreshScrollbarsAutoHide(false);
                         }, 100);
                     }
@@ -1450,8 +1450,10 @@
                     callCallback(optionsCallbacks.onScroll, event);
 
                     _scrollStopTimeoutId = setTimeout(function () {
-                        viewportOnScrollStop();
-                        callCallback(optionsCallbacks.onScrollStop, event);
+                        if(!_destroyed) {
+                            viewportOnScrollStop();
+                            callCallback(optionsCallbacks.onScrollStop, event);
+                        }
                     }, _scrollStopDelay);
                 }
 
@@ -1519,8 +1521,10 @@
                  */
                 function textareaOnDrop() {
                     setTimeout(function () {
-                        textareaUpdate();
-                        _base.update(_strAuto);
+                        if(!_destroyed) {
+                            textareaUpdate();
+                            _base.update(_strAuto);
+                        }
                     }, 50);
                 }
 
@@ -1958,10 +1962,11 @@
                     }
 
                     //abort update due to:
+                    //destroyed
                     //swallowing
                     //sleeping
                     //host is hidden or has false display
-                    if (swallow || _isSleeping || (_initialized && !force && _hostElement.is(':hidden')) || _hostElement.css('display') === 'inline')
+                    if (_destroyed || swallow || _isSleeping || (_initialized && !force && _hostElement.is(':hidden')) || _hostElement.css('display') === 'inline')
                         return;
 
                     _lastUpdateTime = now;
@@ -3139,19 +3144,11 @@
                         removeClass(scrollbarVars.t, strActive);
                         removeClass(scrollbarVars.s, strActive);
 
-                        if (_supportPassiveEvents) {
-                            removePassiveEventListener(_documentElement, _strMouseTouchMoveEvent, handleDragMove);
-                            removePassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
-                            removePassiveEventListener(_documentElement, _strKeyDownEvent, documentKeyDown);
-                            removePassiveEventListener(_documentElement, _strKeyUpEvent, documentKeyUp);
-                        }
-                        else {
-                            _documentElement.off(_strMouseTouchMoveEvent, handleDragMove)
-                                .off(_strMouseTouchUpEvent, documentMouseTouchUp)
-                                .off(_strKeyDownEvent, documentKeyDown)
-                                .off(_strKeyUpEvent, documentKeyUp);
-                        }
-                        _documentElement.off(_strSelectStartEvent, documentOnSelectStart);
+                        _documentElement.off(_strMouseTouchMoveEvent, handleDragMove)
+                            .off(_strMouseTouchUpEvent, documentMouseTouchUp)
+                            .off(_strKeyDownEvent, documentKeyDown)
+                            .off(_strKeyUpEvent, documentKeyUp)
+                            .off(_strSelectStartEvent, documentOnSelectStart);
 
                         decreaseTrackScrollAmount();
                         mouseDownScroll = undefined;
@@ -3195,21 +3192,16 @@
                                 mouseDownScroll = mouseDownScroll < 0 ? 0 : mouseDownScroll;
                             mouseDownOffset = compatibility.page(event)[xy];
 
-
                             addClass(_bodyElement, _classNameDragging);
                             addClass(scrollbarVars.h, strActive);
                             addClass(scrollbarVars.s, strActive);
 
-                            if (_supportPassiveEvents) {
-                                addPassiveEventListener(_documentElement, _strMouseTouchMoveEvent, handleDragMove);
-                                addPassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
-                            }
-                            else {
-                                _documentElement.on(_strMouseTouchMoveEvent, handleDragMove)
-                                    .on(_strMouseTouchUpEvent, documentMouseTouchUp);
-                            }
-                            _documentElement.on(_strSelectStartEvent, documentOnSelectStart);
+                            _documentElement.on(_strMouseTouchMoveEvent, handleDragMove)
+                                .on(_strMouseTouchUpEvent, documentMouseTouchUp)
+                                .on(_strSelectStartEvent, documentOnSelectStart);
+
                             compatibility.prvD(event);
+                            compatibility.stpP(event);
                         }
                     });
                     scrollbarVars.t.on(_strMouseTouchDownEvent, function (event) {
@@ -3229,43 +3221,45 @@
                             if (event.shiftKey)
                                 increaseTrackScrollAmount();
                             var scrollAction = function () {
-                                var handleOffset = scrollbarVars.i.ho;
-                                var handleLength = scrollbarVars.i.hl;
-                                var mouseOffset = mouseDownOffset - trackOffset;
-                                var scrollDuration = 200 * scrollDurationFactor;
-                                var timeoutDelay = isFirstIteration ? Math.max(333, scrollDuration) : scrollDuration;
-                                var scrollObj = {};
-                                var rtlIsNormal = _isRTL && isHorizontal && ((!_rtlScrollBehavior.i && !_rtlScrollBehavior.n) || _normalizeRTLCache);
-                                var decreaseScrollCondition = handleOffset > mouseOffset;
+                                if(!_destroyed) {
+                                    var handleOffset = scrollbarVars.i.ho;
+                                    var handleLength = scrollbarVars.i.hl;
+                                    var mouseOffset = mouseDownOffset - trackOffset;
+                                    var scrollDuration = 200 * scrollDurationFactor;
+                                    var timeoutDelay = isFirstIteration ? Math.max(333, scrollDuration) : scrollDuration;
+                                    var scrollObj = {};
+                                    var rtlIsNormal = _isRTL && isHorizontal && ((!_rtlScrollBehavior.i && !_rtlScrollBehavior.n) || _normalizeRTLCache);
+                                    var decreaseScrollCondition = handleOffset > mouseOffset;
 
-                                if (rtlIsNormal)
-                                    decreaseScrollCondition = handleOffset < mouseOffset;
+                                    if (rtlIsNormal)
+                                        decreaseScrollCondition = handleOffset < mouseOffset;
 
-                                if (decreaseScrollCondition) {
-                                    if (decreaseScroll === undefined)
-                                        decreaseScroll = true;
-                                    scrollObj[scrollbarVars.xy] = '-=' + scrollDistance;
-                                }
-                                else {
-                                    if (decreaseScroll === undefined)
-                                        decreaseScroll = false;
-                                    scrollObj[scrollbarVars.xy] = '+=' + scrollDistance;
-                                }
-                                _base.scrollStop();
-                                _base.scroll(scrollObj, scrollDuration, 'linear');
-
-                                var finishedCondition = decreaseScroll ? handleOffset <= mouseOffset : handleOffset + handleLength >= mouseOffset;
-                                if (rtlIsNormal)
-                                    finishedCondition = decreaseScroll ? handleOffset + handleLength >= mouseOffset : handleOffset <= mouseOffset;
-
-                                if (finishedCondition) {
-                                    clearTimeout(trackTimeout);
+                                    if (decreaseScrollCondition) {
+                                        if (decreaseScroll === undefined)
+                                            decreaseScroll = true;
+                                        scrollObj[scrollbarVars.xy] = '-=' + scrollDistance;
+                                    }
+                                    else {
+                                        if (decreaseScroll === undefined)
+                                            decreaseScroll = false;
+                                        scrollObj[scrollbarVars.xy] = '+=' + scrollDistance;
+                                    }
                                     _base.scrollStop();
-                                    trackTimeout = undefined;
+                                    _base.scroll(scrollObj, scrollDuration, 'linear');
+
+                                    var finishedCondition = decreaseScroll ? handleOffset <= mouseOffset : handleOffset + handleLength >= mouseOffset;
+                                    if (rtlIsNormal)
+                                        finishedCondition = decreaseScroll ? handleOffset + handleLength >= mouseOffset : handleOffset <= mouseOffset;
+
+                                    if (finishedCondition) {
+                                        clearTimeout(trackTimeout);
+                                        _base.scrollStop();
+                                        trackTimeout = undefined;
+                                    }
+                                    else
+                                        trackTimeout = setTimeout(scrollAction, timeoutDelay);
+                                    isFirstIteration = false;
                                 }
-                                else
-                                    trackTimeout = setTimeout(scrollAction, timeoutDelay);
-                                isFirstIteration = false;
                             };
 
                             mouseDownOffset = compatibility.page(event)[xy];
@@ -3274,20 +3268,14 @@
                             addClass(scrollbarVars.t, strActive);
                             addClass(scrollbarVars.s, strActive);
 
-                            if (_supportPassiveEvents) {
-                                addPassiveEventListener(_documentElement, _strMouseTouchUpEvent, documentMouseTouchUp);
-                                addPassiveEventListener(_documentElement, _strKeyDownEvent, documentKeyDown);
-                                addPassiveEventListener(_documentElement, _strKeyUpEvent, documentKeyUp);
-                            }
-                            else {
-                                _documentElement.on(_strMouseTouchUpEvent, documentMouseTouchUp)
-                                    .on(_strKeyDownEvent, documentKeyDown)
-                                    .on(_strKeyUpEvent, documentKeyUp);
-                            }
-                            _documentElement.on(_strSelectStartEvent, documentOnSelectStart);
+                            _documentElement.on(_strMouseTouchUpEvent, documentMouseTouchUp)
+                                .on(_strKeyDownEvent, documentKeyDown)
+                                .on(_strKeyUpEvent, documentKeyUp)
+                                .on(_strSelectStartEvent, documentOnSelectStart);
 
                             scrollAction();
                             compatibility.prvD(event);
+                            compatibility.stpP(event);
                         }
                     }).hover(function () { //make sure both scrollbars will stay visible if one scrollbar is hovered if autoHide is "scroll".
                         if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove) {
@@ -3342,7 +3330,7 @@
                     else {
                         var strActive = 'active';
                         var hide = function () {
-                            if (!_scrollbarsAutoHideFlagScrollAndHovered) {
+                            if (!_scrollbarsAutoHideFlagScrollAndHovered && !_destroyed) {
                                 var anyActive = _scrollbarHorizontalHandleElement.hasClass(strActive) || _scrollbarVerticalHandleElement.hasClass(strActive);
                                 if (!anyActive && (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove || _scrollbarsAutoHideLeave))
                                     _scrollbarHorizontalElement.addClass(_classNameScrollbarAutoHidden);
@@ -3364,10 +3352,10 @@
                 function refreshScrollbarHandleLength(isHorizontal) {
                     var handleCSS = {};
                     var scrollbarVars = getScrollbarVars(isHorizontal);
-
+                    var digit = 1000000;
                     //get and apply intended handle length
                     var handleRatio = Math.min(1, (_hostSizeCache[scrollbarVars._wh] - (_paddingAbsoluteCache ? (isHorizontal ? _paddingX : _paddingY) : 0)) / _contentScrollSizeCache[scrollbarVars._wh]);
-                    handleCSS[scrollbarVars.wh] = (Math.floor(handleRatio * 100 * 100000) / 100000) + "%"; //the last * 100000 / 100000 is for flooring to the 4th digit
+                    handleCSS[scrollbarVars.wh] = (Math.floor(handleRatio * 100 * digit) / digit) + "%"; //the last * digit / digit is for flooring to the 4th digit
 
                     if (!nativeOverlayScrollbarsAreActive())
                         scrollbarVars.h.css(handleCSS);
@@ -3421,7 +3409,8 @@
                     if (_supportTransform) {
                         if (isRTLisHorizontal)
                             offset = -(trackLength - handleLength - offset);
-                        translateValue = isHorizontal ? strTranslateBrace + offset + 'px, 0px)' : strTranslateBrace + '0px, ' + offset + 'px)';
+                        //offset = (offset / trackLength * 100) * (trackLength / handleLength); in %
+                        translateValue = isHorizontal ? strTranslateBrace + offset + 'px, 0)' : strTranslateBrace + '0, ' + offset + 'px)';
                         handleCSS['-webkit-' + strTransform] = translateValue;
                         handleCSS['-moz-' + strTransform] = translateValue;
                         handleCSS['-ms-' + strTransform] = translateValue;
@@ -3525,22 +3514,20 @@
                  * @returns {Array} The differences between the two arrays.
                  */
                 function getArrayDifferences(a1, a2) {
-                    var a = [];
-                    var diff = [];
+                    var a = [ ];
+                    var diff = [ ];
                     var i;
-                    for (i = 0; i < a1.length; i++) {
+                    var k;
+                    for (i = 0; i < a1.length; i++)
                         a[a1[i]] = true;
-                    }
                     for (i = 0; i < a2.length; i++) {
-                        if (a[a2[i]]) {
+                        if (a[a2[i]])
                             delete a[a2[i]];
-                        } else {
+                        else
                             a[a2[i]] = true;
-                        }
                     }
-                    for (var k in a) {
+                    for (k in a)
                         diff.push(k);
-                    }
                     return diff;
                 }
 
@@ -3559,7 +3546,7 @@
                  */
                 function getTextareaInfo() {
                     //read needed values
-                    var textareaCursorPosition = _targetElement.prop('selectionStart');
+                    var textareaCursorPosition = _targetElement[0].selectionStart;
                     if (textareaCursorPosition === undefined)
                         return;
                     var textareaValue = _targetElement.val();
@@ -3630,7 +3617,7 @@
                  * @returns {*} The first element which is a child of the given element and matches the givens selector.
                  */
                 function findFirst(el, selector) {
-                    return helper.prototype.find.call(el, selector).first();
+                    return helper.prototype.find.call(el, selector).eq(0);
                 }
 
                 /**
@@ -4659,16 +4646,18 @@
                                 now = compatibility.now();
                                 sizeAuto = (_heightAutoCache || _widthAutoCache);
                                 action = function () {
-                                    contentLastUpdate = now;
+                                    if(!_destroyed) {
+                                        contentLastUpdate = now;
 
-                                    //if cols, rows or wrap attr was changed
-                                    if (_isTextarea)
-                                        textareaUpdate();
+                                        //if cols, rows or wrap attr was changed
+                                        if (_isTextarea)
+                                            textareaUpdate();
 
-                                    if (sizeAuto)
-                                        _base.update();
-                                    else
-                                        _base.update(_strAuto);
+                                        if (sizeAuto)
+                                            _base.update();
+                                        else
+                                            _base.update(_strAuto);
+                                    }
                                 };
                                 clearTimeout(contentTimeout);
                                 if (_mutationObserverContentLag <= 0 || now - contentLastUpdate > _mutationObserverContentLag || !sizeAuto)
