@@ -8101,6 +8101,26 @@ a.button-dontate:hover:after {
 .theme-container-bottom-button:hover {
   width: 160px; }
 
+.iframe-demo {
+  width: 100%;
+  border: 2px solid #36befd;
+  border-radius: 6px;
+  height: 100%;
+  height: calc(100% + 60px);
+  position: absolute;
+  margin-top: 30px;
+  padding: 15px; }
+
+#iframe-demo-element {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none !important; }
+
+#iframe {
+  min-height: calc(100vh - 422px - 55px);
+  position: relative; }
+
 .content-demo {
   width: 100%;
   border: 2px solid #D6D6D6;
@@ -8385,6 +8405,10 @@ a.button-dontate:hover:after {
 .content-demo-input-right .content-demo-input-textarea:after {
   right: -3px;
   left: auto; }
+
+#content-demo {
+  min-height: calc(100vh - 422px - 55px);
+  position: relative; }
 
 .nesting-demo-element {
   border: 2px solid #36befd;

@@ -461,8 +461,6 @@ $(document).ready(function() {
 			});
 		}
 		
-		
-		
 		//code expand and shrink
 		$('code.expandable').each(function(i, element) { 
 			var strExpanded = 'expanded';
@@ -482,7 +480,6 @@ $(document).ready(function() {
 			});
 			$(element).append(appendElement);
 		});
-		
 	}
 	
 	function updateContentNavigation() { 

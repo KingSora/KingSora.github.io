@@ -37,6 +37,9 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="content" data-navigation="[1]content">
 				<span>Content</span>
 			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="iframe" data-navigation="[1]iframe">
+				<span>iFrame</span>
+			</div>
 		</div>
 		<div id="content-navigation-main">
 			<div id="basic" class="active" data-tab-value="basic">
@@ -1146,7 +1149,7 @@
 				</div>
 			</div>
 		
-			<div id="content" data-tab-value="content">
+			<div id="content-demo" data-tab-value="content">
 				<div class="content-navigation-main-caption">Content Demo</div>
 				This demo shows that dynamic content can be handled.<br>
 				<br>
@@ -1186,6 +1189,20 @@
 							<textarea rows="1" class="content-demo-input-textarea-plugin" placeholder="enter your message..."></textarea>
 						</div>
 					</div>
+				</div>
+			</div>
+		
+			<div id="iframe" data-tab-value="iframe">
+				<div class="content-navigation-main-caption">iFrame Demo</div>
+				As small demo which shows how the plugin is working inside a iFrame.<br>
+				The plugin was applied from the current page (outside iFrame) and not from inside with a script tag for example.<br>
+				Your iFrame source has to have the <b>same origin</b> (domain, protocol and port) as your current site, else you won't be able to do that due to the <a class="inline-btn" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank">same origin policy</a>.
+
+				<div class="iframe-demo">
+					<iframe id="iframe-demo-element" 
+					onload="OverlayScrollbars(document.getElementById('iframe-demo-element').contentWindow.document.body, { })" 
+					src="iframe.html" 
+					frameborder="0"></iframe>
 				</div>
 			</div>
 		</div>

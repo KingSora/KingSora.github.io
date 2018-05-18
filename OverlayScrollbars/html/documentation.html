@@ -2313,10 +2313,11 @@ instance.scroll({ y : "100%" }, 1000);
 								<div>
 									Structure:
 									<pre><code class="js">{
-	sleeping   : <span class="txtc-secondary-color">boolean</span>,								
-	autoUpdate : <span class="txtc-secondary-color">boolean</span>,
-	widthAuto  : <span class="txtc-secondary-color">boolean</span>,
-	heightAuto : <span class="txtc-secondary-color">boolean</span>,
+	sleeping      : <span class="txtc-secondary-color">boolean</span>,								
+	autoUpdate    : <span class="txtc-secondary-color">boolean</span>,
+	widthAuto     : <span class="txtc-secondary-color">boolean</span>,
+	heightAuto    : <span class="txtc-secondary-color">boolean</span>,
+	documentMixed : <span class="txtc-secondary-color">boolean</span>,
 	padding : {
 		t : <span class="txtc-secondary-color">number</span>,
 		r : <span class="txtc-secondary-color">number</span>,
@@ -2353,7 +2354,7 @@ instance.scroll({ y : "100%" }, 1000);
 									Description:
 									<div class="plainobjectproperty-documentation-box">
 										<div class="plainobjectproperty-documentation-box-title">
-											Sleeping
+											sleeping
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
 											Indicates whether this instance is currently sleeping due to the <a class="inline-btn" data-navigation="[1]method-sleep">sleep</a> method.
@@ -2381,6 +2382,15 @@ instance.scroll({ y : "100%" }, 1000);
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
 											Indicates whether the host-elements height is auto.
+										</div>
+									</div>
+                                    <div class="plainobjectproperty-documentation-box">
+										<div class="plainobjectproperty-documentation-box-title">
+											documentMixed
+										</div>
+										<div class="plainobjectproperty-documentation-box-content">
+											Indicates whether the host-elements document isn't the same document as the one with which the plugin was initialized.
+											If this property is true it's most likely the host-element is inside a iFrame. <code class="code-inline">added in v1.4.5</code>
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
