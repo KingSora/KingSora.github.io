@@ -10,12 +10,16 @@ $(document).ready(function() {
 	var _defaultConfig = {
 		defaultHash : 'overview'
 	};
+	var _openModals = [ ];
+	var _ajaxContentRequest;
+	var _ajaxContentRequestTimeoutId;
 	var _dataAttrNavigation = "data-navigation";
 	var _dataAttrTabKey = "data-tab-key";
 	var _dataAttrTabValue = "data-tab-value";
 	var _dataAttrExpanderKey = "data-expander-key";
 	var _dataAttrExpanderValue = "data-expander-value";
 	var _dataAttrRadio = "data-radio";
+	var _dataAttrModal = "data-modal";
 	var _expanderExpandDuration = 230;
 	var _tabsFadeDuration = 230;
 	var _strActive = 'active';
@@ -24,13 +28,18 @@ $(document).ready(function() {
 	var _hasherPrepareHash = '!';
 	var _hasherSeparator = '/';
 	var _nav;
+	var _body;
 	var _window;
 	var _header;
 	var _content;
 	var _footer;
 	var _loading;
 	var _loadingTimeoutId;
+	var _contentNavigationScrollTimeout;
 	var _mainNavigationItems;
+	var _debug = { };
+	var _debugModal;
+	var _debugModalContent;
 	var _fourZeroFourPath = '../_framework/html/404' + _htmlExtension;
 	var _fourZeroFourFaces = [ 
 		" ಠ_ಠ ", "(＃｀д´)ﾉ", "ლ(ಠ_ಠლ)", "(；￣Д￣）", "¯\\_(ツ)_/¯", "ᕕ( ͡° ͜ʖ ͡° )ᕗ", "(☞ﾟヮﾟ)☞    ☜(ﾟヮﾟ☜)", "͡° ͜ʖ ͡°", "ヽ( ಠ益ಠ )ﾉ", " (╯°□°）╯︵ ┻━┻", "(ಠ_ಠ)",
@@ -84,6 +93,11 @@ $(document).ready(function() {
 	}
 	
 	function onHashChange(newHash, oldHash){
+		if(_ajaxContentRequest)
+			_ajaxContentRequest.abort();
+		if(_ajaxContentRequestTimeoutId)
+			clearTimeout(_ajaxContentRequestTimeoutId);
+		
 		newHash = newHash.toLowerCase();
 		oldHash = oldHash !== undefined ? oldHash.toLowerCase() : oldHash;
 		var oldMainHash = oldHash === undefined ? '' : oldHash.split(_hasherSeparator)[0];
@@ -99,20 +113,44 @@ $(document).ready(function() {
 			catch(ex) { }
 
 			showLoading();
-			$.get(_htmlPath + newMainHash + _htmlExtension, function(response) {
-				setTimeout(function() {
-					var instances = $('#content *').overlayScrollbars('!');
-					$.each(instances, function(index, instance) {
-						instance.destroy();
-					});
+			_ajaxContentRequest = $.get(_htmlPath + newMainHash + _htmlExtension, function(response) {
+				$.each($('#content *').overlayScrollbars('!'), function(index, instance) { instance.destroy(); }); //destroy all OS instances
+				_content[0].innerHTML = ""; //empty content
+				
+				_ajaxContentRequestTimeoutId = setTimeout(function() {
+					_ajaxContentRequestTimeoutId = undefined;
+
 					//load correct content:
-					_content.html(response);
-					contentLoad(newMainHash);
-					$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
-						pagePathChange(newHash, oldHash);
-						hideLoading();
-					});				
-				}, 222);
+					(function(HTML, callback) {
+						var temp = document.createElement('div'),
+							frag = document.createDocumentFragment();
+						temp.innerHTML = HTML;
+						var action = function() {
+							if(temp.firstChild){
+								frag.appendChild(temp.firstChild);
+								setTimeout(action, 0);
+							} 
+							else
+								callback(frag);
+						}
+						action();
+					})(response, function(fragment){
+						_content[0].appendChild(fragment); // myTarget should be an element node.
+						
+						contentLoad(newMainHash);
+						
+						$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
+							pagePathChange(newHash, oldHash);
+							hideLoading();
+						});			
+					})
+					//_content[0].innerHTML = response;
+					//contentLoad(newMainHash);
+					//$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
+					//	pagePathChange(newHash, oldHash);
+					//	hideLoading();
+					//});		
+				}, 400);
 			}, "html").fail(function() {
 				//404
 				$.get(_fourZeroFourPath, function(response) {
@@ -123,6 +161,8 @@ $(document).ready(function() {
 				pagePathChange(newHash, oldHash);
 				hideLoading();
 			}).always(function() { 
+				_ajaxContentRequest = undefined;
+				
 				//refresh navigation:
 				_mainNavigationItems.removeClass(_strActive);
 				$.each(_mainNavigationItems, function() { 
@@ -249,6 +289,8 @@ $(document).ready(function() {
 		//Main tabcontrol hashchange functionality
 		if(newHashArray.length > 1 && offsetChange === 0) {
 			var possibleTabItems = $('#content-navigation').find('.content-navigation-item-clickable[data-navigation]');
+			var osInstance = $('#content-navigation').overlayScrollbars();
+			clearTimeout(_contentNavigationScrollTimeout);
 			$.each(possibleTabItems, function() { 
 				var item = $(this);
 				var itemNavAttr = item.attr('data-navigation').toLowerCase();
@@ -257,6 +299,15 @@ $(document).ready(function() {
 				
 				if(itemNavAttr === path[offsetChange]) {
 					item.trigger('click');
+					_contentNavigationScrollTimeout = setTimeout(function() {
+						if(osInstance) {
+							try {
+								osInstance.scrollStop();
+								osInstance.scroll({ el : item, margin : { top : 5, bottom: 40 }, block : "nearest", scroll : { y : "ifneeded" } }, 300);
+							}
+							catch(ex) { }
+						}
+					}, 400);
 					var tabKeyAttr = item.attr(_dataAttrTabKey);
 					if(tabKeyAttr !== undefined && tabKeyAttr !== null) {
 						var tabContent = $('[' + _dataAttrTabValue + '="' + tabKeyAttr + '"]');
@@ -292,7 +343,7 @@ $(document).ready(function() {
 	
 	function contentLoad(currentMainHash) {
 		updateContentNavigation();
-
+		
 		//custom scrollbar on content menu (sidebar menu)
 		$('#content-navigation').overlayScrollbars({ 
 			scrollbars : { 
@@ -302,6 +353,41 @@ $(document).ready(function() {
 				x : 'hidden'
 			}
 		});
+		
+		//modal
+		$('.modal .modal-window-header-close').on('click', function(e) {
+			var clickedElement = $(e.target);
+			var modal = clickedElement.closest('.modal').first();
+			hideModal(modal);
+		});
+		$('.modal').on('mousedown', function(e) {
+			var clickedElement = $(e.target);
+			var modal = clickedElement.closest('.modal').first();
+			var condition = modal.length > 0 ? modal.overlayScrollbars() instanceof OverlayScrollbars ?  clickedElement[0] === modal[0] || clickedElement[0] === modal.overlayScrollbars().getElements().content || clickedElement[0] === modal.overlayScrollbars().getElements().viewport : clickedElement[0] === modal[0] : false;
+
+			if(condition && modal.hasClass('modal-backdrop-closeable') && e.which === 1) {
+				modal.one('mouseup', function(e) { 
+					var clickedElement = $(e.target);
+					var modal = clickedElement.closest('.modal').first();
+					var condition = modal.length > 0 ? modal.overlayScrollbars() instanceof OverlayScrollbars ?  clickedElement[0] === modal[0] || clickedElement[0] === modal.overlayScrollbars().getElements().content || clickedElement[0] === modal.overlayScrollbars().getElements().viewport : clickedElement[0] === modal[0] : false;
+
+					if(condition)
+						hideModal(modal);
+				});
+			}
+		});
+		$('[' + _dataAttrModal + ']').on('click', function(e) { 
+			var target = $(e.target);
+			var attr = target.attr(_dataAttrModal);
+			var closestAttrTarget = target.closest('[' + _dataAttrModal + ']').first();
+			if(!closestAttrTarget.hasClass('modal'))
+				showModal($('.modal[' + _dataAttrModal + '="' + attr + '"]').first());
+		});
+		if(_mainScrollElement) {
+			var modalInstances = $('.modal').overlayScrollbars({ sizeAutoCapable : false }).overlayScrollbars();
+			for(var i = 0; i < modalInstances.length; i++)
+				modalInstances[i].sleep();
+		}
 
 		//dropdown
 		$('.dropdown').on('click', function(e) {
@@ -318,7 +404,7 @@ $(document).ready(function() {
 				dropdown.addClass(_strActive);
 			
 			if(dropdown.hasClass(_strActive)) {
-				$('body').one('click', function() { 
+				_body.one('click', function() { 
 					dropdown.removeClass(_strActive);
 				});
 			}
@@ -460,6 +546,10 @@ $(document).ready(function() {
 				}
 			});
 		}
+		//code in modals
+		$('.modal').find('code').each(function(i, element) {
+			hljs(element); 
+		});
 		
 		//code expand and shrink
 		$('code.expandable').each(function(i, element) { 
@@ -489,9 +579,8 @@ $(document).ready(function() {
 		var contentNavWrapperHeight = _content.height();
 		var scrollTop = _mainScrollElement ? _mainScrollElement.scroll().y.position : _window.scrollTop();
 		var scrollLeft = _mainScrollElement ? _mainScrollElement.scroll().x.position : _window.scrollLeft();
-		var navHeight = _nav.height();;
+		var navHeight = _nav.height();
 		var maxHeight = Math.min(viewportHeight - navHeight, contentNavWrapperHeight - scrollTop);
-		
 		
 		if(OverlayScrollbars.globals().supportTransform) {
 			translateElement(contentNav, -scrollLeft, 0);
@@ -552,29 +641,86 @@ $(document).ready(function() {
 			element.css('transform', vendors[i] + 'translate(' + (x) + 'px, ' + (y) + 'px)');
 	}
 	
+	function showModal(modal) {
+		if(!modal.hasClass('modal-open') && !modal.hasClass('modal-animating')) {
+			var osInstance = modal.overlayScrollbars();
+			var hasOS = osInstance instanceof OverlayScrollbars;
+			
+			modal.addClass('modal-animating').stop().fadeIn(300, function() { 
+				if(hasOS && osInstance.getState().sleeping) 
+					modal.overlayScrollbars().update();
+				modal.removeClass('modal-animating');
+			}).addClass('modal-open').css('z-index', parseInt(modal.css('z-index')) + _openModals.length + 1).focus();
+			if(hasOS)
+				modal.overlayScrollbars().scroll(0, 1);
+			else
+				modal.scrollTop(0).scrollLeft(0);
+			if(_openModals.length === 0) {
+				_body.on('keydown', modalEsc);
+				if(_mainScrollElement)
+					_mainScrollElement.options({ overflowBehavior : { x : 'hidden', y : 'hidden' }});
+				else
+					_body.css('overflow', 'hidden');
+			}
+			_openModals.push(modal[0]);
+		}
+	}
+	
+	function hideModal(modal) {
+		if(modal.hasClass('modal-open') && !modal.hasClass('modal-animating')) {
+			if(modal.overlayScrollbars() instanceof OverlayScrollbars)
+				modal.overlayScrollbars().sleep();
+			modal.addClass('modal-animating').stop().removeClass('modal-open').fadeOut(300, function() { 
+				modal.removeClass('modal-animating');
+				modal.css('z-index', '');
+			});
+			var index = $.inArray(modal[0], _openModals);
+			if (index > -1) {
+				_openModals.splice(index, 1);
+				if(_openModals.length === 0) {
+					_body.off('keydown', modalEsc);
+					if(_mainScrollElement)
+						_mainScrollElement.options({ overflowBehavior : { x : 'scroll', y : 'scroll' }});
+					else
+						_body.css('overflow', ''); 
+				}
+			}
+		}
+	}
+	
+	function modalEsc(event) {
+		var keyCode = event.keyCode || event.originalEvent.keyCode;
+		if(keyCode === 27)
+			hideModal($(_openModals[_openModals.length -1]));
+	}
+	
 	_base.buildPage = function(config, callback) { 
 		_finalConfig = $.extend(true, { }, _defaultConfig, config);
 		_defaultHash = _finalConfig.defaultHash;
 		_mainNavigationItems = $('[' + _dataAttrNavigation + ']');
 		_window = $(window);
+		_body = $('body');
 		_header = $('#header');
 		_nav = $('#navigation');
 		_content = $('#content');
 		_footer = $('#footer');
 		_loading = $('#loading');
-		
+		_debugModal = $('#modal-debug');
+		_debugModalContent = $('#modal-debug-content');
 		
 		//setup hasher
 		hasher.prependHash = _hasherPrepareHash;
 		hasher.separator = _hasherSeparator;
-		if (hasher.getURL() === hasher.getBaseURL())
+		if ( hasher.getURL() === hasher.getBaseURL() 
+			|| hasher.getURL() === (hasher.getBaseURL() + "#")
+			|| hasher.getURL() === (hasher.getBaseURL() + "#" + _hasherPrepareHash))
 			hasher.replaceHash(_defaultHash);
 		hasher.initialized.add(onHashChange); //parse initial hash
 		hasher.changed.add(onHashChange); //parse hash changes
 		hasher.init(); //start listening for hash changes
 		
 		setTimeout(function () { 
-			$('body').addClass('ready');
+			_body.addClass('ready');
 		}, 100);
 		
 		$('#navigation-logo').on('click', function() {
@@ -591,7 +737,53 @@ $(document).ready(function() {
 		setBodyScrollbars();
 		_header.scrollLeft(0);
 		_header.scrollTop(0);
+		
+		//debug
+		_debugModalContent.html(JSON.stringify(_debug, null, 2));
+		
+		try {
+			var triggerDebugTimeoutId;
+			var keydownSequence = [ 68, 69, 66, 85, 71, 13 ]; //debug[enter]
+			var keydownKeyCodes = [ ];
+			var touches = 0;
+			function arraysEqual(arr1, arr2) {
+				if(arr1.length !== arr2.length)
+					return false;
+				for(var i = arr1.length; i--;) {
+					if(arr1[i] !== arr2[i])
+						return false;
+				}
+
+				return true;
+			}
+			
+			_body.on('keydown', function(e) { 
+				clearTimeout(triggerDebugTimeoutId);
+				triggerDebugTimeoutId = setTimeout(function() { 
+					keydownKeyCodes = [ ];
+				}, 250);
+				var keyCode = e.keyCode || e.originalEvent.keyCode;
+				keydownKeyCodes.push(keyCode);
+				if(arraysEqual(keydownKeyCodes, keydownSequence))
+					showModal(_debugModal);
+			});
+			
+			_body[0].addEventListener('touchstart', function() { 
+				clearTimeout(triggerDebugTimeoutId);
+				triggerDebugTimeoutId = setTimeout(function() { 
+					touches = 0;
+				}, 250);
+				touches++;
+				if(touches > 20)
+					showModal(_debugModal);
+			}, { passive : true });
+		} catch(ex) { }
 	};
+	
+	_debug.viewportIntervention = typeof window.innerHeight === 'number' ? $('html')[0].clientHeight !== window.innerHeight : false;
+	if(_debug.viewportIntervention)
+		viewportUnitsBuggyfill.init({ force: true });
+	
 	
 	window._framework = _base;	
 });

@@ -902,12 +902,12 @@ $('#scroll-demo-blockarr').on('click', function() {
 $('#scroll-demo-yonly').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;
 	checkForSameVal = true;
-	scrollDemoCodeMirror.getDoc().setValue('scroll({ el: ' + '$(".scroll-demo-item:nth-child(' + 250 + ')"), axis : "y" }' + ', 500);');
+	scrollDemoCodeMirror.getDoc().setValue('scroll({ el: ' + '$(".scroll-demo-item:nth-child(' + 250 + ')"), scroll : { x : "never" } }' + ', 500);');
 });
 $('#scroll-demo-xonly').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;
 	checkForSameVal = true;
-	scrollDemoCodeMirror.getDoc().setValue('scroll({ el: ' + '$(".scroll-demo-item:nth-child(' + 250 + ')"), axis : "x" }' + ', 500);');
+	scrollDemoCodeMirror.getDoc().setValue('scroll({ el: ' + '$(".scroll-demo-item:nth-child(' + 250 + ')"), scroll : { y : "never" } }' + ', 500);');
 });
 $('#scroll-demo-rtl').on('change', function() { 
 	if($(this).is(":checked"))

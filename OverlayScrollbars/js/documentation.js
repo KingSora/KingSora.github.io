@@ -63,3 +63,161 @@ $(classnamesDesignDraftScrollbarCorner + ', ' + classnamesDomDraftScrollbarCorne
 	$(classnamesDesignDraftScrollbarCorner).removeClass(strActive);
 	$(classnamesDomDraftScrollbarCorner).removeClass(strActive);
 });
+
+
+OverlayScrollbars.extension("myBasicExtension", function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	var handleElmHorizontal;
+	var handleElmVertical;
+	
+	extInstance.added = function() { 
+		var instanceElements = osInstance.getElements();
+		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.handle;
+		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.handle;
+		var html = '<div style="height: 100%; width: 100%; background: red;"></div>';
+		
+		handleElmHorizontal = framework(html);
+		handleElmVertical = framework(html);
+		
+		framework(scrollbarHorizontalHandle).append(handleElmHorizontal);
+		framework(scrollbarVerticalHandle).append(handleElmVertical);
+	}
+	
+	extInstance.removed = function() { 
+		handleElmHorizontal.remove();
+		handleElmVertical.remove();
+	}
+	
+	return extInstance;
+});
+
+var basicExtensionTarget = $('#extensions-createextensions-basic-target').overlayScrollbars({ paddingAbsolute : true }).overlayScrollbars();
+$('#extensions-createextensions-basic-target-add').on('click', function() { 
+	basicExtensionTarget.addExt("myBasicExtension");
+});
+$('#extensions-createextensions-basic-target-remove').on('click', function() { 
+	basicExtensionTarget.removeExt("myBasicExtension");
+});
+
+
+OverlayScrollbars.extension("myAdvancedExtension", function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	var trackElmHorizontal;
+	var trackElmHorizontal2;
+	var trackElmVertical;
+	var trackElmVertical2;
+	
+	//add the divs after the extension has been added to a instance
+	extInstance.added = function(options) { 
+		//extend the defaultOptions with the passed options
+		//to determine the correct color
+		var parsedOptions = framework.extend(true, { }, defaultOptions, options); 
+		var instanceElements = osInstance.getElements();
+		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.track;
+		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.track;
+		var html = '<div style="height: 100%; width: 100%; top: 0; left: 0; position: absolute;"></div>';
+		var sX = osInstance.scroll().x;
+		var sY = osInstance.scroll().y;
+		
+		trackElmHorizontal = framework(html).css({
+			background : parsedOptions.color,
+			width : sX.handleOffset
+		});
+		trackElmHorizontal2 = framework(html).css({
+			background : parsedOptions.color,
+			width : sX.trackLength - (sX.handleOffset + sX.handleLength),
+			left : sX.handleOffset + sX.handleLength
+		});
+		trackElmVertical = framework(html).css({
+			background : parsedOptions.color,
+			height : sY.handleOffset
+		});
+		trackElmVertical2 = framework(html).css({
+			background : parsedOptions.color,
+			height : sY.trackLength - (sY.handleOffset + sY.handleLength),
+			top : sY.handleOffset + sY.handleLength
+		});
+
+		framework(scrollbarHorizontalHandle).append([trackElmHorizontal, trackElmHorizontal2])
+		framework(scrollbarVerticalHandle).append([trackElmVertical, trackElmVertical2]);
+	}
+	
+	//remove the divs after the extension has been removed from a instance
+	extInstance.removed = function() { 
+		trackElmHorizontal.remove();
+		trackElmHorizontal2.remove();
+		trackElmVertical.remove();
+		trackElmVertical2.remove();
+	}
+	
+	//hide the custom divs during scrolling
+	extInstance.on = function(callbackName, args) {
+		switch(callbackName) {
+			case "scroll":
+				var sX = osInstance.scroll().x;
+				var sY = osInstance.scroll().y;
+		
+				trackElmHorizontal.css({
+					width : sX.handleOffset
+				});
+				trackElmHorizontal2.css({
+					width : sX.trackLength - (sX.handleOffset + sX.handleLength),
+					left : sX.handleOffset + sX.handleLength
+				});
+				trackElmVertical.css({
+					height : sY.handleOffset
+				});
+				trackElmVertical2.css({
+					height : sY.trackLength - (sY.handleOffset + sY.handleLength),
+					top : sY.handleOffset + sY.handleLength
+				});
+				break;
+		}
+	}
+	
+	//a custom method which changes the colors of the added divs
+	extInstance.changeColor = function(color) {
+		trackElmHorizontal.css("background", color);
+		trackElmHorizontal2.css("background", color);
+		trackElmVertical.css("background", color);
+		trackElmVertical2.css("background", color);
+	}
+	
+	return extInstance;
+}, { //defaultOptions:
+	color : "orange"
+});
+
+var advancedExtensionTarget = $('#extensions-createextensions-advanced-target').overlayScrollbars({ 
+	paddingAbsolute : true,
+	scrollbars : { 
+		clickScrolling : true
+	}
+ }).overlayScrollbars();
+$('#extensions-createextensions-advanced-target-add').on('click', function() { 
+	advancedExtensionTarget.addExt("myAdvancedExtension");
+});
+$('#extensions-createextensions-advanced-target-add-pink').on('click', function() { 
+	advancedExtensionTarget.addExt("myAdvancedExtension", { color : "DodgerBlue" });
+});
+$('#extensions-createextensions-advanced-target-changeColor').on('click', function() { 
+	try {
+		advancedExtensionTarget.ext("myAdvancedExtension").changeColor("Crimson");
+	} catch(ex) { 
+		console.error(ex); 
+	}
+});
+$('#extensions-createextensions-advanced-target-changeColor-two').on('click', function() { 
+	try {
+		advancedExtensionTarget.ext("myAdvancedExtension").changeColor("GreenYellow");
+	} catch(ex) { 
+		console.error(ex); 
+	}
+});
+$('#extensions-createextensions-advanced-target-remove').on('click', function() { 
+	advancedExtensionTarget.removeExt("myAdvancedExtension");
+});

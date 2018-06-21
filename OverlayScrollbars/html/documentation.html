@@ -19,6 +19,9 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="basics-supportedelements" data-navigation="[1]supportedelements">
 				<span>Supported Elements</span>
 			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="basics-flexbox" data-navigation="[1]flexbox">
+				<span>Flexbox</span>
+			</div>
 			<div class="content-navigation-item content-navigation-item-info">
 				<span>Initialization:</span>
 			</div>
@@ -55,6 +58,15 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="instance-destroy" data-navigation="[1]method-destroy">
 				<span>destroy</span>
 			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="instance-ext" data-navigation="[1]method-ext">
+				<span>ext</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="instance-addext" data-navigation="[1]method-addext">
+				<span>addExt</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="instance-removeext" data-navigation="[1]method-removeext">
+				<span>removeExt</span>
+			</div>
 			<div class="content-navigation-item content-navigation-item-info">
 				<span>Global Methods:</span>
 			</div>
@@ -63,6 +75,18 @@
 			</div>
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-globals" data-navigation="[1]gmethod-globals">
 				<span>globals</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-extension" data-navigation="[1]gmethod-extension">
+				<span>extension</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-caption">
+				<span>Extensions:</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="extensions-basics" data-navigation="[1]extensions-basics">
+				<span>Basics</span>
+			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="extensions-createextensions" data-navigation="[1]extensions-createextensions">
+				<span>Create Extensions</span>
 			</div>
 			<div class="content-navigation-item content-navigation-item-caption">
 				<span>Themes & Styling:</span>
@@ -225,8 +249,9 @@
 								<div>
 									Indicates whether the host element is capable of "auto" sizes such as:
 									<code class="code-inline scss">width: auto</code> and <code class="code-inline scss">height: auto</code>.
-									If set to false and the property width or height is "auto", the rendered width or height of the content will be zero.<br><br>
-									This option is ignored if the target-element is the body element, because in this case the size must be 100% (on both axis) all the time to simulate the viewport correctly.
+									If set to false and the property width or height is "auto", the rendered width or height of the content will be zero.<br>
+									If you are applying OverlayScrollbars to a <b>flexbox-element</b> set this option to <b>false</b> to ensure correct functionality.<br><br>
+									This option is ignored if the target-element is the body element, because in this case the size must be 100% (on both axis) to simulate the viewport correctly.
 								</div>
 							</td>
 						</tr>
@@ -1184,6 +1209,37 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 				<br>
 				If you need support for a yet unsupported element, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a>.
 			</div>
+			
+			<div id="basics-flexbox" data-tab-value="basics-flexbox">
+				<div class="content-navigation-main-caption">Flexbox</div>
+				<div class="content-navigation-sub-caption">General</div>
+				The plugin was built to be used on "normal" elements, however flexbox is a popular and accepted standard.<br>
+				Currently I haven't managed to create a automatic and reliable flexbox detection, so you have to take action by yourself:<br><br>
+				
+				<div class="expander-header" data-expander-key="flexbox-new">
+					<i class="mdi mdi-chevron-down"></i>
+					<span>OverlayScrollbars <code class="code-inline">v1.5.0 or higher</code></span>
+				</div>
+				<div class="expander-content" data-expander-value="flexbox-new">
+					Append the class <code class="code-inline">os-host-flexbox</code> to your target element.
+				</div>
+				
+				<div class="expander-header" data-expander-key="flexbox-old">
+					<i class="mdi mdi-chevron-down"></i>
+					<span>OverlayScrollbars <code class="code-inline">lower than v1.5.0</code></span>
+				</div>
+				<div class="expander-content" data-expander-value="flexbox-old">
+					Try to initialize the plugin with the option <code class="code-inline js">sizeAutoCapable : false</code> and set the overflow style of the target element to <code class="code-inline scss">overflow: hidden</code>.<br>
+				</div>
+				<br>
+				
+				In the most cases this should be enough.<br><br>
+				However if the plugin isn't updating correctly or if the plugin isn't working at all, I can only recommend to use / create a <b>inner-div</b> with the style <code class="code-inline scss">display: block; height: 100%; width: 100%;</code> and initialize to plugin to that inner-div. With this setup the plugin will definitely work.<br>
+				<br>
+				
+				If you need help with a special flexbox case, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a> with a small demo.<br>
+				I'll do my best to solve your problem.
+			</div>
 		
             <div id="initialization-default" data-tab-value="initialization-default">
 				<div class="content-navigation-main-caption">Default initialization</div>
@@ -1246,6 +1302,29 @@ var instances = OverlayScrollbars(document.querySelectorAll("*"), "!");
 for(var i = 0; i < instances.length; i++) {
     //do something with the instance
 }
+</code></pre>
+				
+				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
+				The <b class="txtc-primary-color">initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
+				You simply have to pass a <b>third</b> argument which has to be a <b class="txtc-primary-color">string</b>, a  <b class="txtc-primary-color">array of strings</b> or a  <b class="txtc-primary-color">object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
+				<br>
+				Lets make some examples:
+				<pre><code class="js">//register a extension with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });
+//register a 2nd extension with the name "myOtherExtension"
+OverlayScrollbars.extension("myOtherExtension", function() { return { }; });
+
+//initialize the plugin with just one extension via string
+OverlayScrollbars((document.getElementById(id), { }, "myExtension"); 
+
+//initialize the plugin with multiple extensions via array of strings
+OverlayScrollbars((document.getElementById(id), { }, [ "myExtension", "myOtherExtension" ]); 
+
+//initialize the plugin with extensions with custom options via object
+OverlayScrollbars((document.getElementById(id), { }, {
+	"myExtension"      : { /* options for "myExtension" */ },
+	"myOtherExtension" : { /* options for "myOtherExtension" */ },
+}); 
 </code></pre>
 			</div>
 		
@@ -1315,6 +1394,29 @@ $.each(instances, function(index, instance) {
     //do domething with the instance
 });
 </code></pre>
+
+				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
+				The <b class="txtc-primary-color">initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
+				You simply have to pass a <b>second</b> argument which has to be a <b class="txtc-primary-color">string</b>, a  <b class="txtc-primary-color">array of strings</b> or a  <b class="txtc-primary-color">object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
+				<br>
+				Lets make some examples:
+				<pre><code class="js">//register a extension with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });
+//register a 2nd extension with the name "myOtherExtension"
+OverlayScrollbars.extension("myOtherExtension", function() { return { }; });
+
+//initialize the plugin with just one extension via string
+$(id).overlayScrollbars({ }, "myExtension"); 
+
+//initialize the plugin with multiple extensions via array of strings
+$(id).overlayScrollbars({ }, [ "myExtension", "myOtherExtension" ]); 
+
+//initialize the plugin with extensions with custom options via object
+$(id).overlayScrollbars({ }, {
+	"myExtension"      : { /* options for "myExtension" */ },
+	"myOtherExtension" : { /* options for "myOtherExtension" */ },
+}); 
+</code></pre>
 			</div>
 		
 			<div id="instance-options" data-tab-value="instance-options">
@@ -1347,21 +1449,21 @@ $.each(instances, function(index, instance) {
 					<div class="method-documentation-box-description">
 						Returns the option value with the given name.
 						<div class="method-documentation-box-description-wrapper">
-							<span>Returns:</span>
-							<div class="method-documentation-box-description-return">
-								<p>Type: *</p>
-								<div>
-									The value of the options with the given name.
-								</div>
-							</div>
-						</div>
-						<div class="method-documentation-box-description-wrapper">
 							<span>Parameters:</span>
 							<div class="method-documentation-box-description-param">
 								<p>optionName</p>
 								<p>Type: string</p>
 								<div>
 									A string which represents the option whose value shall be returned.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: *</p>
+								<div>
+									The value of the options with the given name.
 								</div>
 							</div>
 						</div>
@@ -1870,10 +1972,10 @@ instance.scroll({ y : "-= 50px"  });
 									<div class="expander-content" data-expander-value="setScrollCoordinates5">
 										To use this approach a PlainObject with the following structure must be passed:
 										<pre><code class="js code-noscroll">{
-	el       : <span class="txtc-secondary-color">HTMLElement / jQueryElement</span>,
-	axis     : <span class="txtc-secondary-color">string</span>,
-	block    : <span class="txtc-secondary-color">string / array</span>,
-	margin   : <span class="txtc-secondary-color">number / array / boolean</span>
+	el       : <span class="txtc-secondary-color">HTMLElement | jQueryElement</span>,
+	scroll   : <span class="txtc-secondary-color">string | array | object</span>,
+	block    : <span class="txtc-secondary-color">string | array | object</span>,
+	margin   : <span class="txtc-secondary-color">number | boolean | array | object</span>
 }</code></pre>
 										PlainObject description:
 										<div class="plainobjectproperty-documentation-box">
@@ -1887,41 +1989,53 @@ instance.scroll({ y : "-= 50px"  });
 										</div>
 										<div class="plainobjectproperty-documentation-box">
 											<div class="plainobjectproperty-documentation-box-title">
-												axis
+												scroll <code class="code-inline">added in v1.5.0</code>
 											</div>
 											<div class="plainobjectproperty-documentation-box-content">
-												The axis which shall be scrolled. The Default value is <span class="txtc-primary-color">"xy"</span>.<br>
+												The scroll behavior which shall be used. The Default value is <span class="txtc-primary-color">"always"</span>.<br>
 												Possible values are: 
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														"xy"
+														"always"
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														Scrolls both axis.
+														Scrolls always.
 													</div>
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														"yx"
+														"ifneeded"
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														Scrolls both axis.
+														Scrolls only if the element isn't fully in view.<br>Implemented because: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" class="inline-btn">Element.scrollIntoViewIfNeeded()</a>.
 													</div>
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														"x"
+														"never"
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														Scrolls only the x-axis.
+														Scrolls never.
 													</div>
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														"y"
+														array
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														Scrolls only the y-axis.
+														With this array you are able to specify the scroll strategy for each axis individually.<br>
+                                                        A example: <code class="js code-inline">[ "never", "always" ]</code> -
+														with this array a scroll will be performed only on the y axis.
+													</div>
+												</div>
+												<div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														object
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														The passed object specifies the scroll strategy for each axis with its properties <code class="js code-inline">x</code> and <code class="js code-inline">y</code>.
+														If your object doesn't specify a value for a axis, its treated as if the value was <code class="js code-inline">always</code>.<br>
+														A example object would look like: <code class="js code-inline">{ x : "never" }</code>
 													</div>
 												</div>
 											</div>
@@ -1962,12 +2076,12 @@ instance.scroll({ y : "-= 50px"  });
 														"nearest"
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														The element gets docked to the nearest edges, but only if it isn't in view.
+														The element gets docked to the nearest edge(s).
 													</div>
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														string Array
+														array
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
 														With this array you are able to specify the edge for each axis individually.<br>
@@ -1976,6 +2090,17 @@ instance.scroll({ y : "-= 50px"  });
 														with this array the element will be docked to the left and bottom edge of the viewport.<br>
                                                         A second example: <code class="js code-inline">[ "center", "begin" ]</code> -
 														with this array the element will be docked to the top edge of the viewport and is centered horizontally.
+													</div>
+												</div>
+												<div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														object
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														<code class="code-inline">added in v1.5.0</code><br>
+														The passed object specifies the block for each axis with its properties <code class="js code-inline">x</code> and <code class="js code-inline">y</code>.
+														If your object doesn't specify a value for a axis, its treated as if the value was <code class="js code-inline">begin</code>.<br>
+														A example object would look like: <code class="js code-inline">{ y : "center" }</code>
 													</div>
 												</div>
 											</div>
@@ -2014,15 +2139,77 @@ instance.scroll({ y : "-= 50px"  });
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
 													<div class="plainobjectpropertyvalue-documentation-box-title">
-														number Array
+														array
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														The passed number array can have the size of two or the size of four.<br>
+														The passed array can have the size of two or the size of four.<br>
 														A array with two entries specifies the margin for the left&right and top&bottom directions:<br>
 														<code class="js code-inline">[ left&right, top&bottom ]</code>
 														<br>
 														A array with four entries specifies the margin for all directions:<br>
 														<code class="js code-inline">[ top, right, bottom, left ]</code>
+														The array can consist of numbers or booleans or a mix.<br>
+														A example array would look like: <code class="js code-inline">[ true, 0, 0, 10 ]</code>
+													</div>
+												</div>
+												<div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														object
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														<code class="code-inline">added in v1.5.0</code><br>
+														The passed object specifies the margin with the properties called <code class="js code-inline">top</code>, <code class="js code-inline">right</code>, <code class="js code-inline">bottom</code> and <code class="js code-inline">left</code>.
+														The values can be booleans (if the original CSS margin value of the corresponding direction shall be used) or numbers (if a custom margin value shall be used).<br>
+														If your object doesn't specify a value for a direction, its treated as if the value was <code class="js code-inline">0</code>.<br>
+														A example object would look like: <code class="js code-inline">{ top : true, left: 10 }</code>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												axis <code class="code-inline">deprecated since v1.5.0</code>
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												This property is deprecated. Please use the new "scroll" property instead!
+												<div class="expander-header" data-expander-key="method-scroll-axis">
+													<i class="mdi mdi-chevron-down"></i>
+													<span>Show old documentation</span>
+												</div>
+												<div class="expander-content" data-expander-value="method-scroll-axis">
+													The axis which shall be scrolled. The Default value is <span class="txtc-primary-color">"xy"</span>.<br>
+													Possible values are: 
+													<div class="plainobjectpropertyvalue-documentation-box">
+														<div class="plainobjectpropertyvalue-documentation-box-title">
+															"xy"
+														</div>
+														<div class="plainobjectpropertyvalue-documentation-box-content">
+															Scrolls both axis.
+														</div>
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box">
+														<div class="plainobjectpropertyvalue-documentation-box-title">
+															"yx"
+														</div>
+														<div class="plainobjectpropertyvalue-documentation-box-content">
+															Scrolls both axis.
+														</div>
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box">
+														<div class="plainobjectpropertyvalue-documentation-box-title">
+															"x"
+														</div>
+														<div class="plainobjectpropertyvalue-documentation-box-content">
+															Scrolls only the x-axis.
+														</div>
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box">
+														<div class="plainobjectpropertyvalue-documentation-box-title">
+															"y"
+														</div>
+														<div class="plainobjectpropertyvalue-documentation-box-content">
+															Scrolls only the y-axis.
+														</div>
 													</div>
 												</div>
 											</div>
@@ -2087,15 +2274,15 @@ instance.scroll({ x : "-= 10px", y : 10 });
 //scroll to the left top corner of the passed element
 instance.scroll($(selector));
 
-//scroll to the top edge of the passed element
+//scroll to the top edge of the passed element if it isn't in view
 //with 500ms
-instance.scroll({ el : $(selector), axis : "y" }, 500);
+instance.scroll({ el : $(selector), scroll : { y : "ifneeded", x : "never" } }, 500);
 
 //scroll to the bottom edge of the passed element
-instance.scroll({ el : $(selector), axis : "y", block : "end" });
+instance.scroll({ el : $(selector), scroll : { x : "never" }, block : "end" });
 
-//scroll to the bottom and left edge of the passed element but let 10 pixel margin
-instance.scroll({ el : $(selector), axis : "xy", block : ["begin", "end"], margin : 10 });
+//scroll to the bottom and left edge of the passed element if it isnt in view and let 10 pixel margin
+instance.scroll({ el : $(selector), scroll : "ifneeded", block : ["begin", "end"], margin : 10 });
 </code></pre>
 						</div>
 					</div>
@@ -2141,6 +2328,15 @@ instance.scroll({ el : $(selector), axis : "xy", block : ["begin", "end"], margi
 						Stops the current scroll-animation.<br>
 						Has the same paramets as the jQuery.stop() method. <a href="http://api.jquery.com/stop/" target="_blank" class="inline-btn">Read more</a>
 						<div class="method-documentation-box-description-wrapper">
+							<span>Returns: <code class="code-inline">added in v1.5.0</code></span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: OverlayScrollbars</p>
+								<div>
+									The current OverlayScrollbars instance, so you can chain this method with other methods.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
 							<span>example:</span>
 							<pre><code class="js">//scroll-animation duration is 10 seconds
 instance.scroll({ y : "100%" }, 10000);
@@ -2150,6 +2346,9 @@ instance.scrollStop();
 
 //scroll-animation duration is 1 second
 instance.scroll({ y : "100%" }, 1000);
+
+//chaining added in v1.5.0 - stop the old animation and start a new one in one line
+instance.scrollStop().scroll({ y : 500 }, 5000);
 </code></pre>
 						</div>
 					</div>
@@ -2293,7 +2492,42 @@ instance.scroll({ y : "100%" }, 1000);
 						</div>
 					</div>
 				</div>
-			</div>
+			
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						.getElements(<span>elementName</span>)
+					</div>
+					<div class="method-documentation-box-description">
+						Returns the element with the given name.
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>elementName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the element which shall be returned.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: *</p>
+								<div>
+									The value of the given element name.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">var host               = instance.getElements("host");
+var horizontalHandle   = instance.getElements("scrollbarHorizontal.handle");
+var verticalHandle     = instance.getElements("scrollbarVertical.handle");
+</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>	
 		
 			<div id="instance-getState" data-tab-value="instance-getState">
 				<div class="content-navigation-main-caption">GetState Method</div>
@@ -2549,21 +2783,21 @@ instance.scroll({ y : "100%" }, 1000);
 					<div class="method-documentation-box-description">
 						Returns the value of the given state property.
 						<div class="method-documentation-box-description-wrapper">
-							<span>Returns:</span>
-							<div class="method-documentation-box-description-return">
-								<p>Type: *</p>
-								<div>
-									The value of the given state property.
-								</div>
-							</div>
-						</div>
-						<div class="method-documentation-box-description-wrapper">
 							<span>Parameters:</span>
 							<div class="method-documentation-box-description-param">
 								<p>stateProperty</p>
 								<p>Type: string</p>
 								<div>
 									A string which represents a property of the state object.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: *</p>
+								<div>
+									The value of the given state property.
 								</div>
 							</div>
 						</div>
@@ -2575,13 +2809,12 @@ var contentScrollHeight  = instance.getState("contentScrollSize.height");
 						</div>
 					</div>
 				</div>
-				
 			</div>
 			
 			<div id="instance-destroy" data-tab-value="instance-destroy">
 				<div class="content-navigation-main-caption">Destroy Method</div>
 				<div class="content-navigation-sub-caption">Description</div>
-				Destroys and disposes the current instance and removes all added elements form the DOM.
+				Destroys and disposes the current instance and removes all extensions and added elements form the DOM.<br>
 				<div class="content-navigation-sub-caption">Signatures</div>
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
@@ -2599,6 +2832,182 @@ instance.destroy();
 
 //try to get the instance of the plugin again, but it's undefined
 instance = var instance = OverlayScrollbars(document.getElementById(id));
+</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+						
+			<div id="instance-ext" data-tab-value="instance-ext">
+				<div class="content-navigation-main-caption">Ext Method</div>
+				<div class="content-navigation-sub-caption">Description</div>
+				Returns the instance of a certain extension of the current plugin instance. <code class="code-inline">added in v1.5.0</code>
+				<div class="content-navigation-sub-caption">Signatures</div>
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						.ext( extensionName )
+					</div>
+					<div class="method-documentation-box-description">
+						Returns the instance of a previously added extension with the given name.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the previously added extension of which the instance shall be got.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: PlainObject | undefined</p>
+								<div>
+									The instance of the extension with the given name or undefined if no instance was found.<br>
+									This instance is just a copy of the actual instance. Changes to this object won't affect the original instance. 
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>example:</span>
+							<pre><code class="js">//register a dummy extensions with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });
+
+//initialize the plugin with the extension "myExtension" and get the plugins instance
+var instance = OverlayScrollbars(document.getElementById(id), { }, "myExtension");
+
+//get the instance of the extension "myExtension"
+var extensionInstance = instance.ext("myExtension");
+</code></pre>
+						</div>
+					</div>
+				</div>
+				
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						.ext()
+					</div>
+					<div class="method-documentation-box-description">
+						Gets a object which contains all instances of all extensions which has been added to the current instance.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: PlainObject</p>
+								<div>
+									The object keys represents the names of the added extensions. The corresponding values represents the instances.<br>
+									All instance objects are just a copy and changes won't affect the original instance.<br>
+									If a instance has no extensions added, a empty object will be returned.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="instance-addext" data-tab-value="instance-addext">
+				<div class="content-navigation-main-caption">AddExt Method</div>
+				<div class="content-navigation-sub-caption">Description</div>
+				Adds a extension to the current instance. <code class="code-inline">added in v1.5.0</code>
+				<div class="content-navigation-sub-caption">Signatures</div>
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						.addExt( extensionName [, options] )
+					</div>
+					<div class="method-documentation-box-description">
+						Adds a previously registered extension with the given name to the plugin instance and returns the instance of the extension or undefined if the extension couldn't be added.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the extension which shall be added to the instance.
+								</div>
+							</div>
+							<div class="method-documentation-box-description-param">
+								<p>options</p>
+								<p>Type: *</p>
+								<div>
+									A optional parameter.<br>
+									Options with which the extension shall be added.<br>
+									Options can be of any type, but I highly recommend using a <b>object</b>.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: PlainObject | undefined</p>
+								<div>
+									The instance of the added extension or undefined if the extension wasn't added successfully.<br>
+									This instance is just a copy of the actual instance. Changes to this object won't affect the original instance.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>example:</span>
+							<pre><code class="js">//register a dummy extensions with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });
+
+//initialize the plugin and get its instance
+var instance = OverlayScrollbars(document.getElementById(id), { });
+
+//add the previously registered extension "myExtension" to the plugin instance
+var extensionInstance = instance.addExt("myExtension");
+</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="instance-removeext" data-tab-value="instance-removeext">
+				<div class="content-navigation-main-caption">RemoveExt Method</div>
+				<div class="content-navigation-sub-caption">Description</div>
+				Removes a extension from the current instance. <code class="code-inline">added in v1.5.0</code>
+				<div class="content-navigation-sub-caption">Signatures</div>
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						.removeExt( extensionName )
+					</div>
+					<div class="method-documentation-box-description">
+						Removes a previously added extension from the current instance and returns a boolean which indicates whether the removal was successful.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the previously added extension which shall be removed.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: boolean</p>
+								<div>
+									True if the extension was successfully removed, false otherwise (for example if the extension wasn't added before).
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>example:</span>
+							<pre><code class="js">//register a dummy extensions with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });
+
+//initialize the plugin and get its instance
+var instance = OverlayScrollbars(document.getElementById(id), { });
+
+//add the previously registered extension "myExtension" to the plugin instance
+instance.addExt("myExtension");
+
+//remove the previously added extension "myExtension" from the plugin instance
+instance.removeExt("myExtension");
 </code></pre>
 						</div>
 					</div>
@@ -2689,7 +3098,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 							<div class="method-documentation-box-description-return">
 								<p>Type: PlainObject</p>
 								<div>
-									The returned plain object is just a copy, that means that changes to the returned object won't have any effect to the original object.<br><br>
+									The returned plain object is just a copy, which means that changes to the returned object won't have any effect to the original object.<br><br>
 									Structure:
 									<pre><code class="js">{
 	defaultOptions          : <span class="txtc-secondary-color">PlainObject</span>,
@@ -2888,11 +3297,574 @@ OverlayScrollbars(document.getElementById(otherId), { });
 						<div class="method-documentation-box-description-wrapper">
 							<span>examples:</span>
 							<pre><code class="js">//returns a object which represents global infromation about the plugin
-var globals = OverlayScrollbars.globals(();</code></pre>
+var globals = OverlayScrollbars.globals();</code></pre>
 						</div>
 					
 					</div>
 				</div>
+			</div>
+		
+			<div id="global-extension" data-tab-value="global-extension">
+				<div class="content-navigation-main-caption">OverlayScrollbars.extension Method</div>
+				<div class="content-navigation-sub-caption">Description</div>
+				Registers, Unregisters or returns extensions. <code class="code-inline">added in v1.5.0</code>
+				<div class="content-navigation-sub-caption">Signatures</div>
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						OverlayScrollbars.extension( extensionName, extension [, defaultOptions] )
+					</div>
+					<div class="method-documentation-box-description">
+						Registers a extension globally to the plugin, so it can be used by instances.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									A string which represents the name of the extension which shall be registered.
+								</div>
+							</div>
+							<div class="method-documentation-box-description-param">
+								<p>extension</p>
+								<p>Type: function</p>
+								<div>
+									A function which returns the instance of your extension.
+								</div>
+							</div>
+							<div class="method-documentation-box-description-param">
+								<p>defaultOptions</p>
+								<p>Type: *</p>
+								<div>
+									A optional parameter.<br>
+									If the extension is complex and offers a possibility to manage options, you can pass default options with this parameter.<br>
+									Options can be of any type, but I highly recommend using a <b>object</b>.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">//register a dummy extension with the name "myExtension"
+OverlayScrollbars.extension("myExtension", function() { return { }; });</code></pre>
+						</div>
+					</div>
+				</div>
+				
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						OverlayScrollbars.extension( extensionName, extension )
+					</div>
+					<div class="method-documentation-box-description">
+						Unregisters a extension globally from the plugin.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the previous registered extension.
+								</div>
+							</div>
+							<div class="method-documentation-box-description-param">
+								<p>extension</p>
+								<p>Type: null</p>
+								<div>
+									You can pass anything here, as long as it is no function the extension with the given name will be unregistered.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">//unregister the extension with the name "myExtension"
+OverlayScrollbars.extension("myExtension", null);</code></pre>
+						</div>
+					</div>
+				</div>
+				
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						OverlayScrollbars.extension( extensionName )
+					</div>
+					<div class="method-documentation-box-description">
+						Returns the extension-object of the extensions with the given name.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>extensionName</p>
+								<p>Type: string</p>
+								<div>
+									The name of the previous registered extension, of which the extension-object shall be returned.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: PlainObject</p>
+								<div>
+									The returned plain object is just a copy, which means that changes to the returned object won't have any effect to the original object.<br><br>
+									Structure:
+									<pre><code class="json">{
+	name           : <span class="txtc-secondary-color">string</span>,
+	extension      : <span class="txtc-secondary-color hljs-no-escape">function</span>,
+	defaultOptions : <span class="txtc-secondary-color">object | undefined</span>
+}</code></pre>
+									Description:
+									<div class="plainobjectproperty-documentation-box">
+										<div class="plainobjectproperty-documentation-box-title">
+											name
+										</div>
+										<div class="plainobjectproperty-documentation-box-content">
+											The name with which the extension was registered.
+										</div>
+									</div>
+									<div class="plainobjectproperty-documentation-box">
+										<div class="plainobjectproperty-documentation-box-title">
+											extension
+										</div>
+										<div class="plainobjectproperty-documentation-box-content">
+											The function which returns the instance of your extension.
+										</div>
+									</div>
+									<div class="plainobjectproperty-documentation-box">
+										<div class="plainobjectproperty-documentation-box-title">
+											defaultOptions
+										</div>
+										<div class="plainobjectproperty-documentation-box-content">
+											The default options object of your extension or undefined if you haven't passed any.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">//get the extension-object with the name "myExtension"
+var registeredExtension = OverlayScrollbars.extension("myExtension");</code></pre>
+						</div>
+					</div>
+				</div>
+				
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						OverlayScrollbars.extension()
+					</div>
+					<div class="method-documentation-box-description">
+						Returns a array like object which contains all extension-objects which has been registered.
+						
+						<div class="method-documentation-box-description-wrapper">
+							<span>Returns:</span>
+							<div class="method-documentation-box-description-return">
+								<p>Type: ArrayLikeObject</p>
+								<div>
+									The returned object is just a copy, which means that changes to the returned object won't have any effect to the original object.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">var extensionObjects = OverlayScrollbars.extension(); //get all registered extension-objects
+var registeredExtensionCount = extensionObjects.length; //get the number of registered extensions
+var firstRegisteredExtensionObject = extensionObjects[0]; //get the first registered extension-object</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		
+			<div id="extensions-basics" data-tab-value="extensions-basics">
+				<div class="content-navigation-main-caption">Extensions</div>
+				
+				The extension system was <code class="code-inline">added in v1.5.0</code>.<br>
+				Since each app has its own environment with its own requirements, it is impossible to cover all edge-cases within the standard features.<br>
+				Extensions provides a simple and elegant way to implement non-standard features into OverlayScrollbars.
+				<br>
+				
+				<div class="content-navigation-sub-caption">Lifecycle</div>
+				A extension can be <b>added</b> right at the <a class="inline-btn" data-navigation="[1]initialization">initialization</a> of a OverlayScrollbars instance or with the <a class="inline-btn" data-navigation="[1]method-addext">addExt</a> method of a OverlayScrollbars instance.
+				To <b>remove</b> a extension you have two possibilities. You can do it via the <a class="inline-btn" data-navigation="[1]method-removeext">removeExt</a> method or you can <a class="inline-btn" data-navigation="[1]method-destroy">destroy</a> the OverlayScrollbars instance. This will remove all extensions.
+				
+				
+				<div class="content-navigation-sub-caption">Interface</div>
+				A extension is basically a function which is returning a object. This object is the instance of your extension.<br>
+				The most simple extension would look like this:<br>
+				<pre><code class="js code-noscroll">var extension = function() { 
+	return { };
+};
+</code></pre>
+				In order to make it more simple and comfortable for developers, the function has a bunch of parameters which are making the development much more easy.
+				Furthermore the <b class="txtc-primary-color">"this"</b> context of the function is the <b class="txtc-primary-color">OverlayScrollbars instance</b> which is trying to add the extension.
+				<pre><code class="js code-noscroll">var extension = function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	return { };
+};
+</code></pre>
+				<table>
+					<thead>
+						<tr>
+							<td>Parameter</td>
+							<td>Description</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><b>defaultOptions</b></td>
+							<td>The "defaultOptions" value which were passed to the global <a class="inline-btn" data-navigation="[1]gmethod-extension">extension</a> method in order to register this extension. If no defaultOptions value was passed this parameter is undefined.</td>
+						</tr>
+						<tr>
+							<td><b>framework</b></td>
+							<td>The <b>framework</b> which OverlayScrollbars is using internally in order to make it simpler to manipulate and traverse the DOM. If the jQuery version is used, this parameter is the jQuery object. However, if the non-jQuery version is used, this parameter is a jQuery-like-object which has the same API-structure as jQuery but doesn't offer all its functionality. A documentation of the supported methods can be found <a class="inline-btn" data-modal="extensions-framework-object">here</a>.</td>
+						</tr>
+						<tr>
+							<td><b>compatibility</b></td>
+							<td>A object which offers <b>compatibility</b> methods. These methods are unifying native methods which are different or not present across all browsers. (for example if methods or objects have vendor prefixes, different names or signatures and so on...) A documentation of all methods can be found <a class="inline-btn" data-modal="extensions-compatibility-object">here</a>.</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="content-navigation-sub-caption">Special methods</div>
+				You are free to design your extension instance as you like.<br>
+				However, every extension <b>can</b> have 4 methods which are interacting directly with the OverlayScrollbars instance.
+				These methods have fixed (reserved) names and they are only called from the OverlayScrollbars instance itself. They can't be called from the outside.<br>
+				The names of these methods are:
+				<table>
+					<thead>
+						<tr>
+							<td>Method Name</td>
+							<td>Description</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><b>contract</b></td>
+							<td>
+								Gets called if a instances tries to add a extension.<br>
+								<u>Use this method to determine whether the extension can be added or not. With this method you have the opportunity to abort the adding process.</u><br><br>
+								This method has to return a boolean, if the method returns a other type, the method will be ignored.<br>
+								If the method returns true the extension will be added, if it returns false the extension won't be added.<br>
+								If your extension doesn't have a contract method the extension be added always.<br><br>
+								The method has <b>one parameter</b>:<br> 
+								<b class="txtc-primary-color">global</b> : The <a href="https://developer.mozilla.org/en-US/docs/Glossary/Global_object" target="_blank" class="inline-btn">global</a> object of OverlayScrollbars. (The global window object)
+							</td>
+						</tr>
+						<tr>
+							<td><b>added</b></td>
+							<td>
+								Gets called once the extension was successfully added to a OverlayScrollbars instance.<br>
+								<u>Use this method to add all your functionality, DOM elements and so on.</u><br><br>
+								The method has <b>one parameter</b>:<br> 
+								<b class="txtc-primary-color">options</b> : The custom options which has been passed to the extension. This parameter is optional and can be undefined if no options were passed.
+							</td>
+						</tr>
+						<tr>
+							<td><b>removed</b></td>
+							<td>
+								Gets called once the extension was removed from a OverlayScrollbars instance.<br>
+								<u>Use this method to remove all your added functionality, DOM elements and so on.</u><br><br>
+								The method has <b>no parameters</b>.
+							</td>
+						</tr>
+						<tr>
+							<td><b>on</b></td>
+							<td>
+								Gets called after a event happened. <br><br>
+								The method has <b>two parameters</b>:<br>
+								<b class="txtc-primary-color">callbackName</b> : The callback name as specified in the <a class="inline-btn" data-navigation="[1]options">options</a> but without the prefix "on". 
+								For exampple the if the event <code class="code-inline">onOverflowChanged</code> happened this parameter is <code class="code-inline">overflowChanged</code>. <br>
+								<b class="txtc-primary-color">callbackArgs</b> : The corresponding callback argument. A documentation of all callback arguments can be read <a class="inline-btn" data-navigation="[1]options">here</a>.
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				A small code example:
+				<pre><code class="js code-noscroll">var extension = function(compatibility, framework, defaultOptions) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	//the reserved "contract" method, can't be called freely
+	extInstance.contract = function(global) { /* code... */ }
+	
+	//the reserved "added" method, can't be called freely
+	extInstance.added = function(options) { /* code... */ };
+	
+	//the reserved "removed" method, can't be called freely
+	extInstance.removed = function() { /* code... */ };
+	
+	//the reserved "on" method, can't be called freely
+	extInstance.on = function(callbackName, callbackArgs) { /* code... */ };
+	
+	//a custom method which can be called freely
+	extInstance.myCustomMethod = function() { /* code... */ };
+	
+	return extInstance;
+};
+</code></pre>
+			
+			<div class="content-navigation-sub-caption">Epilogue</div>
+			I've designed the extension system to be simple and powerful at the same time. However if you're missing any features please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a> and make your suggestion.
+			</div>
+		
+			<div id="extensions-createextensions" data-tab-value="extensions-createextensions">
+				<div class="content-navigation-main-caption">Create Extensions</div>
+				The extension system was <code class="code-inline">added in v1.5.0</code>.<br>
+				Before you read this section, please make sure you've read and understand the extension <a class="inline-btn" data-navigation="[1]extensions-basics">basics</a>.<br>
+				<br>
+				This section is here to show example templates which shall illustrate how you write a extension correctly.
+				
+				<div class="content-navigation-sub-caption">Examples</div>
+				<div class="expander-header" data-expander-key="extensions-createextensions-basic">
+					<i class="mdi mdi-chevron-down"></i>
+					<span>Basic Extension</span>
+				</div>
+				<div class="expander-content" data-expander-value="extensions-createextensions-basic">
+					This extension adds a red div to the handles of the scrollbars.
+					<pre><code class="js">OverlayScrollbars.extension("myBasicExtension", function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	var handleElmHorizontal;
+	var handleElmVertical;
+	
+	extInstance.added = function() { 
+		var instanceElements = osInstance.getElements();
+		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.handle;
+		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.handle;
+		var html = '&lt;div style="height: 100%; width: 100%; background: red;"&gt;&lt;/div&gt;';
+		
+		handleElmHorizontal = framework(html);
+		handleElmVertical = framework(html);
+		
+		framework(scrollbarHorizontalHandle).append(handleElmHorizontal);
+		framework(scrollbarVerticalHandle).append(handleElmVertical);
+	}
+	
+	extInstance.removed = function() { 
+		handleElmHorizontal.remove();
+		handleElmVertical.remove();
+	}
+	
+	return extInstance;
+});</code></pre>
+				
+					<div class="extensions-createextensions-examples-playground">
+						<div class="extensions-createextensions-examples-playground-info">
+							<div class="txtbox txtbox-primary-color txtc-primary-color">
+								<i class="mdi mdi-information-outline"></i>
+								<span>
+									<b>
+										Test this extension by clicking on the corresponding play button.<br>
+										Errors or additional messages are displayed in the console.
+									</b>
+								</span>
+							</div>
+							
+						</div>
+						<div id="extensions-createextensions-basic-target" class="extensions-createextensions-examples-playground-target">
+							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.addExt("myBasicExtension");</code>
+							<div id="extensions-createextensions-basic-target-add" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.removeExt("myBasicExtension");</code>
+							<div id="extensions-createextensions-basic-target-remove" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				<div class="expander-header" data-expander-key="extensions-createextensions-advanced">
+					<i class="mdi mdi-chevron-down"></i>
+					<span>Advanced Extension</span>
+				</div>
+				<div class="expander-content" data-expander-value="extensions-createextensions-advanced">
+					This extension adds custom colored divs to the track of the scrollbars.<br>
+					The default color is "orange", but it can be changed if you pass a valid options object with a different color to the "addExt" method.<br>
+					With the custom method "changeColor" the color can be changed whenever you want.<br>
+					The position and size of the custom divs gets adjusted if you scroll.
+					<pre><code class="js">OverlayScrollbars.extension("myAdvancedExtension", function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	var trackElmHorizontal;
+	var trackElmHorizontal2;
+	var trackElmVertical;
+	var trackElmVertical2;
+	
+	//add the divs after the extension has been added to a instance
+	extInstance.added = function(options) { 
+		//extend the defaultOptions with the passed options
+		//to determine the correct color
+		var parsedOptions = framework.extend(true, { }, defaultOptions, options); 
+		var instanceElements = osInstance.getElements();
+		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.track;
+		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.track;
+		var html = '&lt;div style="height: 100%; width: 100%; top: 0; left: 0; position: absolute;"&gt;&lt;/div&gt;';
+		var sX = osInstance.scroll().x;
+		var sY = osInstance.scroll().y;
+		
+		trackElmHorizontal = framework(html).css({
+			background : parsedOptions.color,
+			width : sX.handleOffset
+		});
+		trackElmHorizontal2 = framework(html).css({
+			background : parsedOptions.color,
+			width : sX.trackLength - (sX.handleOffset + sX.handleLength),
+			left : sX.handleOffset + sX.handleLength
+		});
+		trackElmVertical = framework(html).css({
+			background : parsedOptions.color,
+			height : sY.handleOffset
+		});
+		trackElmVertical2 = framework(html).css({
+			background : parsedOptions.color,
+			height : sY.trackLength - (sY.handleOffset + sY.handleLength),
+			top : sY.handleOffset + sY.handleLength
+		});
+
+		framework(scrollbarHorizontalHandle).append([trackElmHorizontal, trackElmHorizontal2])
+		framework(scrollbarVerticalHandle).append([trackElmVertical, trackElmVertical2]);
+	}
+	
+	//remove the divs after the extension has been removed from a instance
+	extInstance.removed = function() { 
+		trackElmHorizontal.remove();
+		trackElmHorizontal2.remove();
+		trackElmVertical.remove();
+		trackElmVertical2.remove();
+	}
+	
+	//hide the custom divs during scrolling
+	extInstance.on = function(callbackName, args) {
+		switch(callbackName) {
+			case "scroll":
+				var sX = osInstance.scroll().x;
+				var sY = osInstance.scroll().y;
+		
+				trackElmHorizontal.css({
+					width : sX.handleOffset
+				});
+				trackElmHorizontal2.css({
+					width : sX.trackLength - (sX.handleOffset + sX.handleLength),
+					left : sX.handleOffset + sX.handleLength
+				});
+				trackElmVertical.css({
+					height : sY.handleOffset
+				});
+				trackElmVertical2.css({
+					height : sY.trackLength - (sY.handleOffset + sY.handleLength),
+					top : sY.handleOffset + sY.handleLength
+				});
+				break;
+		}
+	}
+	
+	//a custom method which changes the colors of the added divs
+	extInstance.changeColor = function(color) {
+		trackElmHorizontal.css("background", color);
+		trackElmHorizontal2.css("background", color);
+		trackElmVertical.css("background", color);
+		trackElmVertical2.css("background", color);
+	}
+	
+	return extInstance;
+}, { //defaultOptions:
+	color : "orange"
+});</code></pre>
+					<div class="extensions-createextensions-examples-playground">
+						<div class="extensions-createextensions-examples-playground-info">
+							<div class="txtbox txtbox-primary-color txtc-primary-color">
+								<i class="mdi mdi-information-outline"></i>
+								<span>
+									<b>
+										Test this extension by clicking on the corresponding play button.<br>
+										Errors or additional messages are displayed in the console.
+									</b>
+								</span>
+							</div>
+							
+						</div>
+						<div id="extensions-createextensions-advanced-target" class="extensions-createextensions-examples-playground-target">
+							<div style="width: 500px;">
+								Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+								Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+								Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.addExt("myAdvancedExtension");</code>
+							<div id="extensions-createextensions-advanced-target-add" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.addExt("myAdvancedExtension", { color : "DodgerBlue" });</code>
+							<div id="extensions-createextensions-advanced-target-add-pink" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.ext("myAdvancedExtension").changeColor("Crimson");</code>
+							<div id="extensions-createextensions-advanced-target-changeColor" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.ext("myAdvancedExtension").changeColor("GreenYellow");</code>
+							<div id="extensions-createextensions-advanced-target-changeColor-two" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+						<div class="extensions-createextensions-examples-playground-execute">
+							<code class="js">.removeExt("myAdvancedExtension");</code>
+							<div id="extensions-createextensions-advanced-target-remove" class="button">
+								<i class="mdi mdi-play"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+				<div class="expander-header" data-expander-key="extensions-createextensions-dependencies">
+					<i class="mdi mdi-chevron-down"></i>
+					<span>Extension with dependencies</span>
+				</div>
+				<div class="expander-content" data-expander-value="extensions-createextensions-dependencies">
+					This extension needs jQuery to work correctly, else it won't be added to the instance.
+					<pre><code class="js">OverlayScrollbars.extension("myDependencyExtension", function(defaultOptions, framework, compatibility) { 
+	var osInstance = this;
+	var extInstance = { };
+	
+	//determine if jQuery is available
+	extInstance.contract = function(global) { 
+		return global.jQuery && global.jQuery.fn;
+	}
+	
+	//write a message if this extension is added successfully
+	extInstance.added = function() { 
+		console.log("The dependency extension was added successfully.");
+	}
+	
+	//write a message if this extension is removed successfully
+	extInstance.removed = function() { 
+		console.log("The dependency extension was removed successfully.");
+	}
+
+	return extInstance;
+});
+</code></pre>
+				</div>
+				
+				<div class="content-navigation-sub-caption">Publish your Extension</div>
+				If you've written your own Extension and you want to make it available for everyone, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a>. 
+				After I've reviewed your extension it will be listed on the official <a data-navigation="extensions" class="inline-btn">extensions page</a> where everyone can dwonload it.
 			</div>
 		
 			<div id="themesandstyling-builtinthemes" data-tab-value="themesandstyling-builtinthemes">
@@ -2963,9 +3935,9 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-light" })
 				<br>
 				<div class="content-navigation-sub-caption">Theme inheritance</div>
 				Lets say you like the built-in "dark" theme, but you hate the rounded corners of the handles.<br>
-				Well in this case you don't have to rewrite the whole style again!<br>
+				Well, in this case you don't have to rewrite the whole style again.<br>
 				<br>
-				You can add multiple classes via the "className" option. Just separate them with a blank (space).<br>
+				You can add multiple classes via the "className" option. Just separate them with blanks (spaces).<br>
 				Now you can do something like that:
 				
 				<pre><code class="js">//initialize the plugin with custom classnames
@@ -3070,21 +4042,21 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 					<i class="mdi mdi-information-outline"></i>
 					<span><b>Hover over the DOM or Design elements to get visual feedback.</b></span>
 				</div>
-				<pre id="classnames-scrollbars-domdraft"><code class="html">&lt;div class=&quot;os-host&quot;&gt;
+				<pre id="classnames-scrollbars-domdraft"><code class="html">&lt;div class="os-host"&gt;
 	&lt;!-- ... ---&gt;
-	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;div class=&quot;os-scrollbar os-scrollbar-horizontal&quot;&gt;</span>
-		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;div class=&quot;os-scrollbar-track&quot;&gt;</span>
-			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;div class=&quot;os-scrollbar-handle&quot;&gt;</span>
+	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;div class="os-scrollbar os-scrollbar-horizontal"&gt;</span>
+		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;div class="os-scrollbar-track"&gt;</span>
+			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;div class="os-scrollbar-handle"&gt;</span>
 			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;/div&gt;</span>
 		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;/div&gt;</span>
 	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;/div&gt;</span>
-	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;div class=&quot;os-scrollbar os-scrollbar-vertical&quot;&gt;</span>
-		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;div class=&quot;os-scrollbar-track&quot;&gt;</span>
-			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;div class=&quot;os-scrollbar-handle&quot;&gt;</span>
+	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;div class="os-scrollbar os-scrollbar-vertical"&gt;</span>
+		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;div class="os-scrollbar-track"&gt;</span>
+			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;div class="os-scrollbar-handle"&gt;</span>
 			<span class="classnames-scrollbars-domdraft-element-scrollbar-handle">&lt;/div&gt;</span>
 		<span class="classnames-scrollbars-domdraft-element-scrollbar-track">&lt;/div&gt;</span>
 	<span class="classnames-scrollbars-domdraft-element-scrollbar">&lt;/div&gt;</span>
-	<span class="classnames-scrollbars-domdraft-element-corner">&lt;div class=&quot;os-scrollbar-corner&quot;&gt;</span>
+	<span class="classnames-scrollbars-domdraft-element-corner">&lt;div class="os-scrollbar-corner"&gt;</span>
 	<span class="classnames-scrollbars-domdraft-element-corner">&lt;/div&gt;</span>
 &lt;/div&gt;
 </code></pre>
@@ -3582,6 +4554,874 @@ $scrollbar-corner-background-color: transparent;
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal modal-backdrop-closeable" data-modal="extensions-compatibility-object" tabindex="-1">
+	<div class="modal-window">
+		<div class="modal-window-header">
+			<span>Compatibility</span>
+			<div class="modal-window-header-close">
+				<i class="mdi mdi-window-close"></i>
+			</div>
+		</div>
+		<div class="modal-window-content container">
+			A object which offers <b>compatibility</b> methods. These methods are unifying native methods which are different or not present across all browsers. (for example if methods or objects have vendor prefixes, different names or signatures and so on...).
+			<h6>Structure:</h6>
+			<pre><code class="json">{
+	wW   : <span class="txtc-secondary-color">function</span>,
+	wH   : <span class="txtc-secondary-color">function</span>,
+	mO   : <span class="txtc-secondary-color">function</span>,
+	rO   : <span class="txtc-secondary-color">function</span>,
+	rAF  : <span class="txtc-secondary-color">function</span>,
+	cAF  : <span class="txtc-secondary-color">function</span>,
+	now  : <span class="txtc-secondary-color">function</span>,
+	stpP : <span class="txtc-secondary-color">function ( event )</span>,
+	prvD : <span class="txtc-secondary-color">function ( event )</span>,
+	page : <span class="txtc-secondary-color">function ( event )</span>,
+	mBtn : <span class="txtc-secondary-color">function ( event )</span>,
+	inA  : <span class="txtc-secondary-color">function ( item, array )</span>,
+	bind : <span class="txtc-secondary-color">function ( function, thisObj [, arg1[, arg2[, ...]]] )</span>
+}</code></pre>
+			<h6>Description:</h6>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					wW
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns the window width.
+					<pre><code class="js">//Example usage
+var wndWidth = compatibility.wW();</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					wH
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns the window height.
+					<pre><code class="js">//Example usage
+var wndHeight = compatibility.wH();</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					mO
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns a <a href="https://developer.mozilla.org/de/docs/Web/API/MutationObserver" target="_blank" class="inline-btn">MutationObserver</a> object or <span class="txtc-primary-color">undefined</span> if the browser doesn't support it.<br>
+					<pre><code class="js">//Example usage
+var mO = compatibility.mO();
+if(mO) {
+	var myMutationObserver = new mO(function(mutations) {
+		console.log(mutations);   
+	});
+}</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					rO                 
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns a <a href="https://wicg.github.io/ResizeObserver/#api" target="_blank" class="inline-btn">ResizeObserver</a> object or <span class="txtc-primary-color">undefined</span> if the browser doesn't support it.<br>
+					<pre><code class="js">//Example usage
+var rO = compatibility.rO();
+if(rO) {
+	var myResizeObserver = new rO(function(entries) { 
+		console.log(entries);
+	});
+}</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					rAF
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns the <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame" target="_blank" class="inline-btn">requestAnimationFrame</a> function or a corresponding polyfill function if the browser doesn't support it.<br>
+					<pre><code class="js code-noscroll">//Example usage
+var rAF = compatibility.rAF();
+var requestID = rAF(function() { /* example code */ });</code></pre>
+			</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					cAF
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/cancelAnimationFrame" target="_blank" class="inline-btn">cancelAnimationFrame</a> function or a corresponding polyfill function if the browser doesn't support it.<br>
+					<pre><code class="js code-noscroll">//Example usage
+var rAF = compatibility.rAF();
+var requestID = rAF(function() { /* example code */ });
+var cAF = compatibility.cAF();
+cAF(requestID);</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					now
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function without parameters which returns the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC.<br>
+					Like <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now" target="_blank" class="inline-btn">Date.now()</a> but it also works in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+var time = compatibility.now();
+</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					stpP                          
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function with one parameter which prevents further propagation of the given event in the capturing and bubbling phases<br>
+					Like <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation" target="_blank" class="inline-btn">Event.stopPropagation()</a> but it also works in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+document.addEventListener('mousedown', function(event) { 
+	compatibility.stpP(event);
+});</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					prvD
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function with one parameter which prevents the default action of the given event.<br>
+					Like <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" target="_blank" class="inline-btn">Event.preventDefault()</a> but it also works in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+document.addEventListener('mousedown', function(event) { 
+	compatibility.prvD(event);
+});</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					page
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					Gets the <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/pageX" target="_blank" class="inline-btn">pageX</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/pageY" target="_blank" class="inline-btn">pageY</a> values of the given mouse event.<br>
+					Works also in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+document.addEventListener('mousedown', function(event) { 
+	var page = compatibility.page(event);
+	var pageX = page.x;
+	var pageY = page.y;
+});</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					mBtn
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					Gets the clicked mouse button of the given mouse event. Returns 1 for left button, 2 for middle and 3 for right.<br>
+					Works also in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+document.addEventListener('mousedown', function(event) { 
+	var mouseButton = compatibility.mBtn(event);
+});</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					inA
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function with two parameters returns the index of the given item in the given array or -1 if the item isn't in the given array.<br>
+					This function should be only used if you need the index of a specific DOM-Element in a array of DOM-Elements, because it prevents the <a href="https://stackoverflow.com/questions/18088829/script70-permission-denied-accessing-iframe-in-ie?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa" target="_blank" class="inline-btn">SCRIPT70 Permission denied error</a> to happen, but due to that it can be slower.
+					<pre><code class="js code-noscroll">//Example usage
+var array = document.querySelectorAll('*');
+var index = compatibility.inA(document.body, array);</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					bind
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					Creates a new function that, when called, has its this keyword set to the given thisObj value, with a given sequence of arguments preceding any provided when the new function is called.<br>
+					Like <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" class="inline-btn">Function.prototype.bind()</a> but it also works in IE8 or older browsers.
+					<pre><code class="js code-noscroll">//Example usage
+var add = function(a, b) { return this + a + b; }
+var add012 = compatibility.bind(add, 0, 1, 2);
+var result = add012(); //3</code></pre>
+				</div>
+			</div>
+		</div>
+		<div class="modal-window-footer">
+		
+		</div>
+	</div>
+</div>
+
+<div class="modal modal-backdrop-closeable" data-modal="extensions-framework-object" tabindex="-1">
+	<div class="modal-window">
+		<div class="modal-window-header">
+			<span>Framework</span>
+			<div class="modal-window-header-close">
+				<i class="mdi mdi-window-close"></i>
+			</div>
+		</div>
+		<div class="modal-window-content container">
+			The <b>framework</b> which OverlayScrollbars is using internally in order to make it simpler to manipulate and traverse the DOM. If the jQuery version is used, this parameter is the jQuery object. However, if the non-jQuery version is used, this parameter is a <b>jQuery-like-object</b> which has the same API-structure as jQuery but doesn't offer all its functionality.<br>
+			<br>
+			Below is a list which methods are definitely supported:
+			<h6>Utilities:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-extend">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.extend ( <span class="expander-header-weak">[deep], target [, object1 ] [, objectN ]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-extend">
+				Merge the contents of two or more objects together into the first object.<br>
+				<a href="http://api.jquery.com/jQuery.extend/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+var clone = framework.extend({ }, object1, object2);
+var deepClone = framework.extend(true, { }, object1, object2);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-isEmptyObject">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.isEmptyObject ( <span class="expander-header-weak">object</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-isEmptyObject">
+				Determine whether an object is empty (contains no enumerable properties).<br>
+				<a href="http://api.jquery.com/jQuery.isEmptyObject/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework.isEmptyObject({ });               // true
+framework.isEmptyObject({ prop: "value" }); // false</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-isPlainObject">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.isPlainObject ( <span class="expander-header-weak">object</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-isPlainObject">
+				Determine whether an object is a plain object (created using "{ }" or "new Object")<br>
+				<a href="http://api.jquery.com/jQuery.isPlainObject/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework.isPlainObject({ });    // true
+framework.isPlainObject("test"); // false</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-type">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.type ( <span class="expander-header-weak">obj</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-type">
+				Determine the internal JavaScript [[Class]] of an object.<br>
+				<a href="http://api.jquery.com/jQuery.type/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+//following statements are true:
+framework.type(undefined)          === "undefined";
+framework.type()                   === "undefined";
+framework.type(window.notDefined)  === "undefined";
+framework.type(null)               === "null";
+framework.type(true)               === "boolean";
+framework.type(new Boolean())      === "boolean";
+framework.type(3)                  === "number";
+framework.type(new Number(3))      === "number";
+framework.type("test")             === "string";
+framework.type(new String("test")) === "string";
+framework.type(function() { })     === "function";
+framework.type([ ])                === "array";
+framework.type(new Array())        === "array";
+framework.type(new Date())         === "date";
+framework.type(new Error())        === "error";
+framework.type(/test/)             === "regexp";</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-each">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.each ( <span class="expander-header-weak">array, callback</span> )</span> 
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-each">
+				A generic iterator function, which can be used to seamlessly iterate over both objects and arrays.<br>
+				<a href="http://api.jquery.com/jQuery.each/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+var array = [ 10, 20, 30 ];
+framework.each(array, function(index, value) {
+	console.log(value);
+});</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-inArray">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.inArray ( <span class="expander-header-weak">value, array [, fromIndex ]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-inArray">
+				Search for a specified value within an array and return its index (or -1 if not found).<br>
+				<a href="http://api.jquery.com/jQuery.inArray/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+var array = [ 10, 20, 30, 40 ];
+framework.inArray(40, array); //4</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-util-isArray">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.isArray ( <span class="expander-header-weak">obj</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-util-isArray">
+				Determine whether the argument is an array.<br>
+				<a href="http://api.jquery.com/jQuery.isArray/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+var first = [ 1, 2, 3 ];
+var second = { prop : "value" };
+framework.isArray(first);  //true
+framework.isArray(second); //false</code></pre>
+			</div>
+			<h6>DOM Node inserting / removing:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-append">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.append ( <span class="expander-header-weak">content</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-append">
+				Inserts content, specified by the content parameter, to the end of each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+					<li>The "content" parameter can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/append/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").append("&lt;div&gt;&lt;/div&gt;");
+
+var myElm = framework("&lt;div&gt;&lt;/div&gt;");
+framework("div").append(myElm);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-prepend">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.prepend ( <span class="expander-header-weak">content</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-prepend">
+				Inserts content, specified by the parameter, to the beginning of each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+					<li>The "content" parameter can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/prepend/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").prepend("&lt;div&gt;&lt;/div&gt;");
+
+var myElm = framework("&lt;div&gt;&lt;/div&gt;");
+framework("div").prepend(myElm);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-before">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.before ( <span class="expander-header-weak">content</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-before">
+				Inserts content, specified by the parameter, before each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+					<li>The "content" parameter can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/before/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").before("&lt;div&gt;&lt;/div&gt;");
+
+var myElm = framework("&lt;div&gt;&lt;/div&gt;");
+framework("div").before(myElm);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-after">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.after ( <span class="expander-header-weak">content</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-after">
+				Inserts content, specified by the parameter, after each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+					<li>The "content" parameter can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/after/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").after("&lt;div&gt;&lt;/div&gt;");
+
+var myElm = framework("&lt;div&gt;&lt;/div&gt;");
+framework("div").after(myElm);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-remove">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.remove ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-remove">
+				Remove the set of matched elements from the DOM.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+				</ul>
+				<a href="http://api.jquery.com/remove/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").remove();</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-wrap">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.wrap ( <span class="expander-header-weak">wrappingHtml</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-wrap">
+				Wrap an HTML structure around each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The parameter "wrappingHtml" can only be a string.</li>
+				</ul>
+				<a href="http://api.jquery.com/wrap/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").wrap("&lt;div&gt;&lt;/div&gt;");</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-wrapAll">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.wrapAll ( <span class="expander-header-weak">wrappingHtml</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-wrapAll">
+				Wrap an HTML structure around all elements in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The parameter "wrappingHtml" can only be a string.</li>
+				</ul>
+				<a href="http://api.jquery.com/wrapAll/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").wrapAll("&lt;div&gt;&lt;/div&gt;");</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-wrapInner">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.wrapInner ( <span class="expander-header-weak">wrappingHtml</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-wrapInner">
+				Wrap an HTML structure around the content of each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The parameter "wrappingHtml" can only be a string.</li>
+				</ul>
+				<a href="http://api.jquery.com/wrapInner/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").wrapInner("&lt;div&gt;&lt;/div&gt;");</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-unwrap">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.unwrap ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-unwrap">
+				Remove the parents of the set of matched elements from the DOM, leaving the matched elements in their place.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any optional parameters.</li>
+				</ul>
+				<a href="http://api.jquery.com/unwrap/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").unwrap();</code></pre>
+			</div>
+			<h6>DOM Node manipulation / information:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-css">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.css ( <span class="expander-header-weak">propertyName [, value]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-css">
+				Get one or set one or more CSS properties for the set of matched elements.<br>
+				The <b>.css( properties )</b> signature is also supported.
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "propertyName" parameter has always to be a string and can't be anything other.</li>
+					<li>The "value" parameter has always to be a string and can't be anything other.</li>
+				</ul>
+				<a href="http://api.jquery.com/css/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").css("display"); //get the current css "display" of the matched element
+framework("div").css("display", "none"); //set the css display value to "none"
+framework("div").css({ opacity: 1, display: "block", background: "red" }); //change multiple styles</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-hasClass">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.hasClass ( <span class="expander-header-weak">className</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-hasClass">
+				Determine whether any of the matched elements are assigned the given class.<br>
+				<a href="http://api.jquery.com/hasClass/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div.test-class").hasClass("test-class"); //true</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-addClass">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.addClass ( <span class="expander-header-weak">className</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-addClass">
+				Adds the specified class(es) to each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "className" parameter has always to be a string and can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/addClass/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div.test-class-one").addClass("test-class-two"); //add one class
+framework("div.test-class-one").addClass("test-class-two test-class-three"); //add mutliple classes</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-removeClass">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.removeClass ( <span class="expander-header-weak">className</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-removeClass">
+				Removes the specified class(es) from each element in the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "className" parameter has always to be a string and can't be a function or empty.</li>
+				</ul>
+				<a href="http://api.jquery.com/removeClass/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div.test-class-one").removeClass("test-class-two"); //removes one class
+framework("div.test-class-one").removeClass("test-class-two test-class-three"); //removes mutliple classes</code></pre>
+			</div>
+						<div class="expander-header" data-expander-key="extensions-framework-object-offset">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.offset ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-offset">
+				Get the current coordinates of the first element in the set of matched elements, relative to the document.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The methods desn't accept any parameters. You can't set the offset, you can only get it.</li>
+				</ul>
+				<a href="http://api.jquery.com/offset/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").offset(); //gets the offset of the first found div element</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-position">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.position ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-position">
+				Get the current coordinates of the first element in the set of matched elements, relative to the offset parent.<br>
+				<a href="http://api.jquery.com/position/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").position(); //gets the position of the first found div</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-scrollLeft">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.scrollLeft ( <span class="expander-header-weak">[value]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-scrollLeft">
+				Gets or sets the scrollLeft offset of the matched elements.<br>
+				<a href="http://api.jquery.com/scrollLeft/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").scrollLeft(); //gets the scrollLeft offset of the first found div
+framework("div").scrollLeft(200); //sets the scrollLeft offset to 200 for all found divs</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-scrollTop">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.scrollTop ( <span class="expander-header-weak">[value]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-scrollTop">
+				Gets or sets the scrollTop offset of the matched elements.<br>
+				<a href="http://api.jquery.com/scrollTop/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").scrollTop(); //gets the scrollTop offset of the first found div
+framework("div").scrollTop(200); //sets the scrollTop offset to 200 for all found divs</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-val">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.val ( <span class="expander-header-weak">[value]</span> )</span>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-attr">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.attr ( <span class="expander-header-weak">attributeName [, value]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-attr">
+				Gets or sets the value of an attribute for the set of matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "attributeName" parameter has always to be a string and cant be a object.</li>
+					<li>The "value" parameter can't be a function.</li>
+				</ul>
+				<a href="http://api.jquery.com/attr/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").attr("id"); //get the attribute "id" of the first matched element
+framework("div").attr("id", "myId"); //set the attribute "id" for the matched element(s)</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-removeAttr">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.removeAttr ( <span class="expander-header-weak">attributeName</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-removeAttr">
+				Remove an attribute from each element in the set of matched elements.<br>
+				<a href="http://api.jquery.com/removeAttr/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").removeAttr("id"); //remove the attribute "id" for the matched elements</code></pre>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-val">
+				Gets or sets the current value of the matched elements.<br>
+				<a href="http://api.jquery.com/scrollTop/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("input").val(); //gets the value of the first found input element
+framework("input").val("hello world"); //sets the value for all found input elements to "hello world"</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-hide">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.hide ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-hide">
+				Hide the matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept any additional parameters such as "duration", "complete" or "options".</li>
+				</ul>
+				<a href="http://api.jquery.com/hide/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").hide();</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-show">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.show ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-show">
+				Shows the matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>Sets the css "display" value always to "block" (ignores the the default display value).</li>
+					<li>The method doesn't accept any additional parameters such as "duration", "complete" or "options".</li>
+				</ul>
+				<a href="http://api.jquery.com/show/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").show();</code></pre>
+			</div>
+			<h6>DOM traversal / filtering:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-first">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.first ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-first">
+				Reduce the set of matched elements to the first in the set.<br>
+				<a href="http://api.jquery.com/first/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").first(); //reduced to the first found div element</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-last">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.last ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-last">
+				Reduce the set of matched elements to the final one in the set.<br>
+				<a href="http://api.jquery.com/last/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").last(); //reduced to the last found div element</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-eq">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.eq ( <span class="expander-header-weak">index</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-eq">
+				Reduce the set of matched elements to the one at the specified index.<br>
+				Providing a negative number as index indicates a position starting from the end of the set, rather than the beginning
+				<a href="http://api.jquery.com/eq/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").eq(2); //reduced to the 2nd div which was found
+framework("div").eq(-2); //reduced to the 2nd last div which was found</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-find">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.find ( <span class="expander-header-weak">selector</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-find">
+				Get the descendants of each element in the current set of matched elements, filtered by a selector, jQuery object, or element.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "selector" parameter has to be a string and can't be DOM-Element.</li>
+					<li>The provided selector has to be supported by <a href="https://developer.mozilla.org/de/docs/Web/API/Document/querySelectorAll" target="_blank" class="inline-btn">Document.querySelectorAll</a>. (:not() and so on aren't supported)</li>
+				</ul>
+				<a href="http://api.jquery.com/find/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("ul").find("li:first-child"); //returns the first list element</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-children">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.children ( <span class="expander-header-weak">[selector]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-children">
+				Get the children of each element in the set of matched elements, optionally filtered by a selector.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The provided selector has to be supported by <a href="https://developer.mozilla.org/de/docs/Web/API/Document/querySelectorAll" target="_blank" class="inline-btn">Document.querySelectorAll</a>. (:not() and so on aren't supported)</li>
+				</ul>
+				<a href="http://api.jquery.com/children/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("ul").children(); //returns all list elements of the list</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-parent">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.parent ( <span class="expander-header-weak">[selector]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-parent">
+				Get the parent of each element in the current set of matched elements, optionally filtered by a selector.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The provided selector has to be supported by <a href="https://developer.mozilla.org/de/docs/Web/API/Document/querySelectorAll" target="_blank" class="inline-btn">Document.querySelectorAll</a>. (:not() and so on aren't supported)</li>
+				</ul>
+				<a href="http://api.jquery.com/parent/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("li").parent(); //returns the "ul" element of the list element</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-is">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.is ( <span class="expander-header-weak">selector</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-is">
+				Check the current matched set of elements against a selector.<br>
+				Also supports the pseudo-selectors <code class="code-inline">:hidden</code> and <code class="code-inline">:visible</code> - <a href="https://api.jquery.com/category/selectors/visibility-filter-selectors/" target="_blank" class="inline-btn">Read more</a><br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The "selector" parameter has to be a string and can't be a function or anything other.</li>
+					<li>The provided selector has to be supported by <a href="https://developer.mozilla.org/de/docs/Web/API/Document/querySelectorAll" target="_blank" class="inline-btn">Document.querySelectorAll</a>. (:not() and so on aren't supported)</li>
+				</ul>
+				<a href="http://api.jquery.com/is/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").is("body"); //false
+framework("div").is(":hidden");
+framework("div").is(":visible");</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-contents">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.contents ( <span class="expander-header-weak"></span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-contents">
+				Get the children of each element in the set of matched elements, including text and comment nodes.<br>
+				<a href="http://api.jquery.com/contents/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").contents();</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-each">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.each ( <span class="expander-header-weak">function</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-each">
+				Iterate over all selected elements executing a function for each matched element.<br>
+				<a href="http://api.jquery.com/each/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").each(function(index, element) { 
+	console.log(index); 
+	console.log(element); 
+});</code></pre>
+			</div>
+			<h6>Events:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-on">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.on ( <span class="expander-header-weak">events, handler</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-on">
+				Adds the given event handler function for one or more events to the selected elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept the optional parameters "selector" and "data". </li>
+					<li>The "event" parameter has to be a string and can't be a object.</li>
+				</ul>
+				<a href="http://api.jquery.com/on/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">var exampleCallback = function(event) { console.log(event); };
+//Example usage with a single event
+framework("button").on("click", exampleCallback);
+//Example usage with multiple events
+framework("body").on("mousedown mouseup mousemove", exampleCallback);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-off">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.off ( <span class="expander-header-weak">events, handler</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-off">
+				Removes the given event handler function for one or more events from the selected elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept the optional parameter "selector". </li>
+					<li>The "event" parameter has to be a string and can't be a object.</li>
+					<li>The function can't be called without parameters.</li>
+				</ul>
+				<a href="http://api.jquery.com/off/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">var exampleCallback = function(event) { console.log(event); };
+//Example usage with a single event
+framework("button").off("click", exampleCallback);
+//Example usage with multiple events
+framework("body").off("mousedown mouseup mousemove", exampleCallback);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-one">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.one ( <span class="expander-header-weak">events, handler</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-one">
+				Adds the given event handler function for one or more events to the selected elements. The event handler function gets removed automatically after its first execution.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept the optional parameter "selector" and "data".</li>
+					<li>The "event" parameter has to be a string and can't be a object.</li>
+				</ul>
+				<a href="http://api.jquery.com/one/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">var exampleCallback = function(event) { console.log(event); };
+//Example usage with a single event
+framework("button").one("click", exampleCallback);
+//Example usage with multiple events
+framework("body").one("click keydown", exampleCallback);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-trigger">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.trigger ( <span class="expander-header-weak">event</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-trigger">
+				Execute all handlers and behaviors attached to the matched elements for the given event.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The method doesn't accept the optional parameter "extraParameters".</li>
+				</ul>
+				<a href="http://api.jquery.com/trigger/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("button").on("click", function(event) { console.log(event); });
+framework("button").trigger("click");</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-hover">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.hover ( <span class="expander-header-weak">handlerIn, handlerOut</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-hover">
+				Bind one or two handlers to the matched elements, to be executed when the mouse pointer enters and leaves the elements.<br>
+				<a href="http://api.jquery.com/hover/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+var handlerIn    = function() { console.log("in"); };
+var handlerOut   = function() { console.log("out"); };
+var handlerInOut = function() { console.log("inOut"); };
+framework("button").hover(handlerIn, handlerOut);
+framework("button").hover(handlerInOut);</code></pre>
+			</div>
+			<h6>Animation:</h6>
+			<div class="expander-header" data-expander-key="extensions-framework-object-animate">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.animate ( <span class="expander-header-weak">properties [, duration ] [, easing ] [, complete ]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-animate">
+				Performs a custom animation of a set of CSS properties. You can also animate "scrollLeft" and "scrollTop".<br>
+				The <b>.animate( properties, options )</b> signature is supported.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>Promises such as "always", "fail", "done" and "start" aren't supported.</li>
+					<li>You can't choose a optional queue for your animation.</li>
+					<li>You can only animate in "px" or float (such as "opacity: 0.5"). Units like "%" or "em" aren't supported.</li>
+					<li>Relative animations with "+=" or "-=" aren't supported.</li>
+					<li>The duration parameter has always to be a number and can't be a string.</li>
+					<li>The only supported callback functions are: "step", "progress" and "complete".</li>
+				</ul>
+				<a href="http://api.jquery.com/animate/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").animate({ height: "50px", opacity: 0.5, scrollTop : 0 }, 1000);</code></pre>
+			</div>
+			<div class="expander-header" data-expander-key="extensions-framework-object-stop">
+				<i class="mdi mdi-chevron-down"></i>
+				<span>.stop ( <span class="expander-header-weak">[clearQueue ] [, jumpToEnd ]</span> )</span>
+			</div>
+			<div class="expander-content" data-expander-value="extensions-framework-object-stop">
+				Stops the currently-running animations on the matched elements.<br>
+				<b>Differences to jQuery:</b>
+				<ul>
+					<li>The optional "queue" parameter isn't supported since you can't choose custom queues for your animations.</li>
+				</ul>
+				<a href="http://api.jquery.com/stop/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
+				<pre><code class="js code-noscroll">//Example usage
+framework("div").animate({ height: "50px", opacity: 0.5, scrollTop : 0 }, 1000);
+framework("div").stop(); //the animation above is stopped immediately</code></pre>
+			</div>
+		</div>
+		<div class="modal-window-footer">
+		
 		</div>
 	</div>
 </div>

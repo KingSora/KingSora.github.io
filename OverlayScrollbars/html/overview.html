@@ -33,7 +33,7 @@
 						<p class="content-message-content-list-item-title">Extended support for textarea elements</p>
 						<p class="content-message-content-list-item-content">
 							Textarea elements have extended support. 
-							Dependent on your options, textareas can have dynamic width and height. Which means the size of the textarea is content dependent. 
+							Dependent on your options, textareas can have dynamic width and height. Which means the size of the textarea is dependent of its content. 
 							For more information please read the <a class="inline-btn" data-navigation="documentation/options">documentation</a> to the textarea options or check out the <a class="inline-btn" data-navigation="demos/textarea">textarea demo</a>.
 							No-auto-wrapping (<code class="code-inline">wrap="off"</code>) textareas are also supported.
 						</p>
@@ -47,20 +47,27 @@
 					</div>
 					<div class="content-message-content-list-item">
 						<p class="content-message-content-list-item-bullet">5</p>
-						<p class="content-message-content-list-item-title">Highly customizable scroll method</p>
+						<p class="content-message-content-list-item-title">Extremely powerful scroll method</p>
 						<p class="content-message-content-list-item-content">
-							The plugin offers a scroll method which supports animated scrolling. With this method you can scroll to absolute, relative and calculated coordinates. It's possible to scroll directly to a passed DOM element too. Try the <a class="inline-btn" data-navigation="demos/scroll">demo</a> or read the <a class="inline-btn" data-navigation="documentation/method-scroll">documentation</a> for more info.
+							The plugin offers a scroll method which supports animated scrolling. With this method you can scroll to absolute, relative and calculated coordinates. It's also possible to scroll directly to a passed DOM element. Furthermore it provides the same functionality as the native <a class="inline-btn" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank">scrollIntoView</a> method. Try the <a class="inline-btn" data-navigation="demos/scroll">demo</a> or read the <a class="inline-btn" data-navigation="documentation/method-scroll">documentation</a> for more info.
 						</p>
 					</div>
 					<div class="content-message-content-list-item">
 						<p class="content-message-content-list-item-bullet">6</p>
-						<p class="content-message-content-list-item-title">Using modern web technologies</p>
+						<p class="content-message-content-list-item-title">Supports Extensions for simple customization</p>
 						<p class="content-message-content-list-item-content">
-							The Web has many useful tools which are only supported in modern browsers. The plugin is using them in modern browsers but uses fallbacks in older browsers.
+							In case OverlayScrollbars doesn't support a feature you need, you are able to develop or use extensions. Extensions provides additional functionality to the plugin, to support special or personal cases. The extension-system is simple and powerful. Please read the <a data-navigation="documentation/extensions-basics" class="inline-btn">documentation</a> for more info and check the <a data-navigation="extensions" class="inline-btn">extensions page</a> to see all official extensions.
 						</p>
 					</div>
 					<div class="content-message-content-list-item">
 						<p class="content-message-content-list-item-bullet">7</p>
+						<p class="content-message-content-list-item-title">Using modern web technologies</p>
+						<p class="content-message-content-list-item-content">
+							The Web has many useful tools which are only supported in modern browsers. The plugin is using them in modern browsers to ensure maximal performance but uses fallbacks in older browsers to ensure functionality.
+						</p>
+					</div>
+					<div class="content-message-content-list-item">
+						<p class="content-message-content-list-item-bullet">8</p>
 						<p class="content-message-content-list-item-title">Able to hide all types of scrollbars</p>
 						<p class="content-message-content-list-item-content">
 							Similar plugins are not able to hide natively overlaid scrollbars. These are standard on all mobile browsers as well as on many Linux operating systems and MacOS.<br>
@@ -68,7 +75,7 @@
 						</p>
 					</div>
 					<div class="content-message-content-list-item">
-						<p class="content-message-content-list-item-bullet">8</p>
+						<p class="content-message-content-list-item-bullet">9</p>
 						<p class="content-message-content-list-item-title">No clipping without overflow</p>
 						<p class="content-message-content-list-item-content">
 							As long as there is no overflow, the element is <i>not</i> clipped. The clip appears only if a overflow exists.
@@ -223,9 +230,9 @@
 				Implementation
 			</h3>
 			<div class="content-message-content">
-                <a class="inline-btn" href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip">Download</a> the Plugin manually and <b class="txtc-primary-color">extract</b> the Javascript and CSS files to your desired location.<br>
-                You can also use <a class="inline-btn" target="_blank" href="https://www.npmjs.com/package/overlayscrollbars">npm</a> to download it:
-                <pre><code class="html code-noscroll">npm install overlayscrollbars</code></pre> 
+				You can get the plugin by <a class="inline-btn" href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip">downloading</a> it manually, use a <a class="inline-btn" target="_blank" href="https://cdnjs.com/libraries/overlayscrollbars">cdn</a> or via a package manager like <a class="inline-btn" target="_blank" href="https://www.npmjs.com/package/overlayscrollbars">npm</a>:
+				<pre><code class="html code-noscroll">npm install overlayscrollbars</code></pre> 
+                <br>
                 The plugin has two versions:
                 <ul>
 					<li>The default version without any dependencies: <b>OverlayScrollbars.js</b></li>
@@ -288,7 +295,7 @@
                     </div>
                     <div id="initialization-default" class="active" data-tab-value="initialization-default">
                         <pre><code class="html code-noscroll">&lt;script type=&quot;text/javascript&quot;&gt;
-    $(function() {
+    document.addEventListener("DOMContentLoaded", function() {
         //The first argument are the elements to which the plugin shall be initialized
         //The second argument has to be at least a empty object or a object with your desired options
         OverlayScrollbars(document.querySelectorAll('body'), { });
