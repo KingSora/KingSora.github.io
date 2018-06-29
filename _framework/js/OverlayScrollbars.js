@@ -1228,15 +1228,13 @@
 
                 is : function(selector) {
                     var el;
-                    var elVisible;
                     var i;
                     for(i = 0; i < this[LEXICON.l]; i++) {
                         el = this[i];
-                        elVisible = !!(el[LEXICON.oW] || el[LEXICON.oH] || el.getClientRects()[LEXICON.l]);
                         if(selector === ":visible")
-                            return elVisible;
+                            return !!(el[LEXICON.oW] || el[LEXICON.oH] || el.getClientRects()[LEXICON.l]);
                         if(selector === ":hidden")
-                            return !elVisible;
+                            return !!!(el[LEXICON.oW] || el[LEXICON.oH] || el.getClientRects()[LEXICON.l]);
                         if((el.matches && el.matches(selector)) || matches(el, selector))
                             return true;
                     }
@@ -5435,7 +5433,7 @@
                         }
 
                         //measuring is required
-                        if (settingsBlock.x != strBegin || settingsBlock.y != strBegin || settingsScroll.x == strIfNeeded || settingsScroll.y == strIfNeeded) {
+                        if (settingsBlock.x != strBegin || settingsBlock.y != strBegin || settingsScroll.x == strIfNeeded || settingsScroll.y == strIfNeeded || _isRTL) {
                             var measuringElm = finalElement[0];
                             var rawElementSize = {};
                             var rect;

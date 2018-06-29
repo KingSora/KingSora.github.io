@@ -4377,7 +4377,7 @@
                         }
 
                         //measuring is required
-                        if (settingsBlock.x != strBegin || settingsBlock.y != strBegin || settingsScroll.x == strIfNeeded || settingsScroll.y == strIfNeeded) {
+                        if (settingsBlock.x != strBegin || settingsBlock.y != strBegin || settingsScroll.x == strIfNeeded || settingsScroll.y == strIfNeeded || _isRTL) {
                             var measuringElm = finalElement[0];
                             var rawElementSize = {};
                             var rect;

@@ -118,37 +118,43 @@
 				Browser Support
 			</h3>
 			<div class="content-message-content">		
-				Tested on desktop and mobile Browsers as well as on windows and linux machines.<br>
+				Tested on desktop and mobile browsers as well as on windows and linux machines.<br>
 				<br>
 				<div class="browsersupport">
 					<div class="browsersupport-line">
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
 								<img src="../_framework/img/icons-browser/ie.svg">
+								<img src="../_framework/img/icons-browser/ie.svg">
 							</div>
 						</div>
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
+								<img src="../_framework/img/icons-browser/edge.svg">
 								<img src="../_framework/img/icons-browser/edge.svg">
 							</div>
 						</div>
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
 								<img src="../_framework/img/icons-browser/opera.svg">
+								<img src="../_framework/img/icons-browser/opera.svg">
 							</div>
 						</div>
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
+								<img src="../_framework/img/icons-browser/chrome.svg">
 								<img src="../_framework/img/icons-browser/chrome.svg">
 							</div>
 						</div>
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
 								<img src="../_framework/img/icons-browser/firefox.svg">
+								<img src="../_framework/img/icons-browser/firefox.svg">
 							</div>
 						</div>
 						<div class="browsersupport-line-item">
 							<div class="browsersupport-line-item-inner">
+								<img src="../_framework/img/icons-browser/safari.svg">
 								<img src="../_framework/img/icons-browser/safari.svg">
 							</div>
 						</div>
@@ -230,8 +236,8 @@
 				Implementation
 			</h3>
 			<div class="content-message-content">
-				You can get the plugin by <a class="inline-btn" href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip">downloading</a> it manually, use a <a class="inline-btn" target="_blank" href="https://cdnjs.com/libraries/overlayscrollbars">cdn</a> or via a package manager like <a class="inline-btn" target="_blank" href="https://www.npmjs.com/package/overlayscrollbars">npm</a>:
-				<pre><code class="html code-noscroll">npm install overlayscrollbars</code></pre> 
+				You can get the plugin by <a class="inline-btn" href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip">downloading</a> it manually, via <a class="inline-btn" target="_blank" href="https://cdnjs.com/libraries/overlayscrollbars">cdn</a> or via a package manager like <a class="inline-btn" target="_blank" href="https://www.npmjs.com/package/overlayscrollbars">npm</a>:
+				<pre><code class="code-noscroll">npm install overlayscrollbars</code></pre> 
                 <br>
                 The plugin has two versions:
                 <ul>
@@ -241,12 +247,16 @@
                 Both versions are capable of the same, but the jQuery version is a bit smaller in size.
                 <br>
                 <br>
-                <br>
-                The next step is to <b class="txtc-primary-color">implement</b> the plugin to your Page.<br>
-                To do that, you have to include all necessary files to the head tag in your HTML document.<br>
-                If you are using jQuery, please use the file prefixed with "jquery".<br>
-                Please make sure to load all CSS file(s) before the JS file(s), to prevent unexpected bugs.
-                <div class="tab-control">
+                To <b>implement</b> the plugin to your page you have to include all necessary files to the head tag in your HTML document.<br>
+                If you are using jQuery, please use the file prefixed with <code class="code-inline">jquery.</code>.<br>
+                
+                <div class="txtbox txtbox-yellow">
+					<i class="mdi mdi-lightbulb"></i>
+					<span>
+						Make sure to load all CSS file(s) before the JS file(s), to prevent unexpected bugs.
+					</span>
+				</div>
+				<div class="tab-control">
                     <div class="tab-button-bar">
                         <div class="tab-button-bar-center">
                             <div class="tab-button active" data-tab-key="implementation-default">Default</div>
@@ -283,9 +293,15 @@
                     </div>
                 </div>
 				<br>
-				Now the plugin is ready to be <b class="txtc-primary-color">initialized</b>.<br>
-                Please initialize the plugin only after your document has been fully loaded. <br>
-                Just append the following lines after all the file inclusions in the head tag of your HTML document.<br>
+				Now the plugin is ready to be <b>initialized</b>.<br>
+                
+				<div class="txtbox txtbox-orange">
+					<i class="mdi mdi-alert"></i>
+					<span>
+						Initialize the plugin only after your document has been fully loaded.
+					</span>
+				</div>
+				
                 <div class="tab-control">
                     <div class="tab-button-bar">
                         <div class="tab-button-bar-center">
@@ -294,25 +310,19 @@
                         </div>
                     </div>
                     <div id="initialization-default" class="active" data-tab-value="initialization-default">
-                        <pre><code class="html code-noscroll">&lt;script type=&quot;text/javascript&quot;&gt;
-    document.addEventListener("DOMContentLoaded", function() {
-        //The first argument are the elements to which the plugin shall be initialized
-        //The second argument has to be at least a empty object or a object with your desired options
-        OverlayScrollbars(document.querySelectorAll('body'), { });
-    });
-&lt;/script&gt;
-</code></pre>
-                        For further and more detailed information to the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization">this section</a> in the documentation.<br>
+                        <pre><code class="js code-noscroll">document.addEventListener("DOMContentLoaded", function() {
+	//The first argument are the elements to which the plugin shall be initialized
+	//The second argument has to be at least a empty object or a object with your desired options
+	OverlayScrollbars(document.querySelectorAll("body"), { });
+});</code></pre>
+                        For further and more detailed information about the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization">this section</a> in the documentation.<br>
                     </div>
                     <div id="initialization-jquery" data-tab-value="initialization-jquery">
-                        <pre><code class="html code-noscroll">&lt;script type=&quot;text/javascript&quot;&gt;
-    $(function() {
-        //The passed argument has to be at least a empty object or a object with your desired options
-        $('body').overlayScrollbars({ });
-    });
-&lt;/script&gt;
-</code></pre>
-                        For further and more detailed information to the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization-jquery">this section</a> in the documentation.<br>
+                        <pre><code class="js code-noscroll">$(function() {
+	//The passed argument has to be at least a empty object or a object with your desired options
+	$("body").overlayScrollbars({ });
+});</code></pre>
+                        For further and more detailed information about the initialization and the initialization possibilities please read <a class="inline-btn" data-navigation="documentation/initialization-jquery">this section</a> in the documentation.<br>
                     </div>
                 </div>
             </div>

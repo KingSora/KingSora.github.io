@@ -962,7 +962,7 @@ var updateInputUserIcons = function() {
 	inputIconElement.css("background", user.i);
 };
 var setChatHead = function() { 
-	$('.content-demo-chat-head-datetime').text(moment().format('LL'));
+	$('.content-demo-chat-head-datetime').text(dayjs().format('MMMM DD, YYYY'));
 	var leftUserElements = $('.content-demo-chat-head-users-user-left');
 	var rightUserElements = $('.content-demo-chat-head-users-user-right');
 	var iconElementSelector = '.content-demo-chat-head-users-user-icon';
@@ -998,7 +998,7 @@ var sendNewMessageGroup = function(user, message) {
 	var groupSuffix = user === leftUser ? 'left' : 'right';
 	var element = $('<div class="content-demo-chat-message-group-' + groupSuffix + ' content-demo-chat-message-group"></div>');
 	var msgGroup = { 
-		time : moment(),
+		time : dayjs(),
 		user : user,
 		elem : element,
 		messages : [ message ]
@@ -1007,14 +1007,14 @@ var sendNewMessageGroup = function(user, message) {
 	allUsersMessageGroups.push(msgGroup);
 	element.append(
 		'<div class="content-demo-chat-message-group-head">' +
-			'<span class="content-demo-chat-message-group-head-username">' + msgGroup.user.n + '</span>, <span class="content-demo-chat-message-group-head-datetime">' + msgGroup.time.format('LT') + '</span>' +
+			'<span class="content-demo-chat-message-group-head-username">' + msgGroup.user.n + '</span>, <span class="content-demo-chat-message-group-head-datetime">' + msgGroup.time.format('hh:mm A') + '</span>' +
 		'</div>' +
 		'<div class="content-demo-chat-message-group-user-icon" style="background:' + msgGroup.user.i + '">' +
 		'</div>' +
 		'<div class="content-demo-chat-message-group-content">' +
 			'<div class="content-demo-chat-message-group-content-item">' +
 				'<div class="content-demo-chat-message-group-content-item-datetime">' +
-					msgGroup.messages[0].time.format('LTS') +
+					msgGroup.messages[0].time.format('hh:mm:ss A') +
 				'</div>' +
 				'<div class="content-demo-chat-message-group-content-item-content">' +
 					msgGroup.messages[0].content +
@@ -1031,7 +1031,7 @@ var appendToMessageGroup = function(messageGroup, message) {
 	msgSlot.append(
 		'<div class="content-demo-chat-message-group-content-item">' +
 			'<div class="content-demo-chat-message-group-content-item-datetime">' +
-				message.time.format('LTS') +
+				message.time.format('hh:mm:ss A') +
 			'</div>' +
 			'<div class="content-demo-chat-message-group-content-item-content">' +
 				message.content +
@@ -1041,7 +1041,7 @@ var appendToMessageGroup = function(messageGroup, message) {
 }
 var sendMessage = function(user, content) { 
 	var lastMessageGroup = getUserLastMessageGroup(user);
-	var message = { time : moment(), content : content };
+	var message = { time : dayjs(), content : content };
 	if(lastMessageGroup == null || allUsersMessageGroups[allUsersMessageGroups.length -1] !== lastMessageGroup) {
 		sendNewMessageGroup(user, message);
 	}

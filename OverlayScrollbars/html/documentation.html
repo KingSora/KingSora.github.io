@@ -159,9 +159,9 @@
 				</div>
 				
 				<div class="content-navigation-sub-caption">Documentation</div>
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>Click on a option to toggle it's description and additional info.</b></span>
+					<span>Click on a option to toggle it's description and additional info.</span>
 				</div>
 				
 				<table class="options-table">
@@ -185,7 +185,7 @@
 								<div>
 									The class name which sgall be added to the host element. You can add multiple class names if you separate them by spaces.<br>
 									This option is intended for styling / theming purposes.<br><br>
-									If this option is null, then the class <code class="code-inline scss">.os-theme-none</code> gets added automatically to the host element. This class ensures that the scrollbars won't have any appearance.<br>
+									If this option is null, then the class <code class="code-inline css">.os-theme-none</code> gets added automatically to the host element. This class ensures that the scrollbars won't have any appearance.<br>
 								</div>
 							</td>
 						</tr>
@@ -248,7 +248,7 @@
 							<td colspan="4">
 								<div>
 									Indicates whether the host element is capable of "auto" sizes such as:
-									<code class="code-inline scss">width: auto</code> and <code class="code-inline scss">height: auto</code>.
+									<code class="code-inline css">width: auto</code> and <code class="code-inline css">height: auto</code>.
 									If set to false and the property width or height is "auto", the rendered width or height of the content will be zero.<br>
 									If you are applying OverlayScrollbars to a <b>flexbox-element</b> set this option to <b>false</b> to ensure correct functionality.<br><br>
 									This option is ignored if the target-element is the body element, because in this case the size must be 100% (on both axis) to simulate the viewport correctly.
@@ -319,7 +319,7 @@
 										<div class="plainobjectpropertyvalue-documentation-box-content">
 											The instance is using the update loop.<br>
 											On every iteration of the loop the DOM / instance is checked for changes. <u>Only if there are any changes</u> the DOM / instance will be updated.
-											<span class="font-weight-500">If the browser supports modern change detection mechanisms, they get turned off.</span>
+											<b>If the browser supports modern change detection mechanisms, they get turned off.</b>
 										</div>
 									</div>
 									<div class="plainobjectpropertyvalue-documentation-box">
@@ -328,7 +328,7 @@
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box-content">
 											The instance isn't using the update loop.<br>
-											<span class="font-weight-500">If the browser supports modern change detection mechanisms, they gets turned on and the instance is using them.</span>
+											<b>If the browser supports modern change detection mechanisms, they gets turned on and the instance is using them.</b>
 										</div>
 									</div>
 									<div class="plainobjectpropertyvalue-documentation-box">
@@ -337,7 +337,7 @@
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box-content">
 											The plugin chooses. - It checks if the browser supports modern change detection mechanisms. If yes, then the plugin will use these for updating (alike false), else it will fallback to the update loop (alike true). 
-											<span class="font-weight-500">This option is highly recommended to guarantee best performance and browser compatibility.</span>
+											<b>This option is highly recommended to guarantee best performance and browser compatibility.</b>
 											<br>-
 											<br>
 											<b>Note:</b> To ensure maximal efficiency there is only <u>ONE</u> update loop across <u>ALL</u> instances. The loop is only running if at least one instance is using it. The loop interval is the value of the smallest "autoUpdateInterval" option across all instances which are using the loop. 
@@ -450,8 +450,8 @@
 												"hidden"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the x-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-x: hidden</code>.<br>
-												<i>In short: <span class="font-weight-500">Horizontal scrolling is NOT possible and the content is clipped.</span></i>
+												If the x-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-x: hidden</code>.<br>
+												<i>In short: <b>Horizontal scrolling is NOT possible and the content is clipped.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -459,8 +459,8 @@
 												"scroll"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the x-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-x: scroll</code>.<br>
-												<i>In short: <span class="font-weight-500">Horizontal scrolling is possible and the content is clipped.</span></i>
+												If the x-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-x: scroll</code>.<br>
+												<i>In short: <b>Horizontal scrolling is possible and the content is clipped.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -468,9 +468,9 @@
 												"visible-hidden"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the x-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-x: visible</code>.
-												If the y-axis has a overflow and the overflow behavior of the y-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline scss">overflow-x: hidden</code>.<br>
-												<i>In short: <span class="font-weight-500">The content is not clipped, but if the y-axis has a overflow the content is clipped and horizontal scrolling is NOT possible.</span></i>
+												If the x-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-x: visible</code>.
+												If the y-axis has a overflow and the overflow behavior of the y-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline css">overflow-x: hidden</code>.<br>
+												<i>In short: <b>The content is not clipped, but if the y-axis has a overflow the content is clipped and horizontal scrolling is NOT possible.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -478,9 +478,9 @@
 												"visible-scroll"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the x-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-x: visible</code>.
-												If the y-axis has a overflow and the overflow behavior of the y-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline scss">overflow-x: scroll</code>.<br>
-												<i>In short: <span class="font-weight-500">The content is not clipped, but if the y-axis has a overflow the content is clipped and horizontal scrolling is possible.</span></i>
+												If the x-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-x: visible</code>.
+												If the y-axis has a overflow and the overflow behavior of the y-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline css">overflow-x: scroll</code>.<br>
+												<i>In short: <b>The content is not clipped, but if the y-axis has a overflow the content is clipped and horizontal scrolling is possible.</b></i>
 											</div>
 										</div>
 									</div>
@@ -504,8 +504,8 @@
 												"hidden"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the y-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-y: hidden</code>.<br>
-												<i>In short: <span class="font-weight-500">Vertical scrolling is NOT possible and the content is clipped.</span></i>
+												If the y-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-y: hidden</code>.<br>
+												<i>In short: <b>Vertical scrolling is NOT possible and the content is clipped.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -513,8 +513,8 @@
 												"scroll"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the y-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-y: scroll</code>.<br>
-												<i>In short: <span class="font-weight-500">Vertical scrolling is possible and the content is clipped.</span></i>
+												If the y-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-y: scroll</code>.<br>
+												<i>In short: <b>Vertical scrolling is possible and the content is clipped.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -522,9 +522,9 @@
 												"visible-hidden"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the y-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-y: visible</code>.
-												If the x-axis has a overflow and the overflow behavior of the x-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline scss">overflow-y: hidden</code>.<br>
-												<i>In short: <span class="font-weight-500">The content is not clipped, but if the x-axis has a overflow the content is clipped and vertical scrolling is NOT possible.</span></i>
+												If the y-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-y: visible</code>.
+												If the x-axis has a overflow and the overflow behavior of the x-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline css">overflow-y: hidden</code>.<br>
+												<i>In short: <b>The content is not clipped, but if the x-axis has a overflow the content is clipped and vertical scrolling is NOT possible.</b></i>
 											</div>
 										</div>
 										<div class="plainobjectpropertyvalue-documentation-box">
@@ -532,9 +532,9 @@
 												"visible-scroll"
 											</div>
 											<div class="plainobjectpropertyvalue-documentation-box-content">
-												If the y-axis has a overflow, the viewport becomes <code class="code-inline scss">overflow-y: visible</code>.
-												If the x-axis has a overflow and the overflow behavior of the x-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline scss">overflow-y: scroll</code>.<br>
-												<i>In short: <span class="font-weight-500">The content is not clipped, but if the x-axis has a overflow the content is clipped and vertical scrolling is possible.</span></i>
+												If the y-axis has a overflow, the viewport becomes <code class="code-inline css">overflow-y: visible</code>.
+												If the x-axis has a overflow and the overflow behavior of the x-axis is "hidden" or "scroll" the viewport becomes <code class="code-inline css">overflow-y: scroll</code>.<br>
+												<i>In short: <b>The content is not clipped, but if the x-axis has a overflow the content is clipped and vertical scrolling is possible.</b></i>
 											</div>
 										</div>
 									</div>
@@ -884,7 +884,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onOverflowChangedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	x             : <span class="txtc-secondary-color">boolean</span>,
 	y             : <span class="txtc-secondary-color">boolean</span>,
 	xScrollable   : <span class="txtc-secondary-color">boolean</span>,
@@ -957,7 +957,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onOverflowAmountChangedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	x : <span class="txtc-secondary-color">number</span>,
 	y : <span class="txtc-secondary-color">number</span>
 }</code></pre>
@@ -1000,7 +1000,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onDirectionChangedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	isRTL : <span class="txtc-secondary-color">boolean</span>,
 	dir   : <span class="txtc-secondary-color">number</span>
 }</code></pre>
@@ -1043,7 +1043,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onContentSizeChangedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	width  : <span class="txtc-secondary-color">number</span>,
 	height : <span class="txtc-secondary-color">number</span>
 }</code></pre>
@@ -1086,7 +1086,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onHostSizeChangedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	width  : <span class="txtc-secondary-color">number</span>,
 	height : <span class="txtc-secondary-color">number</span>
 }</code></pre>
@@ -1129,7 +1129,7 @@
 										</div>
 										<div class="expander-content" data-expander-value="onUpdatedEventArgs">
 											Structure:
-											<pre><code class="js code-noscroll">eventArgs : {
+											<pre><code class="json code-noscroll">eventArgs : {
 	forced  : <span class="txtc-secondary-color">boolean</span>
 }</code></pre>
 											Description:
@@ -1155,22 +1155,22 @@
 				<div class="content-navigation-main-caption">Supported Elements</div>
 				<div class="content-navigation-sub-caption">General</div>
 				Basically the plugin can be initialized to any DOM element which can contain DOM elements and supports scrolling.<br>
-				However, <code class="code-inline scss">display : inline</code> elements does not support scrolling at all. If you initialize the plugin to a inline element, the plugin will not work crrectly, and the element dimensions will be wrong aswell.
+				However, <code class="code-inline css">display : inline</code> elements does not support scrolling at all. If you initialize the plugin to a inline element, the plugin will not work crrectly, and the element dimensions will be wrong aswell.
 				After you changed the display property to something else, it will work correctly again.
 				<br>
 				<br>
 				The plugin was tested with the following display values:
-<pre><code class="scss">display : block;
+<code class="css">display : block;<br>
 display : inline-block;
-</code></pre>
+</code>
 				Since you can wrap any element which has one of those values, they should suit for every application.<br>
 				
 				<div class="content-navigation-sub-caption">Body element</div>
 				The body element is not really special, because it supports all criteria, but there is a case which is different on this element.<br>
 				Without the plugin initialized the scroll viewport of your whole content is the window. But after the initialization of the plugin, the body element itself becomes new scroll viewport of your whole content.<br>
 				<br>
-				That means, if you want to specify a <code class="code-inline scss">min-height</code> or <code class="code-inline scss">min-width</code> for your content, you have to do it with this two selectors:
-<pre><code class="scss">body.os-host > .os-padding > .os-viewport > .os-content,
+				That means, if you want to specify a <code class="code-inline css">min-height</code> or <code class="code-inline css">min-width</code> for your content, you have to do it with this two selectors:
+<pre><code class="css">body.os-host > .os-padding > .os-viewport > .os-content,
 body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 	min-width  : 800px;
 	min-height : 600px;
@@ -1178,28 +1178,26 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 </code></pre>
 				Please use always both selectors and not just one.<br>
 				<br>
-				You could also specify a <code class="code-inline scss">min-height</code> or <code class="code-inline scss">min-width</code> directly for the body element, but that wouldn't make any sense, since you want the body element to be always as big as the window, to simulate a correct viewport. Besides that, the plugin style overrides your body min size(s) to 0 if the plugin is applied to the body element.
+				You could also specify a <code class="code-inline css">min-height</code> or <code class="code-inline css">min-width</code> directly for the body element, but that wouldn't make any sense, since you want the body element to be always as big as the window, to simulate a correct viewport. Besides that, the plugin style overrides your body min size(s) to 0 if the plugin is applied to the body element.
 				
 				<div class="content-navigation-sub-caption">Textarea elements</div>
 				Textarea elements are special. Although they cant contain any  DOM elements, the plugin has extended support for them.<br>
-				<b class="txtc-primary-color">Your textarea element will be wrapped inside a generated element</b>, please read the <a class="inline-btn" data-navigation="[1]domelements">DOM Elements</a> section for more informations.<br>
-				<div class="txtbox txtbox-primary-color">
+				<b>Your textarea element will be wrapped inside a generated element</b>, please read the <a class="inline-btn" data-navigation="[1]domelements">DOM Elements</a> section for more information.<br>
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
 					<span>
 						Because of this wrapping <b>you have to redefine the styles of your textarea element</b>.<br>
-						The plugin offers the selector <code class="code-inline scss">.os-host-textarea</code> which acts a the new selector for textarea styling.<br>
+						The plugin offers the selector <code class="code-inline css">.os-host-textarea</code> which acts a the new selector for textarea styling.<br>
 						<b>Please use this selector</b> if you want to style textareas, to which the plugin is applied, in general.<br>
-						<b>For individual styling</b> use the <code class="code-inline js">className</code> option, to give your textarea a individual class name.<br>
+						<b>For individual styling</b> use the <code class="code-inline js">className</code> option, to give your textarea individual class name(s).<br>
 					</span>
 				</div>
 				
 				<b>After the plugin is applied to your textarea, the textarea is capable of dynamic height and dynamic width.</b><br>
-				Dynamic height can be achieved if the option <code class="code-inline js">textarea.dynHeight</code> is set to true, then the host-element must have the css property <code class="code-inline scss">height: auto</code> set.<br>
-				Dynamic width can be achieved if the option <code class="code-inline js">textarea.dynWidth</code> is set to true, then the host-element must have the css properties <code class="code-inline scss">width: auto</code> & <code class="code-inline scss">float: left</code> set, additionally your textarea element must have the html attribute <code class="code-inline html">wrap="auto"</code> applied, to disable the autowrapping.<br>
+				Dynamic height can be achieved if the option <code class="code-inline js">textarea.dynHeight</code> is set to true, then the host-element must have the css property <code class="code-inline css">height: auto</code> set.<br><br>
+				Dynamic width can be achieved if the option <code class="code-inline js">textarea.dynWidth</code> is set to true, then the host-element must have the css properties <code class="code-inline css">width: auto</code> & <code class="code-inline css">float: left</code> set, additionally your textarea element must have the html attribute <code class="code-inline html">wrap="auto"</code> applied, to disable the autowrapping.<br>
 				<br>
 				Use the <a class="inline-btn" data-navigation="demos/textarea">textarea demo</a> to test dynamic sized textareas.
-				<br>
-				Dynamic width and height isn't possible at all with native textareas.
 				
 				<div class="content-navigation-sub-caption">Unsupported elements</div>
 				Unsupported are the following elements:<br><br>
@@ -1229,12 +1227,12 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 					<span>OverlayScrollbars <code class="code-inline">lower than v1.5.0</code></span>
 				</div>
 				<div class="expander-content" data-expander-value="flexbox-old">
-					Try to initialize the plugin with the option <code class="code-inline js">sizeAutoCapable : false</code> and set the overflow style of the target element to <code class="code-inline scss">overflow: hidden</code>.<br>
+					Try to initialize the plugin with the option <code class="code-inline js">sizeAutoCapable : false</code> and set the overflow style of the target element to <code class="code-inline css">overflow: hidden</code>.<br>
 				</div>
 				<br>
 				
 				In the most cases this should be enough.<br><br>
-				However if the plugin isn't updating correctly or if the plugin isn't working at all, I can only recommend to use / create a <b>inner-div</b> with the style <code class="code-inline scss">display: block; height: 100%; width: 100%;</code> and initialize to plugin to that inner-div. With this setup the plugin will definitely work.<br>
+				However if the plugin isn't updating correctly or if the plugin isn't working at all, I can only recommend to use / create a <b>inner-div</b> with the style <code class="code-inline css">display: block; height: 100%; width: 100%;</code> and initialize to plugin to that inner-div. With this setup the plugin will definitely work.<br>
 				<br>
 				
 				If you need help with a special flexbox case, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a> with a small demo.<br>
@@ -1244,10 +1242,10 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
             <div id="initialization-default" data-tab-value="initialization-default">
 				<div class="content-navigation-main-caption">Default initialization</div>
 				<div class="content-navigation-sub-caption">Single element</div>
-				<b class="txtc-primary-color">The initialization</b> of the plugin for a cerain element is very easy:
-				<div class="txtbox txtbox-red txtc-red">
+				<b>The initialization</b> of the plugin for a cerain element is very easy:
+				<div class="txtbox txtbox-blue">
 					<i class="mdi mdi-alert-circle-outline"></i>
-					<span><b>In order to initialize the plugin, you have to pass at least a empty object as second argument.</b></span>
+					<span>In order to initialize the plugin, you have to pass at least a empty object as second argument.</span>
 				</div>
 <pre><code class="js">//initializes the plugin to a single element and returns its instance
 var instance = OverlayScrollbars(document.getElementById(id), { /* your options */ }); 
@@ -1256,11 +1254,12 @@ var instance = OverlayScrollbars(document.getElementById(id), { /* your options 
 				The second argument represents the options with which the plugin shall be initialized.<br>
                 If you initialize the plugin to a single element, this method will return the instance of the plugin.<br><br>
 				
-				You can get the <b class="txtc-primary-color">current instance</b> with the same method.
-				<div class="txtbox txtbox-red txtc-red">
+				You can get the <b>current instance</b> with the same method.
+				<div class="txtbox txtbox-blue">
 					<i class="mdi mdi-alert-circle-outline"></i>
-					<span><b>If you don't pass a object as second argument, the method returns the instance.</b></span>
+					<span>If you don't pass a object as second argument, the method returns the instance.</span>
 				</div>
+				
 <pre><code class="js">//returns the plugin instance or undefined if the element has no instance
 var instance = OverlayScrollbars(document.getElementById(id));
 </code></pre><br>
@@ -1274,12 +1273,12 @@ OverlayScrollbars(document.getElementById(id), { resize : "both" });
 </code></pre>
 				
 				<div class="content-navigation-sub-caption">Multiple elements</div>
-				The <b class="txtc-primary-color">initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
+				The <b>initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
 <pre><code class="js">//initialize plugin with custom options on all div elements and return all instances as array
 var instances = OverlayScrollbars(document.querySelectorAll("div"), { }); 
 </code></pre>
             <br>
-            If you need the <b class="txtc-primary-color">instances of multiple element</b> you can do it the same way as for a single element:
+            If you need the <b>instances of multiple element</b> you can do it the same way as for a single element:
 <pre><code class="js">//get the instance information of all elements on your page and store it into a variable
 //the array can contain undefined entries
 var instances = OverlayScrollbars(document.querySelectorAll("*")); 
@@ -1292,9 +1291,9 @@ for(var i = 0; i < instances.length; i++) {
 }
 </code></pre>
 			I've built-in a filtering possibility, if you want a array only with not undefined instances:
-			<div class="txtbox txtbox-orange txtc-orange">
+			<div class="txtbox txtbox-yellow">
 				<i class="mdi mdi-information-outline"></i>
-				<span><b>This will only work if the first argument returns multiple HTML elements.</b></span>
+				<span>This will only work if the first argument returns multiple HTML elements.</span>
 			</div>
 <pre><code class="js">//returns a array with all instances which are not undefined
 var instances = OverlayScrollbars(document.querySelectorAll("*"), "!"); 
@@ -1305,8 +1304,8 @@ for(var i = 0; i < instances.length; i++) {
 </code></pre>
 				
 				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
-				The <b class="txtc-primary-color">initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
-				You simply have to pass a <b>third</b> argument which has to be a <b class="txtc-primary-color">string</b>, a  <b class="txtc-primary-color">array of strings</b> or a  <b class="txtc-primary-color">object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
+				The <b>initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
+				You simply have to pass a <b>third</b> argument which has to be a <b>string</b>, a  <b>array of strings</b> or a  <b>object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
 				<br>
 				Lets make some examples:
 				<pre><code class="js">//register a extension with the name "myExtension"
@@ -1332,25 +1331,25 @@ OverlayScrollbars((document.getElementById(id), { }, {
 			<div id="initialization-jquery" data-tab-value="initialization-jquery">
 				<div class="content-navigation-main-caption">jQuery initialization</div>
 				<div class="content-navigation-sub-caption">Single element</div>
-				<b class="txtc-primary-color">The initialization</b> of the plugin for a cerain element is very easy and it won't break the jQuery chain:
-				<div class="txtbox txtbox-red txtc-red">
+				<b>The initialization</b> of the plugin for a cerain element is very easy and it won't break the jQuery chain:
+				<div class="txtbox txtbox-blue">
 					<i class="mdi mdi-alert-circle-outline"></i>
-					<span><b>You have to pass at least a empty object in order to initialize the plugin.</b></span>
+					<span>You have to pass at least a empty object in order to initialize the plugin.</span>
 				</div>
 <pre><code class="js">//initializes the plugin with empty options
 $(id).overlayScrollbars({ /* your options */ }); 
 </code></pre>
 				The object which is passed to this method represents the options with which the plugin shall be initialized.<br><br>
 				
-				You can get the <b class="txtc-primary-color">current instance</b> with the same method.
-				<div class="txtbox txtbox-red txtc-red">
+				You can get the <b>current instance</b> with the same method.
+				<div class="txtbox txtbox-blue">
 					<i class="mdi mdi-alert-circle-outline"></i>
-					<span><b>If you don't pass a object the method returns the instance.</b></span>
+					<span>If you don't pass a object the method returns the instance.</span>
 				</div>
 <pre><code class="js">//returns the plugin instance or undefined if the element has no instance
 var instance = $(id).overlayScrollbars(); 
 </code></pre><br>
-				Due to the fact that the initialization wont break the jQuery chain you can <b class="txtc-primary-color">initialize and store the instance</b> in just one line:
+				Due to the fact that the initialization wont break the jQuery chain you can <b>initialize and store the instance</b> in just one line:
 <pre><code class="js"> //initializes plugin and stores the instance into a variable
 var instance = $(id).overlayScrollbars({ }).overlayScrollbars();
 </code></pre>
@@ -1365,12 +1364,12 @@ $(id).overlayScrollbars({ resize : "both" });
 </code></pre>
 				
 				<div class="content-navigation-sub-caption">Multiple elements</div>
-				The <b class="txtc-primary-color">initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
+				The <b>initialization for multiple elements</b> works like the initialization for a single element. The only difference is, that the initialization method will return a array of instances.
 <pre><code class="js">//initialize plugin with custom options on all div elements and return all instances as array
 var instances = $("div").overlayScrollbars({ }).overlayScrollbars(); 
 </code></pre>
                 <br>
-                If you need the <b class="txtc-primary-color">instances of multiple element</b> you can do it the same way as for a single element:
+                If you need the <b>instances of multiple element</b> you can do it the same way as for a single element:
 <pre><code class="js">//get the instance information of all elements on your page and store it into a variable
 //the array can contain undefined entries
 var instances = $("*").overlayScrollbars();
@@ -1383,9 +1382,9 @@ $.each(instances, function(index, instance) {
 });
 </code></pre>
 			I've built-in a filtering possibility, if you want a array only with not undefined instances:
-			<div class="txtbox txtbox-orange txtc-orange">
+			<div class="txtbox txtbox-yellow">
 				<i class="mdi mdi-information-outline"></i>
-				<span><b>This will only work if the jQuery selectors targets more than one element.</b></span>
+				<span>This will only work if the jQuery selectors targets more than one element.</span>
 			</div>
 			<pre><code class="js">//returns a array with all instances which are not undefined
 var instances = $("*").overlayScrollbars("!");
@@ -1396,8 +1395,8 @@ $.each(instances, function(index, instance) {
 </code></pre>
 
 				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
-				The <b class="txtc-primary-color">initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
-				You simply have to pass a <b>second</b> argument which has to be a <b class="txtc-primary-color">string</b>, a  <b class="txtc-primary-color">array of strings</b> or a  <b class="txtc-primary-color">object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
+				The <b>initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
+				You simply have to pass a <b>second</b> argument which has to be a <b>string</b>, a  <b>array of strings</b> or a  <b>object</b>. This argument represents the extensions which shall be added right after the initialization is complete. <br>
 				<br>
 				Lets make some examples:
 				<pre><code class="js">//register a extension with the name "myExtension"
@@ -1632,7 +1631,7 @@ instance.sleep();
 									</div>
 									<div class="expander-content" data-expander-value="getScrollPlainObjectDocumentation">
 										Structure:
-										<pre><code class="js">{
+										<pre><code class="json">{
 	x : {
 		position          : <span class="txtc-secondary-color">number</span>,
 		ratio             : <span class="txtc-secondary-color">number</span>,
@@ -1971,7 +1970,7 @@ instance.scroll({ y : "-= 50px"  });
 									</div>
 									<div class="expander-content" data-expander-value="setScrollCoordinates5">
 										To use this approach a PlainObject with the following structure must be passed:
-										<pre><code class="js code-noscroll">{
+										<pre><code class="json code-noscroll">{
 	el       : <span class="txtc-secondary-color">HTMLElement | jQueryElement</span>,
 	scroll   : <span class="txtc-secondary-color">string | array | object</span>,
 	block    : <span class="txtc-secondary-color">string | array | object</span>,
@@ -2290,7 +2289,7 @@ instance.scroll({ el : $(selector), scroll : "ifneeded", block : ["begin", "end"
 				
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						.scroll(coordinates, options)
+						.scroll(<span>coordinates, options</span>)
 					</div>
 					<div class="method-documentation-box-description">
 						Sets the scroll position.
@@ -2372,7 +2371,7 @@ instance.scrollStop().scroll({ y : 500 }, 5000);
 								<p>Type: PlainObject</p>
 								<div>
 									Structure:
-									<pre><code class="js">{
+									<pre><code class="json">{
 	target   : <span class="txtc-secondary-color">HTMLElement</span>,
 	host     : <span class="txtc-secondary-color">HTMLElement</span>,
 	padding  : <span class="txtc-secondary-color">HTMLElement</span>,
@@ -2546,7 +2545,7 @@ var verticalHandle     = instance.getElements("scrollbarVertical.handle");
 								<p>Type: PlainObject</p>
 								<div>
 									Structure:
-									<pre><code class="js">{
+									<pre><code class="json">{
 	sleeping      : <span class="txtc-secondary-color">boolean</span>,								
 	autoUpdate    : <span class="txtc-secondary-color">boolean</span>,
 	widthAuto     : <span class="txtc-secondary-color">boolean</span>,
@@ -2680,7 +2679,7 @@ var verticalHandle     = instance.getElements("scrollbarVertical.handle");
 											hideOverflow.x
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether the overflow on the x-axis is hidden by <code class="code-inline scss">overflow-x: hidden</code> or <code class="code-inline scss">overflow-x: scroll</code>.
+											Indicates whether the overflow on the x-axis is hidden by <code class="code-inline css">overflow-x: hidden</code> or <code class="code-inline css">overflow-x: scroll</code>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2688,7 +2687,7 @@ var verticalHandle     = instance.getElements("scrollbarVertical.handle");
 											hideOverflow.y
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether the overflow on the y-axis is hidden by <code class="code-inline scss">overflow-y: hidden</code> or <code class="code-inline scss">overflow-y: scroll</code>.
+											Indicates whether the overflow on the y-axis is hidden by <code class="code-inline css">overflow-y: hidden</code> or <code class="code-inline css">overflow-y: scroll</code>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2696,7 +2695,7 @@ var verticalHandle     = instance.getElements("scrollbarVertical.handle");
 											hideOverflow.xs
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether the overflow on the x-axis is hidden by <code class="code-inline scss">overflow-x: scroll</code>.
+											Indicates whether the overflow on the x-axis is hidden by <code class="code-inline css">overflow-x: scroll</code>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -2704,7 +2703,7 @@ var verticalHandle     = instance.getElements("scrollbarVertical.handle");
 											hideOverflow.ys
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
-											Indicates whether the overflow on the y-axis is hidden by <code class="code-inline scss">overflow-y: scroll</code>.
+											Indicates whether the overflow on the y-axis is hidden by <code class="code-inline css">overflow-y: scroll</code>.
 										</div>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
@@ -3100,7 +3099,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 								<div>
 									The returned plain object is just a copy, which means that changes to the returned object won't have any effect to the original object.<br><br>
 									Structure:
-									<pre><code class="js">{
+									<pre><code class="json">{
 	defaultOptions          : <span class="txtc-secondary-color">PlainObject</span>,
 	autoUpdateLoop          : <span class="txtc-secondary-color">boolean</span>,
 	autoUpdateRecommended   : <span class="txtc-secondary-color">boolean</span>,
@@ -3495,7 +3494,7 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 };
 </code></pre>
 				In order to make it more simple and comfortable for developers, the function has a bunch of parameters which are making the development much more easy.
-				Furthermore the <b class="txtc-primary-color">"this"</b> context of the function is the <b class="txtc-primary-color">OverlayScrollbars instance</b> which is trying to add the extension.
+				Furthermore the <code class="code-inline">this</code>-context of the function is the <b>OverlayScrollbars instance</b> which is trying to add the extension.
 				<pre><code class="js code-noscroll">var extension = function(defaultOptions, framework, compatibility) { 
 	var osInstance = this;
 	return { };
@@ -3650,16 +3649,13 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 				
 					<div class="extensions-createextensions-examples-playground">
 						<div class="extensions-createextensions-examples-playground-info">
-							<div class="txtbox txtbox-primary-color txtc-primary-color">
+							<div class="txtbox txtbox-yellow">
 								<i class="mdi mdi-information-outline"></i>
 								<span>
-									<b>
-										Test this extension by clicking on the corresponding play button.<br>
-										Errors or additional messages are displayed in the console.
-									</b>
+									Test this extension by clicking on the corresponding play button.<br>
+									Errors or additional messages are displayed in the console.
 								</span>
 							</div>
-							
 						</div>
 						<div id="extensions-createextensions-basic-target" class="extensions-createextensions-examples-playground-target">
 							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
@@ -3781,16 +3777,13 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 });</code></pre>
 					<div class="extensions-createextensions-examples-playground">
 						<div class="extensions-createextensions-examples-playground-info">
-							<div class="txtbox txtbox-primary-color txtc-primary-color">
+							<div class="txtbox txtbox-yellow">
 								<i class="mdi mdi-information-outline"></i>
 								<span>
-									<b>
-										Test this extension by clicking on the corresponding play button.<br>
-										Errors or additional messages are displayed in the console.
-									</b>
+									Test this extension by clicking on the corresponding play button.<br>
+									Errors or additional messages are displayed in the console.
 								</span>
 							</div>
-							
 						</div>
 						<div id="extensions-createextensions-advanced-target" class="extensions-createextensions-examples-playground-target">
 							<div style="width: 500px;">
@@ -3874,12 +3867,12 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 				<br>
 				
 				<div class="content-navigation-sub-caption">"none" -theme</div>
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>Use this theme if you dont want any visible scrollbars.</b></span>
+					<span>Use this theme if you dont want any visible scrollbars.</span>
 				</div>
 				The "none" theme hides basically the appearance of the scrollbars.<br>
-				It's class name is <code class="code-inline scss">.os-theme-none</code>. Thus it can be activated if you set the className option to this value or null.
+				It's class name is <code class="code-inline css">.os-theme-none</code>. Thus it can be activated if you set the className option to this value or null.
 				<br>
 				<br>
 				Here is a quick demo of this theme:
@@ -3894,12 +3887,12 @@ OverlayScrollbars(document.getElementById(id), { className : null });
 				<br>
 				
 				<div class="content-navigation-sub-caption">"dark" -theme</div>
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>This theme is the way to go if your page has a bright background.</b></span>
+					<span>This theme is the way to go if your page has a bright background.</span>
 				</div>
 				The "dark" theme is a very simple and clean theme with a dark touch.<br>
-				It's class name is <code class="code-inline scss">.os-theme-dark</code>. Thus it can be activated if you set the className option to this value.
+				It's class name is <code class="code-inline css">.os-theme-dark</code>. Thus it can be activated if you set the className option to this value.
 				<br>
 				<br>
 				Here is a quick demo of this theme:
@@ -3914,12 +3907,12 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark" });
 				<br>
 				
 				<div class="content-navigation-sub-caption">"light" -theme</div>
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>This theme is the way to go if your page has a dark background.</b></span>
+					<span>This theme is the way to go if your page has a dark background.</span>
 				</div>
 				The "light" theme is a very simple and clean theme with a bright touch.<br>
-				It's class name is <code class="code-inline scss">.os-theme-light</code>. Thus it can be activated if you set the className option to this value.
+				It's class name is <code class="code-inline css">.os-theme-light</code>. Thus it can be activated if you set the className option to this value.
 				<br>
 				<br>
 				Here is a quick demo of this theme:
@@ -3943,12 +3936,12 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-light" })
 				<pre><code class="js">//initialize the plugin with custom classnames
 OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-theme-dark-edgy" });
 </code></pre>
-				After this command your host-element has the "dark" -theme applied but has also the class <code class="scss code-inline">.os-theme-dark-edgy</code>.<br>
+				After this command your host-element has the "dark" -theme applied but has also the class <code class="css code-inline">.os-theme-dark-edgy</code>.<br>
 				Now you can define some additional style rules:
-	<pre><code class="scss">.os-theme-dark.os-theme-dark-edgy > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+	<pre><code class="css">.os-theme-dark.os-theme-dark-edgy > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
 	border-radius: 0px;
 }</code></pre>
-				Make sure that this rule overrules the default "dark" -theme rules (e.g. put it at the bottom or use <code class="scss code-inline">!important</code>).<br>
+				Make sure that this rule overrules the default "dark" -theme rules (e.g. put it at the bottom or use <code class="css code-inline">!important</code>).<br>
 				Thats it! With this "system" you can achieve very flexible styling.
 			</div>
 		
@@ -3960,13 +3953,13 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 				<br>
 				
 				<div class="content-navigation-sub-caption">Host Element</div>
-				The plugin is adding several class names to the <b class="txtc-primary-color txtfw-500">host-element</b>. Some of them are always present and some are only present if a certain behavior is fulfilled.
+				The plugin is adding several class names to the <b>host-element</b>. Some of them are always present and some are only present if a certain behavior is fulfilled.
 				This class names helps us to understand the current state of the plugin & scrollbars.
 				<br><br>
-				Here is a complete listing of all class names of the <b class="txtc-primary-color txtfw-500">host-element</b>:
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				Here is a complete listing of all class names of the <b>host-element</b>:
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>All class names for the host-element have the prefix ".os-host".</b></span>
+					<span>All class names for the host-element have the prefix ".os-host".</span>
 				</div>
 				<table>
 					<thead>
@@ -4034,13 +4027,13 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 				</table>
 				<br>
 				<div class="content-navigation-sub-caption">Scrollbars</div>
-				Now that we are aware of the class names of the host-element, we can continue with the structure of the <b class="txtc-primary-color">scrollbars</b>.<br>
+				Now that we are aware of the class names of the host-element, we can continue with the structure of the <b>scrollbars</b>.<br>
 				Both scrollbars have the same DOM structure.<br>
 				<br>
 				Here is a draft of the scrollbars DOM structure as well as the intended design:
-				<div class="txtbox txtbox-primary-color txtc-primary-color">
+				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
-					<span><b>Hover over the DOM or Design elements to get visual feedback.</b></span>
+					<span>Hover over the DOM or Design elements to get visual feedback.</span>
 				</div>
 				<pre id="classnames-scrollbars-domdraft"><code class="html">&lt;div class="os-host"&gt;
 	&lt;!-- ... ---&gt;
@@ -4083,7 +4076,7 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 				<div class="clear"></div>
 				<br>
 				Each of the scrollbar elements can have additional classes. These classes gets added if a certain behavior is fulfilled.<br>
-				Here is a complete listing of all class names of the <b class="txtc-primary-color">.os-scrollbar</b> element:
+				Here is a complete listing of all class names of the <b>.os-scrollbar</b> element:
 				<table>
 					<thead>
 						<tr>
@@ -4119,7 +4112,7 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 					</tbody>
 				</table>
 				<br>
-				Here is a complete listing of all class names of the <b class="txtc-primary-color">.os-scrollbar-track</b> element:
+				Here is a complete listing of all class names of the <b>os-scrollbar-track</b> element:
 				<table>
 					<thead>
 						<tr>
@@ -4139,7 +4132,7 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 					</tbody>
 				</table>
 				<br>
-				Here is a complete listing of all class names of the <b class="txtc-primary-color">.os-scrollbar-handle</b> element:
+				Here is a complete listing of all class names of the <b>.os-scrollbar-handle</b> element:
 				<table>
 					<thead>
 						<tr>
@@ -4187,17 +4180,17 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 						</tr>
 					</tbody>
 				</table>
-				<div class="txtbox txtbox-red txtc-red">
+				<div class="txtbox txtbox-red">
 					<i class="mdi mdi-alert-circle-outline"></i>
-					<span><b>
-						Don't change the values of the CSS properties "opacity", "transition" and "visibility" on the ".os-scrollbar" elements! They are handled automatically.<br>
-						Please also don't apply padding or border to the ".os-scrollbar-track" elements. Use pseudo-elements (:before and :after) to achieve such styling.
-					</b></span>
+					<span>
+						Don't change the values of the CSS properties <code class="code-inline">opacity</code>, <code class="code-inline">transition</code> and <code class="code-inline">visibility</code> on the <code class="code-inline">.os-scrollbar</code> elements! <b>They are handled automatically</b>.<br>
+						Please also <b>don't</b> apply padding or border to the <code class="code-inline">.os-scrollbar-track</code> elements.<br>Use pseudo-elements (<code class="code-inline">:before</code> and <code class="code-inline">:after</code>) to achieve such styling.
+					</span>
 				</div>
 				If you have to apply a style to any other element which is generated by the plugin, it's most likely wrong and there must be a different way. If this isn't the case, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a>.<br>
 				<br>
 				Due to necessary Javascript optimization the ":active" pseudo-class doesn't work / wont be applied on all elements listed above. A class with the name ".active" will be applied instead to provide the same functionality. Here is a example how you must write your selector if you want to style a ":active" element:
-				<pre><code class="scss">/* incorrect */
+				<pre><code class="css">/* incorrect */
 .os-scrollbar:active,
 .os-scrollbar-track:active,
 .os-scrollbar-handle:active {
@@ -4214,10 +4207,10 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 				
 				<br>
 				<div class="content-navigation-sub-caption">Template(s)</div>
-				In the <a data-navigation="themes" class="inline-btn">themes section</a> you can find <b class="txtc-primary-color">CSS templates</b> for the most common scrollbar styles.<br>
+				In the <a data-navigation="themes" class="inline-btn">themes section</a> you can find <b>CSS templates</b> for the most common scrollbar styles.<br>
 				You can download and customize them as you want.<br>
 				<br>
-				Here is a simple but very efficient <b class="txtc-primary-color">SASS template</b>. (even if you dont know SASS, this tmeplate will give you a basic idea)<br>
+				Here is a simple but very efficient <b>SCSS template</b>. (even if you dont know SCSS, this tmeplate will give you a basic idea)<br>
 				If you don't need anything too fancy this template should be well suited for your needs.<br>
 				<br>
 				Just copy & paste it and set the variables as you like:
