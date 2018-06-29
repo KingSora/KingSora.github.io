@@ -114,8 +114,9 @@ $(document).ready(function() {
 
 			showLoading();
 			_ajaxContentRequest = $.get(_htmlPath + newMainHash + _htmlExtension, function(response) {
+                _body.trigger("contentDestruct");
 				$.each($('#content *').overlayScrollbars('!'), function(index, instance) { instance.destroy(); }); //destroy all OS instances
-				_content[0].innerHTML = ""; //empty content
+                _content[0].innerHTML = ""; //empty content
 				
 				_ajaxContentRequestTimeoutId = setTimeout(function() {
 					_ajaxContentRequestTimeoutId = undefined;
@@ -143,7 +144,8 @@ $(document).ready(function() {
 							pagePathChange(newHash, oldHash);
 							hideLoading();
 						});			
-					})
+					});
+                    
 					//_content[0].innerHTML = response;
 					//contentLoad(newMainHash);
 					//$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {

@@ -2824,9 +2824,9 @@
                         return false;
 
                     var float;
-                    var viewportScrollSize;
                     var textareaValueLength = _isTextarea && _widthAutoCache && !_textareaAutoWrappingCache ? _targetElement.val().length : 0;
                     var setCSS = !_mutationObserverConnected && _widthAutoCache && !_isTextarea;
+                    var viewportScrollSize = { };
                     var css = { };
 
                     //fix for https://bugzilla.mozilla.org/show_bug.cgi?id=1439305, it only works with "clipAlways : true"

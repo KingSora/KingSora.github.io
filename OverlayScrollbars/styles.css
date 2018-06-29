@@ -6538,7 +6538,7 @@ body:not(.ready) *:after {
   font-weight: 600;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 15px 20px -15px transparent, 0 55px 50px -35px transparent;
+  box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0), 0 55px 50px -35px rgba(0, 0, 0, 0);
   position: relative;
   letter-spacing: 0.1pt;
   text-decoration: none !important;
@@ -6553,7 +6553,7 @@ body:not(.ready) *:after {
   box-shadow: 0 15px 20px -15px rgba(0, 0, 255, 0.3), 0 55px 50px -35px rgba(0, 0, 255, 0.3); }
 
 .header-content-download:active {
-  box-shadow: 0 15px 20px -15px transparent, 0 55px 50px -35px transparent; }
+  box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0), 0 55px 50px -35px rgba(0, 0, 0, 0); }
 
 #header + #navigation {
   position: absolute; }
@@ -8409,7 +8409,7 @@ a.inline-btn[data-modal]:after {
   border: 2px solid #36befd;
   border-radius: 6px;
   height: 100%;
-  height: calc(100% + 60px);
+  height: calc(100% + 5px);
   position: absolute;
   margin-top: 30px;
   padding: 15px; }
@@ -9120,15 +9120,15 @@ a.inline-btn[data-modal]:after {
 
 #theme-demo-plugin-four-graidient-top {
   top: 0;
-  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
-  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 100%); }
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); }
 
 #theme-demo-plugin-four-graidient-bottom {
   bottom: 0;
-  background: -moz-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
-  background: -webkit-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.45) 100%); }
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%);
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.45) 100%); }
 
 .textarea-demo-left,
 .textarea-demo-right {

@@ -1196,11 +1196,14 @@
 				<div class="content-navigation-main-caption">iFrame Demo</div>
 				As small demo which shows how the plugin is working inside a iFrame.<br>
 				The plugin was applied from the current page (outside iFrame) and not from inside with a script tag for example.<br>
-				Your iFrame source has to have the <b>same origin</b> (domain, protocol and port) as your current site, else you won't be able to do that due to the <a class="inline-btn" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank">same origin policy</a>.
-
+				<div class="txtbox txtbox-yellow">
+					<i class="mdi mdi-information-outline"></i>
+					<span>Your iFrame source has to have the <b>same origin</b> (domain, protocol and port) as your current site, else you won't be able to do that due to the <a class="inline-btn" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank">same origin policy</a>.</span>
+				</div>
+                
 				<div class="iframe-demo">
 					<iframe id="iframe-demo-element" 
-					onload="OverlayScrollbars(document.getElementById('iframe-demo-element').contentWindow.document.body, { })" 
+					onload="window.osiFrame = OverlayScrollbars(document.getElementById('iframe-demo-element').contentWindow.document.body, { autoUpdate : false })" 
 					src="iframe.html" 
 					frameborder="0"></iframe>
 				</div>

@@ -1116,3 +1116,11 @@ $('.content-demo-input textarea').on('keydown', function(e) {
 updateInputUserIcons();
 setChatHead();
 sendFirstMessages();
+
+$('body').on("contentDestruct", function() { 
+    var iFrameInstance = window.osiFrame;
+    delete window.osiFrame;
+    if(iFrameInstance instanceof OverlayScrollbars) {
+        iFrameInstance.destroy();
+    }
+});
