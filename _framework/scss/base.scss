@@ -108,6 +108,9 @@ pre > code:not(.expandable).hljs.html:before {
 	-moz-box-shadow: 0px 3px 15px -7px rgba(228,79,38,1);
 	box-shadow: 0px 3px 15px -7px rgba(228,79,38,1);
 }
+.nowrap {
+	white-space: nowrap !important;
+}
 code,
 code * {
 	font-size: 9pt !important;
@@ -678,6 +681,16 @@ body:not(.ready) *:after {
 	position: relative;
 	padding: 40px 0px;
 	box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0.01), 0 55px 50px -35px rgba(0, 0, 0, 0.01);
+}
+.content-section .expander-content {
+	color: #555E6B;
+	font-size: 10.5pt;
+	font-weight: 400;
+	line-height: 26px;
+	position: relative;
+	text-align: left;
+	letter-spacing: 0.2pt;
+	background: #fff;
 }
 .content-section:nth-child(2n + 0) {
 	background: #f9f9f9;
@@ -1674,6 +1687,7 @@ h6 {
 	margin-bottom: 0px;
 }
 
+//
 
 //TABLE
 table {
@@ -1951,7 +1965,179 @@ td.cell-secondary {
 	background: rgba($secondary-color-r, $secondary-color-g, $secondary-color-b, 0.3);
 	border-color: rgba($secondary-color-r, $secondary-color-g, $secondary-color-b, 0.3);
 }
-
+.split-table {
+}
+.split-table tr.row-caption td {
+	height: auto;
+	font-size: 8pt;
+	background: #fff;
+	border-left-color: transparent;
+	border-top-color: transparent;
+}
+.split-table tr.row-caption td:not(:first-child) {
+	border-right-color: transparent;
+}
+.split-table tr td i.mdi {
+	font-size: 20pt;
+	display: inline;
+}
+.split-table tr td i.mdi.txtc-primary-color {
+	text-shadow: 0px 1px 2px rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.3);
+}
+.split-table tr td i.mdi.txtc-light {
+	text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.03);
+}
+.split-table tr td a > i.mdi.txtc-primary-color,
+.split-table tr td i[data-tooltip].mdi.txtc-primary-color {
+	border-bottom: 1px dotted $primary-color;
+}
+.split-table tr td a > i.mdi.txtc-primary-color:hover {
+	border-bottom-style: solid;
+}
+.split-table tr td a > i.mdi.txtc-light,
+.split-table tr td i[data-tooltip].mdi.txtc-light  {
+	border-bottom: 1px dotted $text-color-light;
+}
+.split-table tr td a > i.mdi.txtc-light:hover {
+	border-bottom-style: solid;
+}
+.split-table table > tbody > tr > td:first-child > b:first-child {
+	white-space: normal;
+}
+.split-table > table:first-child {
+	display: none;
+}
+.split-table:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+.split-table-side {
+	float: left;
+	overflow: hidden;
+}
+.split-table-main {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+}
+.split-table-side + .split-table-main {
+	width: calc(100% - 200px);
+	overflow: hidden;
+}
+.split-table-main > .split-table-main-head {
+	width: 100%;
+}
+.split-table-main > .split-table-main-body {
+	width: 100%;
+}
+.split-table-side > .split-table-side-body,
+.split-table-main > .split-table-main-body {
+	padding-bottom: 20px;
+}
+.split-table-side > .split-table-side-head table > tbody tr td:first-child,
+.split-table-side > .split-table-side-head table > thead tr td:first-child,
+.split-table-side > .split-table-side-head table > thead tr th:first-child,
+.split-table-side > .split-table-side-body table > tbody tr td:first-child,
+.split-table-side > .split-table-side-body table > thead tr td:first-child,
+.split-table-side > .split-table-side-body table > thead tr th:first-child,
+.split-table-main > .split-table-main-head table > tbody tr td:first-child,
+.split-table-main > .split-table-main-head table > thead tr td:first-child,
+.split-table-main > .split-table-main-head table > thead tr th:first-child,
+.split-table-main > .split-table-main-body table > tbody tr td:first-child,
+.split-table-main > .split-table-main-body table > thead tr td:first-child,
+.split-table-main > .split-table-main-body table > thead tr th:first-child,
+.split-table-side {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+	text-align: left;
+}
+.split-table-side > .split-table-side-head table,
+.split-table-side > .split-table-side-body table,
+.split-table-main > .split-table-main-head table,
+.split-table-main > .split-table-main-body table {
+	margin: 0;
+	overflow: hidden;
+	text-align: center;
+}
+.split-table-side table > thead tr td:first-child,
+.split-table-side table > thead tr th:first-child,
+.split-table-side table > tbody tr td:first-child {
+	visibility: visible;
+}
+.split-table-main > .split-table-main-head table,
+.split-table-main > .split-table-main-body table {
+	margin-left: -200px;
+}
+.split-table-main > .split-table-main-head table > tbody,
+.split-table-side > .split-table-side-head table > tbody,
+.split-table-main > .split-table-main-head table > tbody > tr,
+.split-table-main > .split-table-main-head table > tbody > tr > td,
+.split-table-side > .split-table-main-head table > tbody > tr,
+.split-table-side > .split-table-side-head table > tbody > tr > td  {
+	visibility: collapse;
+}
+.split-table-main > .split-table-main-body table > thead,
+.split-table-side > .split-table-side-body table > thead,
+.split-table-main > .split-table-main-body table > thead > tr,
+.split-table-main > .split-table-main-body table > thead > tr > td,
+.split-table-main > .split-table-main-body table > thead > tr > th,
+.split-table-side > .split-table-side-body table > thead > tr,
+.split-table-side > .split-table-side-body table > thead > tr > td,
+.split-table-side > .split-table-side-body table > thead > tr > th  {
+	visibility: collapse;
+}
+.split-table-main > .split-table-main-head table > tbody tr td:first-child,
+.split-table-main > .split-table-main-head table > thead tr td:first-child,
+.split-table-main > .split-table-main-head table > thead tr th:first-child,
+.split-table-main > .split-table-main-body table > tbody tr td:first-child,
+.split-table-main > .split-table-main-body table > thead tr td:first-child,
+.split-table-main > .split-table-main-body table > thead tr th:first-child {
+	visibility: collapse;
+}
+#faq-comparison-table {
+	
+}
+.split-table-main-body:before,
+.split-table-main-body:after,
+.split-table-main-head:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: transparent;
+	height: 100%;
+	width: 100%;
+	z-index: 5;
+	-webkit-box-shadow: 0px 0px 35px -11px rgba(0,0,0,0.18);
+	-moz-box-shadow: 0px 0px 35px -11px rgba(0,0,0,0.18);
+	box-shadow: 0px 0px 35px -11px rgba(0,0,0,0.18);
+	opacity: 0.8;
+}
+.split-table-main-body:before,
+.split-table-main-head:before {
+	transform: translate(-100%, 0) scaleY(2);
+}
+.split-table-main-body:after {
+	transform: translate(0, -100%) scaleX(0);
+}
+.split-table-expand {
+	display: block;
+	float: left;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+	cursor: pointer;
+	background: transparent;
+	transition: background 0.3s;
+}
+.split-table-expand:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+.split-table-expand > i {
+	display: block;
+}
 
 
 //MODAL
@@ -2060,12 +2246,10 @@ td.cell-secondary {
 	padding-bottom: 20px;
 }
 
-
 //TOOLTIP
 [data-tooltip] > .tooltip {
 	display: none;
 }
-
 
 //DOCUMENTATION
 .method-documentation-box {
@@ -2381,8 +2565,8 @@ a.inline-btn:after {
     top: -5px;
 }
 a.inline-btn[href]:after {
-	content: '\f3cc';
+	content: unquote("\"\\#{map-get($mdi-icons, "open-in-new")}\"");
 }
 a.inline-btn[data-modal]:after {
-	content: '\f137';
+	content: unquote("\"\\#{map-get($mdi-icons, "checkbox-multiple-blank-outline")}\"");
 }

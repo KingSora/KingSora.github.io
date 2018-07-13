@@ -1007,14 +1007,14 @@ var sendNewMessageGroup = function(user, message) {
 	allUsersMessageGroups.push(msgGroup);
 	element.append(
 		'<div class="content-demo-chat-message-group-head">' +
-			'<span class="content-demo-chat-message-group-head-username">' + msgGroup.user.n + '</span>, <span class="content-demo-chat-message-group-head-datetime">' + msgGroup.time.format('hh:mm A') + '</span>' +
+			'<span class="content-demo-chat-message-group-head-username">' + msgGroup.user.n + '</span>, <span class="content-demo-chat-message-group-head-datetime">' + msgGroup.time.format('HH:mm') + '</span>' +
 		'</div>' +
 		'<div class="content-demo-chat-message-group-user-icon" style="background:' + msgGroup.user.i + '">' +
 		'</div>' +
 		'<div class="content-demo-chat-message-group-content">' +
 			'<div class="content-demo-chat-message-group-content-item">' +
 				'<div class="content-demo-chat-message-group-content-item-datetime">' +
-					msgGroup.messages[0].time.format('hh:mm:ss A') +
+					msgGroup.messages[0].time.format('HH:mm:ss') +
 				'</div>' +
 				'<div class="content-demo-chat-message-group-content-item-content">' +
 					msgGroup.messages[0].content +
@@ -1031,7 +1031,7 @@ var appendToMessageGroup = function(messageGroup, message) {
 	msgSlot.append(
 		'<div class="content-demo-chat-message-group-content-item">' +
 			'<div class="content-demo-chat-message-group-content-item-datetime">' +
-				message.time.format('hh:mm:ss A') +
+				message.time.format('HH:mm:ss') +
 			'</div>' +
 			'<div class="content-demo-chat-message-group-content-item-content">' +
 				message.content +

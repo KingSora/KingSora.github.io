@@ -1,3 +1,6 @@
+$('#faq-scrollbar-outside-absolute-target').overlayScrollbars({ paddingAbsolute : true });
+$('#faq-scrollbar-outside-relative-target').overlayScrollbars({ paddingAbsolute : false });
+
 $('.split-table').each(function() { 
 	var elm = $(this);
 	var templateTable = elm.find('table').first();
@@ -11,6 +14,7 @@ $('.split-table').each(function() {
 	mainBody.append(templateTable.clone());
 	
 	var osSideBody = sideBody.overlayScrollbars({ 
+		paddingAbsolute : true,
 		overflowBehavior : {
 			x : 'hidden',
 			y : 'hidden',
@@ -30,9 +34,10 @@ $('.split-table').each(function() {
 	}).overlayScrollbars();
 	var osMainBody = mainBody.overlayScrollbars({
 		resize : 'v',
+		paddingAbsolute : true,
 		callbacks : {
 			onHostSizeChanged : function(e) { 
-				sideBody.css("max-height", e.height);
+				sideBody.css("height", e.height);
 			},
 			onScroll : function() {
 				osMainHead.scroll({ x : this.scroll().x.position });
@@ -47,6 +52,100 @@ $('[data-tooltip]').each(function() {
 	tippy(this, { 
 		html : tt[0],
 		arrow : true,
-		interactive: true,
+		interactive: tt.find('a').length > 0,
 	})
 });
+
+var githubApi = "https://api.github.com/";
+var githubInfosTemplate = {
+	overlayscrollbars : githubApi + "repos/kingsora/overlayscrollbars",
+	simplebar : githubApi + "repos/Grsmto/simplebar",
+	perfectscrollbar : githubApi + "repos/utatti/perfect-scrollbar",
+	geminiscrollbar : githubApi + "repos/noeldelgado/gemini-scrollbar",
+	nanoscrollerjs : githubApi + "repos/jamesflorentino/nanoScrollerJS",
+	smoothscrollbar : githubApi + "repos/idiotWu/smooth-scrollbar",
+	optiscroll : githubApi + "repos/albertogasparin/Optiscroll",
+	nicescroll : githubApi + "repos/inuyaksa/jquery.nicescroll",
+	malihu : githubApi + "repos/malihu/malihu-custom-scrollbar-plugin",
+	jscrollpane : githubApi + "repos/vitch/jScrollPane"
+}
+var pageCache = window.localStorage;
+var pageCacheName = hasher.getURL();
+var cache = pageCache ? pageCache.getItem(pageCacheName) : null;
+cache = typeof cache === 'string' ? JSON.parse(cache) : null;
+var refreshGithubCache = true;
+var githubCache = { };
+
+if(cache !== null) {
+	if(cache.hasOwnProperty("github")) {
+		githubCache = cache.github;
+		refreshGithubCache = !(dayjs().diff(githubCache.timestamp, 'days', true) < 0.5);
+	}
+}
+if(refreshGithubCache) {
+	var myArr = [ ];
+	$.each(githubInfosTemplate, function(key, value) { 
+		myArr.push($.get({ 
+			url : value, 
+			success : function(data) { 
+				githubCache[key] = data;
+				
+			},
+			error : function(e) { 
+				githubCache[key] = githubCache[key];
+			}
+		})); 
+	});
+	
+	$.when.apply($, myArr).always(function() { 
+		githubCache.timestamp = dayjs().valueOf();
+		if(pageCache) {
+			pageCache.setItem(pageCacheName, JSON.stringify({
+				github : githubCache
+			}));
+		}
+		insertGithubData(githubCache);
+	})
+}
+else {
+	insertGithubData(githubCache);
+}
+function insertGithubData(data) {
+	$('#github-infos-timestamp').html(dayjs(data.timestamp).format('MMMM DD, YYYY - HH:mm'))
+	$.each(data, function(key, value) { 
+		var unknown = '<i class="mdi mdi-help-circle txtc-light"></i>';
+		if($.isPlainObject(value)) {
+			$('.' + key + '-stars').html(value.stargazers_count);
+			$('.' + key + '-open-issues').html(value.open_issues_count);
+			$('.' + key + '-created').html(dayjs().diff(dayjs(value.created_at), 'months') + " months ago");
+			$('.' + key + '-archived').html(value.archived ? "Yes" : "No");
+			var license = value.license;
+			if(license && value.license.spdx_id != null)
+				license = value.license.spdx_id;
+			else
+				license = unknown;
+			$('.' + key + '-license').html(license);
+		}
+		else {
+			$('.' + key + '-stars').html(unknown);
+			$('.' + key + '-open-issues').html(unknown);
+			$('.' + key + '-created').html(unknown);
+			$('.' + key + '-archived').html(unknown);
+			$('.' + key + '-license').html(unknown);
+		}
+	});
+}
+$('.split-table-expand').on('click', function() { 
+	var elm = $(this);
+	var icon = elm.find('i').first();
+	console.log(icon);
+	if(icon.hasClass('mdi-arrow-expand')) {
+		icon.removeClass('mdi-arrow-expand').addClass('mdi-arrow-collapse');
+		$('#faq-comparison-table').parent().css({ display: 'table', width : 'auto', margin : '0px auto' });
+	}
+	else {
+		icon.removeClass('mdi-arrow-collapse').addClass('mdi-arrow-expand');
+		$('#faq-comparison-table').parent().css({ display: '', width : '', margin : '' });
+	}
+});
+

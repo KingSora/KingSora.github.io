@@ -11,6 +11,9 @@ $('#builtinthemes-theme-demo-none').overlayScrollbars({ className : null, paddin
 $('#builtinthemes-theme-demo-dark').overlayScrollbars({ className : 'os-theme-dark', paddingAbsolute : true, resize : "both" });
 $('#builtinthemes-theme-demo-light').overlayScrollbars({ className : 'os-theme-light', paddingAbsolute : true, resize : "both" });
 
+$('#themesandstyling-styling-handle-length-target').overlayScrollbars({ className : 'os-theme-dark limited-handles', paddingAbsolute : true, resize : "both" });
+$('#themesandstyling-styling-scrollbar-position-target').overlayScrollbars({ className : 'os-theme-dark deviant-scrollbars', paddingAbsolute : true, resize : "both" });
+
 var classnamesDomDraftScrollbar = '.classnames-scrollbars-domdraft-element-scrollbar';
 var classnamesDesignDraftScrollbar = '.classnames-scrollbars-designdraft-scrollbar';
 

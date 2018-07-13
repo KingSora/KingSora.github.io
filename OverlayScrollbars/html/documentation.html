@@ -386,7 +386,7 @@
 									<div>
 										Indicates whether the native overlaid scrollbars shall be visible.<br>
 										<p>true</p>
-										Shows the native scrollbars, but still initializes the plugin and dispatches all callbacks.
+										Shows the native scrollbars and hides the custom scrollbars, but still initializes the plugin and dispatches all callbacks.
 										<br>
 										<p>false</p>
 										Hides the native scrollbars and acts like if they were non-overlay-scrollbars.
@@ -409,8 +409,8 @@
 										<p>false</p>
 										Stops the Plugin from initializing and fires the <code class="code-inline js">'onInitializationWithdrawn'</code> callback.<br>
 										-<br>
-										Use false if you want prevent the plugin to initialize on mobile browsers.<br>
-										If you initialize the plugin on the body element, I highly recommend to set this option to false.
+										Use false if you want prevent the plugin to initialize for example on mobile browsers.<br>
+										<b>If you initialize the plugin on the body element, I highly recommend to set this option to false.</b>
 									</div>
 								</td>
 							</tr>
@@ -1582,10 +1582,11 @@ instance.update();
 				<div class="content-navigation-main-caption">Sleep Method</div>
 				<div class="content-navigation-sub-caption">Description</div>
 				Disables every observation of the DOM and puts the instance to "sleep".<br>
-				It wont respond to any changes in the DOM and won't update. Scrollbars won't respond to mouse or touch events. Resizing isn't possible anymore.<br>
+				It wont respond to any changes in the DOM and won't update. Scrollbars won't respond to mouse or touch events.<br>
+				Resizing isn't possible anymore.<br>
 				This behavior can be reset by calling the <a class="inline-btn" data-navigation="[1]method-update">update</a> method.<br>
 				<br>
-				Use this method only before expensive DOM operations to make sure the plugin won't slow down them unnecessary.<br>
+				Use this method before expensive DOM operations (such as animations) to make sure the plugin won't slow down them unnecessary.<br>
 				Dont forget to re-enable it after the operations via the update method.
          
 				<div class="content-navigation-sub-caption">Signatures</div>
@@ -2006,7 +2007,7 @@ instance.scroll({ y : "-= 50px"  });
 														"ifneeded"
 													</div>
 													<div class="plainobjectpropertyvalue-documentation-box-content">
-														Scrolls only if the element isn't fully in view.<br>Implemented because: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" class="inline-btn">Element.scrollIntoViewIfNeeded()</a>.
+														Scrolls only if the element isn't fully in view.<br>Implemented in order to support: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" class="inline-btn">Element.scrollIntoViewIfNeeded()</a>.
 													</div>
 												</div>
 												<div class="plainobjectpropertyvalue-documentation-box">
@@ -2102,6 +2103,19 @@ instance.scroll({ y : "-= 50px"  });
 														A example object would look like: <code class="js code-inline">{ y : "center" }</code>
 													</div>
 												</div>
+												<!--
+												<div class="plainobjectpropertyvalue-documentation-box">
+													<div class="plainobjectpropertyvalue-documentation-box-title">
+														boolean
+													</div>
+													<div class="plainobjectpropertyvalue-documentation-box-content">
+														<code class="code-inline">added in v1.5.1</code><br>
+														The passed boolean is a shortcut which corresponds exactly to the boolean parameter of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank" class="inline-btn">Element.scrollIntoView()</a> method.<br>
+														<code class="code-inline">true</code> corresponds to the array <code class="code-inline">[ "nearest", "begin" ]</code>.<br>
+														<code class="code-inline">false</code> corresponds to the array <code class="code-inline">[ "nearest", "end" ]</code>.<br>
+													</div>
+												</div>
+												-->
 											</div>
 										</div>
 										<div class="plainobjectproperty-documentation-box">
@@ -2170,10 +2184,10 @@ instance.scroll({ y : "-= 50px"  });
 												axis <code class="code-inline">deprecated since v1.5.0</code>
 											</div>
 											<div class="plainobjectproperty-documentation-box-content">
-												This property is deprecated. Please use the new "scroll" property instead!
+												<b>This property is deprecated. Please use the new "scroll" property instead!</b>
 												<div class="expander-header" data-expander-key="method-scroll-axis">
 													<i class="mdi mdi-chevron-down"></i>
-													<span>Show old documentation</span>
+													<span>Old documentation</span>
 												</div>
 												<div class="expander-content" data-expander-value="method-scroll-axis">
 													The axis which shall be scrolled. The Default value is <span class="txtc-primary-color">"xy"</span>.<br>
@@ -2225,7 +2239,7 @@ instance.scroll({ y : "-= 50px"  });
 							</div>
 							<div class="method-documentation-box-description-param">
 								<p>easing</p>
-								<p>Type: string || string[]</p>
+								<p>Type: string | stringArray</p>
 								<div>
 									The easing of the scroll-animation.<br>
                                     A single string represents the easing for both axis.<br>
@@ -2261,27 +2275,33 @@ instance.scroll("50%", 5500, [ "linear", "easeOutElastic" ]);
 //with a "easeOutElastic" easing for both axis
 instance.scroll({ x : 0, y : "+= 30% - 25px" }, 1500, "easeOutElastic");
 
-//scroll to the left top corner of the passed element
-//with a duration of 1300ms
-//with no easing
-//with a complete callback
-instance.scroll($(selector), 1300, undefined, function() { });
-
 //subtract 10 pixel from the current x-axis scroll-offset and set the y-axis scroll-offset to 10 pixel
 instance.scroll({ x : "-= 10px", y : 10 });
 
 //scroll to the left top corner of the passed element
-instance.scroll($(selector));
+instance.scroll(element);
+
+//scroll to the left top corner of the passed element
+//with a duration of 1300ms
+//with no easing
+//with a complete callback
+instance.scroll(element, 1300, undefined, function() { });
+
+//equivalent of the scrollIntoView() method
+instance.scroll({ el : element, block : { y : "begin", x : "nearest" } });
+
+//equivalent of the scrollIntoView(false) method
+instance.scroll({ el : element, block : { y : "end", x : "nearest" } });
 
 //scroll to the top edge of the passed element if it isn't in view
 //with 500ms
-instance.scroll({ el : $(selector), scroll : { y : "ifneeded", x : "never" } }, 500);
+instance.scroll({ el : element, scroll : { y : "ifneeded", x : "never" } }, 500);
 
 //scroll to the bottom edge of the passed element
-instance.scroll({ el : $(selector), scroll : { x : "never" }, block : "end" });
+instance.scroll({ el : element, scroll : { x : "never" }, block : "end" });
 
 //scroll to the bottom and left edge of the passed element if it isnt in view and let 10 pixel margin
-instance.scroll({ el : $(selector), scroll : "ifneeded", block : ["begin", "end"], margin : 10 });
+instance.scroll({ el : element, scroll : "ifneeded", block : ["begin", "end"], margin : 10 });
 </code></pre>
 						</div>
 					</div>
@@ -3110,7 +3130,7 @@ OverlayScrollbars(document.getElementById(otherId), { });
 	supportTransition       : <span class="txtc-secondary-color">boolean</span>,
 	restrictedMeasuring     : <span class="txtc-secondary-color">boolean</span>,
 	nativeScrollbarStyling  : <span class="txtc-secondary-color">boolean</span>,
-	cssCalc                 : <span class="txtc-secondary-color">string</span>,
+	cssCalc                 : <span class="txtc-secondary-color">string | null</span>,
 	nativeScrollbarSize : {
 		x : <span class="txtc-secondary-color">number</span>,
 		y : <span class="txtc-secondary-color">number</span>
@@ -3924,25 +3944,6 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-light" })
 						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 					</div>
 				</div>
-				
-				<br>
-				<div class="content-navigation-sub-caption">Theme inheritance</div>
-				Lets say you like the built-in "dark" theme, but you hate the rounded corners of the handles.<br>
-				Well, in this case you don't have to rewrite the whole style again.<br>
-				<br>
-				You can add multiple classes via the "className" option. Just separate them with blanks (spaces).<br>
-				Now you can do something like that:
-				
-				<pre><code class="js">//initialize the plugin with custom classnames
-OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-theme-dark-edgy" });
-</code></pre>
-				After this command your host-element has the "dark" -theme applied but has also the class <code class="css code-inline">.os-theme-dark-edgy</code>.<br>
-				Now you can define some additional style rules:
-	<pre><code class="css">.os-theme-dark.os-theme-dark-edgy > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
-	border-radius: 0px;
-}</code></pre>
-				Make sure that this rule overrules the default "dark" -theme rules (e.g. put it at the bottom or use <code class="css code-inline">!important</code>).<br>
-				Thats it! With this "system" you can achieve very flexible styling.
 			</div>
 		
 			<div id="themesandstyling-classnames" data-tab-value="themesandstyling-classnames">
@@ -4184,7 +4185,7 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 					<i class="mdi mdi-alert-circle-outline"></i>
 					<span>
 						Don't change the values of the CSS properties <code class="code-inline">opacity</code>, <code class="code-inline">transition</code> and <code class="code-inline">visibility</code> on the <code class="code-inline">.os-scrollbar</code> elements! <b>They are handled automatically</b>.<br>
-						Please also <b>don't</b> apply padding or border to the <code class="code-inline">.os-scrollbar-track</code> elements.<br>Use pseudo-elements (<code class="code-inline">:before</code> and <code class="code-inline">:after</code>) to achieve such styling.
+						Please also <b>don't</b> apply <code class="code-inline">padding</code> or <code class="code-inline">border</code> to the <code class="code-inline">.os-scrollbar-track</code> elements.
 					</span>
 				</div>
 				If you have to apply a style to any other element which is generated by the plugin, it's most likely wrong and there must be a different way. If this isn't the case, please open a issue on <a href="https://github.com/KingSora/OverlayScrollbars/issues" target="_blank" class="inline-btn">github</a>.<br>
@@ -4203,6 +4204,118 @@ OverlayScrollbars(document.getElementById(id), { className : "os-theme-dark os-t
 .os-scrollbar-handle.active {
 	<span class="txtc-blue">/* USE the .active class insted */</span>
 }</code></pre>
+
+				<div class="content-navigation-sub-caption">Theme inheritance</div>
+				Lets say you like the built-in "dark" theme, but you hate the rounded corners of the handles.<br>
+				Well, in this case you don't have to rewrite the whole style again.<br>
+				<br>
+				You can add multiple classes via the "className" option. Just separate them with blanks (spaces).<br>
+				Now you can do something like that:
+				
+				<pre><code class="js">//initialize the plugin with custom classnames
+OverlayScrollbars(document.getElementById(id), { 
+	className : "os-theme-dark os-theme-dark-edgy" 
+});
+</code></pre>
+				After this command your host-element has the "dark" -theme applied but has also the class <code class="css code-inline">.os-theme-dark-edgy</code>.<br>
+				Now you can define some additional style rules:
+	<pre><code class="css">.os-theme-dark.os-theme-dark-edgy > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+	border-radius: 0px;
+}</code></pre>
+				Make sure that this rule overrules the default "dark" -theme rules (e.g. put it at the bottom or use <code class="css code-inline">!important</code>).<br>
+				Thats it! With this "system" you can achieve very flexible styling.
+
+				
+				<br>
+				<div class="content-navigation-sub-caption">Scrollbar handle length</div>
+				<b>You can change the scrollbar-handle length via CSS.</b> I know, it's a bit unusual to do it that way, but it's the most efficient and elegant way, since you can do anything with any CSS-unit such as pixel, percent and so on.<br>
+				Below is a full example how to achieve different handle-length styles across different instances.<br>
+				<br>
+				First we write our CSS style rules, note the selector, this styles only apply if the host-element has the class <code class="code-inline">limited-handles</code>:
+				<div class="txtbox txtbox-blue">
+					<i class="mdi mdi-information-outline"></i>
+					<span>If you want fixed size handles, set the min- and max- length of the handle to the same value.</span>
+				</div>
+				<pre><code class="css">.limited-handles > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
+	max-width: 50%;
+	min-width: 30px;
+}
+.limited-handles > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
+	max-height: 50%;
+	min-height: 30px;
+}
+</code></pre>
+				We have defined the required CSS, now we have to initialize the plugin correctly with the above described <b>theme inheritance</b> technique:<br>
+				<pre><code class="js">OverlayScrollbars(document.getElementById(id), { 
+	className : "os-theme-dark limited-handles" 
+});</code></pre>
+				The result looks like this:<br>
+				<div id="themesandstyling-styling-handle-length-target">
+					Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+					Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.<br>
+					Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.<br>
+					Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?<br>
+					Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?<br>
+					At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.<br>
+					Et harum quidem rerum facilis est et expedita distinctio.<br>
+					Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.<br>
+					Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.<br>
+					Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+					Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.<br>
+					Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.<br>
+					Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?<br>
+					Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?<br>
+				</div>
+				
+				<div class="content-navigation-sub-caption">Scrollbar position and length</div>
+				This is pretty much the same as changing the handle-length.<br>
+				First we write our CSS style rules:
+				<pre><code class="css">.deviant-scrollbars > .os-scrollbar-horizontal {
+	top: 0;
+	right: 0;
+	bottom: auto;
+	left: 10px;
+	width: 50%;
+	background: rgba(0, 0, 255, 0.3);
+}
+.deviant-scrollbars > .os-scrollbar-vertical {
+	left: 0;
+	bottom: 0;
+	right: auto;
+	top: 10px;
+	height: 50%;
+	background: rgba(255, 0, 0, 0.3);
+}
+.deviant-scrollbars.os-host-scrollbar-horizontal-hidden > .os-scrollbar-vertical {
+	top: 0;
+}
+.deviant-scrollbars.os-host-scrollbar-vertical-hidden > .os-scrollbar-horizontal {
+	left: 0;
+}
+</code></pre>
+				Then we initialize the plugin correctly:<br>
+				<pre><code class="js">OverlayScrollbars(document.getElementById(id), { 
+	className : "os-theme-dark deviant-scrollbars" 
+});</code></pre>
+The result looks like this:<br>
+				<div id="themesandstyling-styling-scrollbar-position-target">
+					Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+					Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.<br>
+					Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.<br>
+					Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?<br>
+					Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?<br>
+					At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.<br>
+					Et harum quidem rerum facilis est et expedita distinctio.<br>
+					Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.<br>
+					Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.<br>
+					Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.<br>
+					Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.<br>
+					Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.<br>
+					Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?<br>
+					Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?<br>
+				</div>
+							
+				
 				
 				
 				<br>

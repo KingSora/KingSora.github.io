@@ -575,10 +575,13 @@ $(document).ready(function() {
 		
 		//tippy
 		$('[data-tooltip]').each(function() { 
-			var el = this;
-			var tt =  $(this).find('.tooltip').first();
-			tippy(this, { html : tt[0], arrow : true, })
-			$(this).append(tt.clone());
+			try {
+				var el = this;
+				var tt =  $(this).find('.tooltip').first();
+				tippy(this, { html : tt[0], arrow : true, })
+				$(this).append(tt.clone());
+			}
+			catch(ex) {}
 		});
 	}
 	
