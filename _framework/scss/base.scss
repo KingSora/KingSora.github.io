@@ -1966,6 +1966,11 @@ td.cell-secondary {
 	border-color: rgba($secondary-color-r, $secondary-color-g, $secondary-color-b, 0.3);
 }
 .split-table {
+	white-space: nowrap;
+	font-size: 0;
+}
+.split-table > * {
+	font-size: 11pt;
 }
 .split-table tr.row-caption td {
 	height: auto;
@@ -2013,15 +2018,15 @@ td.cell-secondary {
 	clear: both;
 }
 .split-table-side {
-	float: left;
+	display: inline-block;
 	overflow: hidden;
 }
 .split-table-main {
-	width: 100%;
-	float: left;
+	display: inline-block;
 	overflow: hidden;
 }
 .split-table-side + .split-table-main {
+	display: inline-block;
 	width: calc(100% - 200px);
 	overflow: hidden;
 }

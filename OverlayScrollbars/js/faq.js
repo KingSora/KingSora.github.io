@@ -1,3 +1,4 @@
+$('#faq-click-scrolling-target').overlayScrollbars({ resize : 'both', paddingAbsolute : true, scrollbars : { clickScrolling : true }});
 $('#faq-scrollbar-outside-absolute-target').overlayScrollbars({ paddingAbsolute : true });
 $('#faq-scrollbar-outside-relative-target').overlayScrollbars({ paddingAbsolute : false });
 
@@ -111,9 +112,9 @@ else {
 	insertGithubData(githubCache);
 }
 function insertGithubData(data) {
+	var unknown = '<i class="mdi mdi-help-circle txtc-light"></i>';
 	$('#github-infos-timestamp').html(dayjs(data.timestamp).format('MMMM DD, YYYY - HH:mm'))
 	$.each(data, function(key, value) { 
-		var unknown = '<i class="mdi mdi-help-circle txtc-light"></i>';
 		if($.isPlainObject(value)) {
 			$('.' + key + '-stars').html(value.stargazers_count);
 			$('.' + key + '-open-issues').html(value.open_issues_count);
@@ -134,11 +135,15 @@ function insertGithubData(data) {
 			$('.' + key + '-license').html(unknown);
 		}
 	});
+	$('#faq-comparison-table .mdi.mdi-loading.mdi-spin').each(function() { 
+		var el = this;
+		var parent = $(el).parent();
+		parent.html(unknown);
+	});
 }
 $('.split-table-expand').on('click', function() { 
 	var elm = $(this);
 	var icon = elm.find('i').first();
-	console.log(icon);
 	if(icon.hasClass('mdi-arrow-expand')) {
 		icon.removeClass('mdi-arrow-expand').addClass('mdi-arrow-collapse');
 		$('#faq-comparison-table').parent().css({ display: 'table', width : 'auto', margin : '0px auto' });

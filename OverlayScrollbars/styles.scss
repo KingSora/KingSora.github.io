@@ -1923,7 +1923,6 @@ body.resizing * {
 
 
 
-
 #faq-comparison-table {
 	width: 100%;
 }
@@ -1936,6 +1935,7 @@ body.resizing * {
 	height: 650px;
 	padding-bottom: 10px;
 }
+#faq-click-scrolling-target,
 #faq-scrollbar-outside-absolute-target,
 #faq-scrollbar-outside-relative-target {
 	height: 250px;
@@ -1948,4 +1948,10 @@ body.resizing * {
 	white-space: nowrap;
 	float: left;
 	margin-right: 6px;
+}
+#faq-click-scrolling-target {
+	float: none;
+}
+#faq-click-scrolling-target .os-scrollbar-track {
+	background: rgba(255, 0, 0, 0.4);
 }

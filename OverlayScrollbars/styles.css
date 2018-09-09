@@ -9980,6 +9980,13 @@ td.cell-secondary {
   background: rgba(100, 97, 246, 0.3);
   border-color: rgba(100, 97, 246, 0.3); }
 
+.split-table {
+  white-space: nowrap;
+  font-size: 0; }
+
+.split-table > * {
+  font-size: 11pt; }
+
 .split-table tr.row-caption td {
   height: auto;
   font-size: 8pt;
@@ -10026,15 +10033,15 @@ td.cell-secondary {
   clear: both; }
 
 .split-table-side {
-  float: left;
+  display: inline-block;
   overflow: hidden; }
 
 .split-table-main {
-  width: 100%;
-  float: left;
+  display: inline-block;
   overflow: hidden; }
 
 .split-table-side + .split-table-main {
+  display: inline-block;
   width: calc(100% - 200px);
   overflow: hidden; }
 
@@ -12386,6 +12393,7 @@ body.resizing * {
   height: 650px;
   padding-bottom: 10px; }
 
+#faq-click-scrolling-target,
 #faq-scrollbar-outside-absolute-target,
 #faq-scrollbar-outside-relative-target {
   height: 250px;
@@ -12398,5 +12406,11 @@ body.resizing * {
   white-space: nowrap;
   float: left;
   margin-right: 6px; }
+
+#faq-click-scrolling-target {
+  float: none; }
+
+#faq-click-scrolling-target .os-scrollbar-track {
+  background: rgba(255, 0, 0, 0.4); }
 
 /*# sourceMappingURL=styles.css.map */
