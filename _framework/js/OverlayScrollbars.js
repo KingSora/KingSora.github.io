@@ -192,11 +192,10 @@
              * Checks whether a item is in the given array and returns its index.
              * @param item The item of which the position in the array shall be determined.
              * @param arr The array.
-             * @param fromIndex The index to start the search at.
              * @returns {number} The zero based index of the item or -1 if the item isn't in the array.
              */
-            inA : function(item, arr, fromIndex) {
-                for (var i = fromIndex || 0; i < arr[LEXICON.l]; i++)
+            inA : function(item, arr) {
+                for (var i = 0; i < arr[LEXICON.l]; i++)
                     //Sometiems in IE a "SCRIPT70" Permission denied error occurs if HTML elements in a iFrame are compared
                     try {
                         if (arr[i] === item)
