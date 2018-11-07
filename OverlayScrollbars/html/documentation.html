@@ -4691,6 +4691,8 @@ $scrollbar-corner-background-color: transparent;
 	page : <span class="txtc-secondary-color">function ( event )</span>,
 	mBtn : <span class="txtc-secondary-color">function ( event )</span>,
 	inA  : <span class="txtc-secondary-color">function ( item, array )</span>,
+	isA  : <span class="txtc-secondary-color">function ( array )</span>,
+	type : <span class="txtc-secondary-color">function ( obj )</span>,
 	bind : <span class="txtc-secondary-color">function ( function, thisObj [, arg1[, arg2[, ...]]] )</span>
 }</code></pre>
 			<h6>Description:</h6>
@@ -4839,11 +4841,51 @@ document.addEventListener('mousedown', function(event) {
 					inA
 				</div>
 				<div class="plainobjectproperty-documentation-box-content">
-					A function with two parameters returns the index of the given item in the given array or -1 if the item isn't in the given array.<br>
+					A function with two parameters which returns the index of the given item in the given array or -1 if the item isn't in the given array.<br>
 					This function should be only used if you need the index of a specific DOM-Element in a array of DOM-Elements, because it prevents the <a href="https://stackoverflow.com/questions/18088829/script70-permission-denied-accessing-iframe-in-ie?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa" target="_blank" class="inline-btn">SCRIPT70 Permission denied error</a> to happen, but due to that it can be slower.
 					<pre><code class="js code-noscroll">//Example usage
 var array = document.querySelectorAll('*');
 var index = compatibility.inA(document.body, array);</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					isA
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function with one parameter which returns a boolean which indicates whether the given argument is an array.<br>
+					<pre><code class="js code-noscroll">//Example usage
+var first = [ 1, 2, 3 ];
+var second = { prop : "value" };
+framework.isArray(first);  //true
+framework.isArray(second); //false</code></pre>
+				</div>
+			</div>
+			<div class="plainobjectproperty-documentation-box">
+				<div class="plainobjectproperty-documentation-box-title">
+					type
+				</div>
+				<div class="plainobjectproperty-documentation-box-content">
+					A function with one parameter which returns the internal JavaScript [[Class]] of an object.<br>
+					This function is the equivalent to the <a href="https://api.jquery.com/jQuery.type/" target="_blank" class="inline-btn">jQuery type</a> function, but because jQuery is deprecating it, it's in this compatibility object.
+					<pre><code class="js code-noscroll">//Example usage
+//following statements are true:
+framework.type(undefined)          === "undefined";
+framework.type()                   === "undefined";
+framework.type(window.notDefined)  === "undefined";
+framework.type(null)               === "null";
+framework.type(true)               === "boolean";
+framework.type(new Boolean())      === "boolean";
+framework.type(3)                  === "number";
+framework.type(new Number(3))      === "number";
+framework.type("test")             === "string";
+framework.type(new String("test")) === "string";
+framework.type(function() { })     === "function";
+framework.type([ ])                === "array";
+framework.type(new Array())        === "array";
+framework.type(new Date())         === "date";
+framework.type(new Error())        === "error";
+framework.type(/test/)             === "regexp";</code></pre>
 				</div>
 			</div>
 			<div class="plainobjectproperty-documentation-box">
@@ -4912,32 +4954,6 @@ framework.isEmptyObject({ prop: "value" }); // false</code></pre>
 framework.isPlainObject({ });    // true
 framework.isPlainObject("test"); // false</code></pre>
 			</div>
-			<div class="expander-header" data-expander-key="extensions-framework-object-util-type">
-				<i class="mdi mdi-chevron-down"></i>
-				<span>.type ( <span class="expander-header-weak">obj</span> )</span>
-			</div>
-			<div class="expander-content" data-expander-value="extensions-framework-object-util-type">
-				Determine the internal JavaScript [[Class]] of an object.<br>
-				<a href="http://api.jquery.com/jQuery.type/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
-				<pre><code class="js code-noscroll">//Example usage
-//following statements are true:
-framework.type(undefined)          === "undefined";
-framework.type()                   === "undefined";
-framework.type(window.notDefined)  === "undefined";
-framework.type(null)               === "null";
-framework.type(true)               === "boolean";
-framework.type(new Boolean())      === "boolean";
-framework.type(3)                  === "number";
-framework.type(new Number(3))      === "number";
-framework.type("test")             === "string";
-framework.type(new String("test")) === "string";
-framework.type(function() { })     === "function";
-framework.type([ ])                === "array";
-framework.type(new Array())        === "array";
-framework.type(new Date())         === "date";
-framework.type(new Error())        === "error";
-framework.type(/test/)             === "regexp";</code></pre>
-			</div>
 			<div class="expander-header" data-expander-key="extensions-framework-object-util-each">
 				<i class="mdi mdi-chevron-down"></i>
 				<span>.each ( <span class="expander-header-weak">array, callback</span> )</span> 
@@ -4961,19 +4977,6 @@ framework.each(array, function(index, value) {
 				<pre><code class="js code-noscroll">//Example usage
 var array = [ 10, 20, 30, 40 ];
 framework.inArray(40, array); //4</code></pre>
-			</div>
-			<div class="expander-header" data-expander-key="extensions-framework-object-util-isArray">
-				<i class="mdi mdi-chevron-down"></i>
-				<span>.isArray ( <span class="expander-header-weak">obj</span> )</span>
-			</div>
-			<div class="expander-content" data-expander-value="extensions-framework-object-util-isArray">
-				Determine whether the argument is an array.<br>
-				<a href="http://api.jquery.com/jQuery.isArray/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
-				<pre><code class="js code-noscroll">//Example usage
-var first = [ 1, 2, 3 ];
-var second = { prop : "value" };
-framework.isArray(first);  //true
-framework.isArray(second); //false</code></pre>
 			</div>
 			<h6>DOM Node inserting / removing:</h6>
 			<div class="expander-header" data-expander-key="extensions-framework-object-append">
@@ -5476,20 +5479,6 @@ framework("body").one("click keydown", exampleCallback);</code></pre>
 				<pre><code class="js code-noscroll">//Example usage
 framework("button").on("click", function(event) { console.log(event); });
 framework("button").trigger("click");</code></pre>
-			</div>
-			<div class="expander-header" data-expander-key="extensions-framework-object-hover">
-				<i class="mdi mdi-chevron-down"></i>
-				<span>.hover ( <span class="expander-header-weak">handlerIn, handlerOut</span> )</span>
-			</div>
-			<div class="expander-content" data-expander-value="extensions-framework-object-hover">
-				Bind one or two handlers to the matched elements, to be executed when the mouse pointer enters and leaves the elements.<br>
-				<a href="http://api.jquery.com/hover/" target="_blank" class="inline-btn">read the jQuery Documentation</a>
-				<pre><code class="js code-noscroll">//Example usage
-var handlerIn    = function() { console.log("in"); };
-var handlerOut   = function() { console.log("out"); };
-var handlerInOut = function() { console.log("inOut"); };
-framework("button").hover(handlerIn, handlerOut);
-framework("button").hover(handlerInOut);</code></pre>
 			</div>
 			<h6>Animation:</h6>
 			<div class="expander-header" data-expander-key="extensions-framework-object-animate">

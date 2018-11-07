@@ -1402,6 +1402,7 @@ h6 {
 	border: 1px solid $border-color;
 	color: $text-color-dark;
 	height: 40px;
+	line-height: 40px;
 	border-radius: 6px;
 	background: #fff;
 	cursor: pointer;
@@ -1409,6 +1410,7 @@ h6 {
 	padding: 0px 14px;
 	display: block;
 	font-weight: $font-weight-semibold;
+	text-align: center;
 	outline: none !important;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
@@ -1439,6 +1441,12 @@ h6 {
 }
 .radio-button-bar > .radio-button.active + .radio-button {
 	border-left-color: transparent;
+}
+.radio-button-bar > .radio-button:hover {
+	border-color: $secondary-color;
+}
+.radio-button-bar > .radio-button:hover + .radio-button {
+	border-left-color: $secondary-color;
 }
 
 .group-box {
@@ -1545,6 +1553,25 @@ h6 {
 .button:active {
 	box-shadow: inset 0 4px 9px -1px rgba(0, 0, 0, 0.15);
 }
+
+//INPUT
+input {
+	height: 40px;
+	border-radius: 6px;
+	border: 1px solid $border-color;
+	padding: 0 12px;
+	color: $text-color-gray;
+	transition: border-color 0.3s, color 0.3s;
+}
+input:hover,
+input:focus {
+	border-color: $secondary-color;
+	color: $text-color-dark;
+}
+
+
+
+
 
 //DROPDOWN
 .dropdown {

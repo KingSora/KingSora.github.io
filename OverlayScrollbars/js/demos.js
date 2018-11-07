@@ -759,11 +759,11 @@ $('#theme-demo-plugin-four').overlayScrollbars({
 			var padding = instance.getElements().padding;
 			gradientBot.insertAfter(padding);
 			gradientTop.insertAfter(padding);
-			onScrollCallback.bind(this)();
+			onScrollCallback.call(this);
 		},
 		onOverflowChanged : function(e) {
 			show = e.yScrollable && e.y;
-			onScrollCallback.bind(this)();
+			onScrollCallback.call(this);
 		}
 	}
 });
@@ -934,7 +934,7 @@ var possibleLeftUsers = [
 	{ n: "Reiner Braun", i: backgroundUrl + "demo_content_reiner.png)" , m: "Good day, %!<br>How are you doing? Any plans for tonight?" },
 	{ n: "Eren Jäger", i: backgroundUrl + "demo_content_eren.png)", m: "Whats up %.<br>Wanna talk about our god and savior?" },
 	{ n: "Levi Ackerman", i: backgroundUrl + "demo_content_levi.png)", m: "Hi %." },
-	{ n: "Sasha Braus", i: backgroundUrl + "demo_content_sasha.png)", m: "Yo, %!<br>Do you know what is my favorite food?" },
+	{ n: "Sasha Braus", i: backgroundUrl + "demo_content_sasha.png)", m: "Yo, %!<br>Do you know what is my favorite food?" }
 ];
 var possibleRightUsers = [ 
 	{ n: "Annie Leonhardt", i: backgroundUrl + "demo_content_annie.png)", 
@@ -948,10 +948,18 @@ var possibleRightUsers = [
 	},
 	{ n: "Erwin Smith", i: backgroundUrl + "demo_content_erwin.png)", 
 		m: [ "%, I am your supervisor and not your buddy.", "What a silly question %. I am not religious.", "%, you are making a very good Job. Your'e indeed mankinds strongest soldier.", "Well, I know you like potatoes, but your favorite food is meat.<br>Am I right??" ] 
-	},
+	}
 ];
-var leftUser = possibleLeftUsers[Math.floor((Math.random() * (possibleLeftUsers.length)))];
-var rightUser = possibleRightUsers[Math.floor((Math.random() * (possibleRightUsers.length)))];
+var getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+var trim = function(str) { 
+	return str.replace(/^\s+|\s+$/g, ''); 
+};
+var leftUserRnd = getRandomInt(0, possibleLeftUsers.length - 1);
+var rightUserRnd = getRandomInt(0, possibleRightUsers.length - 1);
+var leftUser = possibleLeftUsers[leftUserRnd];
+var rightUser = possibleRightUsers[rightUserRnd];
 var getCurrentInputUser = function() {
 	if(inputElement.hasClass('content-demo-input-right'))
 		return rightUser;
@@ -1057,7 +1065,7 @@ var sendMessage = function(user, content) {
 };
 var sendFirstMessages = function() { 
 	sendMessage(leftUser, leftUser.m.replace("%", rightUser.n.split(' ')[0]));
-	sendMessage(rightUser, rightUser.m[possibleLeftUsers.indexOf(leftUser)].replace("%", leftUser.n.split(' ')[0]));
+	sendMessage(rightUser, rightUser.m[$.inArray(leftUser, possibleLeftUsers)].replace("%", leftUser.n.split(' ')[0]));
 };
 
 
@@ -1102,8 +1110,8 @@ $('.content-demo-input-switch').on('click', function() {
 $('.content-demo-input textarea').on('keydown', function(e) { 
 	var value = $('.content-demo-input textarea').val();
 	if (e.keyCode === 13 && !e.shiftKey) {
-		if (value && value.replace(/(?:\r\n|\r|\n)/g, '').trim().length > 0) {
-			value = value.replace(/(?:\r\n|\r|\n)/g, '<br/>').trim();
+		if (value && trim(value.replace(/(?:\r\n|\r|\n)/g, '')).length > 0) {
+			value = trim(value.replace(/(?:\r\n|\r|\n)/g, '<br/>'));
 			sendMessage(getCurrentInputUser(), value);
 			$('.content-demo-input textarea').val("");
 			chatInputOS.update();
@@ -1119,8 +1127,7 @@ sendFirstMessages();
 
 $('body').on("contentDestruct", function() { 
     var iFrameInstance = window.osiFrame;
-    delete window.osiFrame;
-    if(iFrameInstance instanceof OverlayScrollbars) {
+    if(iFrameInstance instanceof OverlayScrollbars && iFrameInstance.destroy)
         iFrameInstance.destroy();
-    }
+	try { delete window.osiFrame; } catch(e) { }
 });

@@ -9442,6 +9442,7 @@ h6 {
   border: 1px solid #D6D6D6;
   color: #31485B;
   height: 40px;
+  line-height: 40px;
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
@@ -9449,6 +9450,7 @@ h6 {
   padding: 0px 14px;
   display: block;
   font-weight: 600;
+  text-align: center;
   outline: none !important;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -9479,6 +9481,12 @@ h6 {
 
 .radio-button-bar > .radio-button.active + .radio-button {
   border-left-color: transparent; }
+
+.radio-button-bar > .radio-button:hover {
+  border-color: #6461f6; }
+
+.radio-button-bar > .radio-button:hover + .radio-button {
+  border-left-color: #6461f6; }
 
 .group-box {
   border-radius: 4px !important;
@@ -9579,6 +9587,19 @@ h6 {
 
 .button:active {
   box-shadow: inset 0 4px 9px -1px rgba(0, 0, 0, 0.15); }
+
+input {
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #D6D6D6;
+  padding: 0 12px;
+  color: #555E6B;
+  transition: border-color 0.3s, color 0.3s; }
+
+input:hover,
+input:focus {
+  border-color: #6461f6;
+  color: #31485B; }
 
 .dropdown {
   border: 1px solid #D6D6D6;
@@ -10572,6 +10593,106 @@ a.inline-btn[href]:after {
 
 a.inline-btn[data-modal]:after {
   content: "\F137"; }
+
+.input-numeric {
+  height: 40px;
+  position: relative; }
+
+.input-numeric-button {
+  height: 100%;
+  width: 40px;
+  position: absolute;
+  top: 0;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 0;
+  min-width: 0;
+  padding: 0; }
+
+.input-numeric-button-decrease {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: none;
+  left: 0;
+  right: auto; }
+
+.input-numeric-button-increase {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-left: none;
+  right: 0;
+  left: auto; }
+
+.input-numeric-input {
+  width: 100%;
+  height: 100%;
+  padding: 0 40px; }
+
+.input-numeric-input > input {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  text-align: center; }
+
+.styling-tool-line {
+  height: 40px;
+  position: relative;
+  line-height: 40px;
+  margin-top: 1px; }
+
+.styling-tool-line-left,
+.styling-tool-line-right {
+  position: absolute;
+  top: 0;
+  width: 50%; }
+
+.styling-tool-line-left {
+  left: 0; }
+
+.styling-tool-line-right {
+  right: 0; }
+
+.styling-tool-line-right > input {
+  width: 100%; }
+
+.styling-tool-line-right-number-unit > .input-numeric,
+.styling-tool-line-right-number-unit > .dropdown {
+  width: 50%;
+  position: absolute;
+  top: 0; }
+
+.styling-tool-line-right-number-unit > .input-numeric {
+  left: 0; }
+
+.styling-tool-line-right-number-unit > .input-numeric .input-numeric-button-increase {
+  border-radius: 0;
+  border-right: 1px solid transparent; }
+
+.styling-tool-line-right-number-unit > .dropdown {
+  right: 0;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px; }
+
+.styling-tool-states.radio-button-bar > .radio-button {
+  width: 33.33%; }
+
+.styling-tool-states.radio-button-bar {
+  margin: 0 0 10px 0; }
+
+.styling-tool-line + .styling-tool-states.radio-button-bar {
+  margin-top: 10px; }
+
+.group-box-caption > .styling-tool-states.radio-button-bar > .radio-button {
+  width: auto;
+  height: 30px;
+  line-height: 30px; }
+
+.group-box-caption > .styling-tool-states.radio-button-bar {
+  display: inline-block;
+  vertical-align: middle; }
+
+.group-box-caption > .styling-tool-states.radio-button-bar {
+  margin: 0 0 0 6px; }
 
 #navigation-logo {
   width: 108px; }

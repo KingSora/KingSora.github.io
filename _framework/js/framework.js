@@ -20,6 +20,7 @@ $(document).ready(function() {
 	var _dataAttrExpanderValue = "data-expander-value";
 	var _dataAttrRadio = "data-radio";
 	var _dataAttrModal = "data-modal";
+	var _dataAttrInputNumeric = "data-input-numeric";
 	var _expanderExpandDuration = 230;
 	var _tabsFadeDuration = 230;
 	var _strActive = 'active';
@@ -146,12 +147,15 @@ $(document).ready(function() {
 						});			
 					});
                     
-					//_content[0].innerHTML = response;
-					//contentLoad(newMainHash);
-					//$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
-					//	pagePathChange(newHash, oldHash);
-					//	hideLoading();
-					//});		
+					/*
+					_content[0].innerHTML = response;
+					contentLoad(newMainHash);
+					$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
+						pagePathChange(newHash, oldHash);
+						hideLoading();
+					});	
+					*/	
+					
 				}, 400);
 			}, "html").fail(function() {
 				//404
@@ -210,22 +214,24 @@ $(document).ready(function() {
 				return false;
 			}
 		});	
-		//$('[' + _dataAttrNavigation + ']').on('mousedown', function(e) {
-		//	var ee = e.originalEvent || e;
-		//	//on middle mouse button
-		//	if((ee.buttons === 4 || ee.which === 2)) {
-		//		var navigationValue = $(this).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
-		//		var newHashArray = generateHashArray(navigationValue);
-		//		var newHashArrayParamString = '#' + _hasherPrepareHash;
-		//		for(var i = 0; i < newHashArray.length; i++)
-		//			newHashArrayParamString += (i == 0 ? "" : _hasherSeparator) + newHashArray[i] + "";
-		//		window.open(hasher.getBaseURL() + newHashArrayParamString, '_blank');
-		//		
-		//		e.stopPropagation();
-		//		e.stopImmediatePropagation();
-		//		return false;
-		//	}
-		//});
+		/*
+		$('[' + _dataAttrNavigation + ']').on('mousedown', function(e) {
+			var ee = e.originalEvent || e;
+			//on middle mouse button
+			if((ee.buttons === 4 || ee.which === 2)) {
+				var navigationValue = $(this).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
+				var newHashArray = generateHashArray(navigationValue);
+				var newHashArrayParamString = '#' + _hasherPrepareHash;
+				for(var i = 0; i < newHashArray.length; i++)
+					newHashArrayParamString += (i == 0 ? "" : _hasherSeparator) + newHashArray[i] + "";
+				window.open(hasher.getBaseURL() + newHashArrayParamString, '_blank');
+				
+				e.stopPropagation();
+				e.stopImmediatePropagation();
+				return false;
+			}
+		});
+		*/
 		$('[' + _dataAttrNavigation + ']').on('mousedown', function(e) {
 			var ee = e.originalEvent || e;
 			
@@ -390,6 +396,113 @@ $(document).ready(function() {
 			for(var i = 0; i < modalInstances.length; i++)
 				modalInstances[i].sleep();
 		}
+			
+		//input-numeric
+		(function() { 
+			$('.input-numeric').each(function() {
+				var mainElem = $(this);
+				var floaty = mainElem.attr(_dataAttrInputNumeric + "-float") == "true";
+				var parseFunc = floaty ? window.parseFloat : window.parseInt;
+				
+				var min = parseFunc(mainElem.attr(_dataAttrInputNumeric + "-min"));
+				var max = parseFunc(mainElem.attr(_dataAttrInputNumeric + "-max"));
+				var step = parseFunc(mainElem.attr(_dataAttrInputNumeric + "-step"));
+				var value = parseFunc(mainElem.find('.input-numeric-input > input').val());
+				
+				var decreaseBtn = mainElem.find('.input-numeric-button-decrease').first();
+				var increaseBtn = mainElem.find('.input-numeric-button-increase').first();
+				var input = mainElem.find('.input-numeric-input > input');
+				
+				var updateValue = function() {
+					var adjusted = false;
+					if(value < min) {
+						value = min;
+						adjusted = true;
+					}
+					if(value > max) {
+						value = max;
+						adjusted = true;
+					}
+					input.val(value);
+					mainElem.trigger('valuechanged', [ value ]);
+					return adjusted;
+				}
+				
+				var buttonPressedTimeout;
+				var buttonPressed = function(action) {
+					action();
+					buttonPressedTimeout = setTimeout(function() { buttonPressed(action); }, 125);
+				};
+				
+				min = isNaN(min) ? 0 : min;
+				max = isNaN(max) ? 0 : max;
+				step = isNaN(step) ? 0 : step;
+				
+				if(min > max) 
+					min = max;
+				if(max < min)
+					max = min;
+				if(value < min)
+					value = min;
+				if(value > max)
+					value = max;
+			
+				decreaseBtn.on('mousedown', function(e) { 
+					clearTimeout(buttonPressedTimeout);
+					buttonPressed(function() { 
+						value -= step;
+						updateValue();
+					});
+					$(document).one('mouseup', function(e) { 
+						clearTimeout(buttonPressedTimeout);
+					});
+				});
+				increaseBtn.on('mousedown', function(e) { 
+					clearTimeout(buttonPressedTimeout);
+					buttonPressed(function() { 
+						value += step;
+						updateValue();
+					});
+					$(document).one('mouseup', function(e) { 
+						clearTimeout(buttonPressedTimeout);
+					});
+				});
+
+				input.on('keydown', function(e) { 
+					// Allow: backspace, delete, tab, escape, enter and .
+					if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110].concat(floaty ? [190] : [])) !== -1 ||
+						(e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) || 	// Allow: Ctrl/cmd+A
+						(e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) || 	// Allow: Ctrl/cmd+C
+						(e.keyCode == 86 && (e.ctrlKey === true || e.metaKey === true)) || 	// Allow: Ctrl/cmd+V
+						(e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) || 	// Allow: Ctrl/cmd+X
+						(e.keyCode >= 35 && e.keyCode <= 39)) { 							// Allow: home, end, left, right
+							 return;
+					}
+					// Ensure that it is a number and stop the keypress
+					if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+						e.preventDefault();
+					}
+				});
+				input.on('input', function(e) { 
+					var inputVal = input.val();
+					if(inputVal === "")
+						value = min;
+					else {
+						value = parseFunc(inputVal);
+						value = isNaN(value) ? min : value;
+					}
+					updateValue();
+				});
+				/*
+				input.on('focus', function(e) { 
+					input.select();
+				});
+				*/
+				updateValue();
+				
+				mainElem.find('.input-numeric-input > input').val(value);
+			});
+		})();
 
 		//dropdown
 		$('.dropdown').on('click', function(e) {
@@ -439,6 +552,7 @@ $(document).ready(function() {
 		
 		//expander
 		$('[' + _dataAttrExpanderKey + ']').on('click', function(e) { 
+			//var closestOS = $(this).closest('.os-host');
 			var currElem = $(this).closest('[' + _dataAttrExpanderKey + ']');
 			var target = $('[' + _dataAttrExpanderValue + '="' + currElem.attr(_dataAttrExpanderKey) + '"]');
 			if(target.hasClass(_strActive)) {
