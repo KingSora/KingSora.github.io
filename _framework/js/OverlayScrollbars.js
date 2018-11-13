@@ -248,17 +248,17 @@
             }
         };
         
+		var MATH = Math;
         var JQUERY = window.jQuery;
         var EASING = (function() {
-            var _math = window.Math;
             var _easingsMath = {
-                p : _math.PI,
-                c : _math.cos,
-                s : _math.sin,
-                w : _math.pow,
-                t : _math.sqrt,
-                n : _math.asin,
-                a : _math.abs,
+                p : MATH.PI,
+                c : MATH.cos,
+                s : MATH.sin,
+                w : MATH.pow,
+                t : MATH.sqrt,
+                n : MATH.asin,
+                a : MATH.abs,
                 o : 1.70158
             };
             
@@ -770,7 +770,7 @@
                                 timeNow = COMPATIBILITY.now();
                                 elapsed = (timeNow - timeStart);
                                 end = qObj.stop || elapsed >= duration;
-                                percent = 1 - ((Math.max(0, timeStart + duration - timeNow) / duration) || 0);
+                                percent = 1 - ((MATH.max(0, timeStart + duration - timeNow) / duration) || 0);
 
                                 for(key in to) {
                                     fromVal = parseFloat(from[key]);
@@ -798,7 +798,7 @@
                                 }
 
                                 if(isFunction(progress))
-                                    progress({ }, percent, Math.max(0, duration - elapsed));
+                                    progress({ }, percent, MATH.max(0, duration - elapsed));
 
                                 if (end) {
                                     startNextAnimationInQ(animObj);
@@ -1568,7 +1568,7 @@
                         if(keepForeignProps)
                             FRAMEWORK.extend(true, validatedOptions, objectCopy);
                         else if(!FRAMEWORK.isEmptyObject(objectCopy) && writeErrors)
-                            console.warn("The following options are discarded due to invalidity:\r\n" + JSON.stringify(objectCopy, null, 2));
+                            console.warn("The following options are discarded due to invalidity:\r\n" + window.JSON.stringify(objectCopy, null, 2));
 
                         return validatedOptions;
                     }
@@ -1632,7 +1632,7 @@
                         var edge = ua[strIndexOf]('Edge/');
                         var rv = ua[strIndexOf]('rv:');
                         var result;
-                        var parseInt = window.parseInt;
+                        var parseInt = parseInt;
 
                         // IE 10 or older => return version number
                         if (msie > 0)
@@ -1720,7 +1720,7 @@
                     if(nativeScrollbarIsOverlaid.x && nativeScrollbarIsOverlaid.y)
                         return;
 
-                    var abs = Math.abs;
+                    var abs = MATH.abs;
                     var windowWidth = COMPATIBILITY.wW();
                     var windowHeight = COMPATIBILITY.wH();
                     var windowDpr = getWindowDPR();
@@ -1734,8 +1734,8 @@
                             if (deltaW === 0 && deltaH === 0)
                                 return;
 
-                            var deltaWRatio = Math.round(newW / (windowWidth / 100.0));
-                            var deltaHRatio = Math.round(newH / (windowHeight / 100.0));
+                            var deltaWRatio = MATH.round(newW / (windowWidth / 100.0));
+                            var deltaHRatio = MATH.round(newH / (windowHeight / 100.0));
                             var absDeltaW = abs(deltaW);
                             var absDeltaH = abs(deltaH);
                             var absDeltaWRatio = abs(deltaWRatio);
@@ -1851,13 +1851,13 @@
                                 if (instance !== undefined) {
                                     var instanceOptions = instance.options();
                                     var instanceAutoUpdateAllowed = instanceOptions[_strAutoUpdate];
-                                    var instanceAutoUpdateInterval = Math.max(1, instanceOptions[_strAutoUpdateInterval]);
+                                    var instanceAutoUpdateInterval = MATH.max(1, instanceOptions[_strAutoUpdateInterval]);
                                     var now = COMPATIBILITY.now();
                                     if ((instanceAutoUpdateAllowed === true || instanceAutoUpdateAllowed === null) && (now - _loopingInstancesIntervalCache[i]) > instanceAutoUpdateInterval) {
                                         instance.update('auto');
                                         _loopingInstancesIntervalCache[i] = new Date(now += instanceAutoUpdateInterval);
                                     }
-                                    lowestInterval = Math.max(1, Math.min(lowestInterval, instanceAutoUpdateInterval));
+                                    lowestInterval = MATH.max(1, MATH.min(lowestInterval, instanceAutoUpdateInterval));
                                 }
                             }
                             _loopInterval = lowestInterval;
@@ -3055,7 +3055,7 @@
 
                     //measure width
                     origWidth = measureElement[LEXICON.oW];
-                    width = doMeasure ? Math.max(origWidth, measureElement[LEXICON.sW] - 1) : 1;
+                    width = doMeasure ? MATH.max(origWidth, measureElement[LEXICON.sW] - 1) : 1;
                     width += (_widthAutoCache ? _marginX + (!_isBorderBox ? wrapAttrOff ? 0 : _paddingX + _borderX : 0) : 0);
 
                     //set measured width and height auto
@@ -3065,7 +3065,7 @@
 
                     //measure height
                     origHeight = measureElement[LEXICON.oH];
-                    height = Math.max(origHeight, measureElement[LEXICON.sH] - 1);
+                    height = MATH.max(origHeight, measureElement[LEXICON.sH] - 1);
 
                     //append correct size values
                     css[_strWidth] = width;
@@ -3374,7 +3374,7 @@
 
                     //detect width auto:
                     var widthAutoResizeDetection = false;
-                    var widthAutoObserverDetection = (_sizeAutoObserverAdded && (_hostElement.css(_strFloat) !== 'none' /*|| _isTextarea */)) ? (Math.round(sizeAutoObserverElementBCRect.right - sizeAutoObserverElementBCRect.left) === 0) && (!paddingAbsolute ? (hostElement[LEXICON.cW] - _paddingX) > 0 : true) : false;
+                    var widthAutoObserverDetection = (_sizeAutoObserverAdded && (_hostElement.css(_strFloat) !== 'none' /*|| _isTextarea */)) ? (MATH.round(sizeAutoObserverElementBCRect.right - sizeAutoObserverElementBCRect.left) === 0) && (!paddingAbsolute ? (hostElement[LEXICON.cW] - _paddingX) > 0 : true) : false;
                     if (sizeAutoCapable && !widthAutoObserverDetection) {
                         var tmpCurrHostWidth = hostElement[LEXICON.oW];
                         var tmpCurrContentGlueWidth = _contentGlueElement.css(_strWidth);
@@ -3395,7 +3395,7 @@
                     var wasWidthAuto = !widthAuto && _widthAutoCache;
 
                     //detect height auto:
-                    var heightAuto = _sizeAutoObserverAdded && !displayIsHidden ? (Math.round(sizeAutoObserverElementBCRect.bottom - sizeAutoObserverElementBCRect.top) === 0) /* && (!paddingAbsolute && (_msieVersion > 9 || !_msieVersion) ? true : true) */ : false;
+                    var heightAuto = _sizeAutoObserverAdded && !displayIsHidden ? (MATH.round(sizeAutoObserverElementBCRect.bottom - sizeAutoObserverElementBCRect.top) === 0) /* && (!paddingAbsolute && (_msieVersion > 9 || !_msieVersion) ? true : true) */ : false;
                     var heightAutoChanged = checkCacheSingle(heightAuto, _heightAutoCache, force);
                     var wasHeightAuto = !heightAuto && _heightAutoCache;
 
@@ -3599,8 +3599,8 @@
                             h: contentMeasureElement[LEXICON.cH]
                         };
                         var scrollSize = {
-                            w: Math.max(contentMeasureElement[LEXICON.sW], contentMeasureElementGuaranty[LEXICON.sW]),
-                            h: Math.max(contentMeasureElement[LEXICON.sH], contentMeasureElementGuaranty[LEXICON.sH])
+                            w: MATH.max(contentMeasureElement[LEXICON.sW], contentMeasureElementGuaranty[LEXICON.sW]),
+                            h: MATH.max(contentMeasureElement[LEXICON.sH], contentMeasureElementGuaranty[LEXICON.sH])
                         };
                         var contentClientSize = {
                             w: _isTextarea && textareaSize && !textareaDynWidth ? textareaSize.ow : widthAuto ? clientSize.w : scrollSize.w,
@@ -3618,8 +3618,8 @@
                         //has to be clientSize because offsetSize respect borders.
                         var hostSize = getHostSize();
                         var contentGlueSize = {
-                            w: Math.max(contentClientSize.w + padding.ax, hostSize.w - _paddingX) - (textareaDynWidth ? (_isTextarea && widthAuto ? _marginX + (!_isBorderBox ? _paddingX + _borderX : 0) : 0) : 0),
-                            h: Math.max(contentClientSize.h + padding.ay, hostSize.h - _paddingY)
+                            w: MATH.max(contentClientSize.w + padding.ax, hostSize.w - _paddingX) - (textareaDynWidth ? (_isTextarea && widthAuto ? _marginX + (!_isBorderBox ? _paddingX + _borderX : 0) : 0) : 0),
+                            h: MATH.max(contentClientSize.h + padding.ay, hostSize.h - _paddingY)
                         };
                         contentGlueSize.c = checkCacheDouble(contentGlueSize, _contentGlueSizeCache, force);
                         _contentGlueSizeCache = contentGlueSize;
@@ -3662,8 +3662,8 @@
 
                             //make sure content glue size at least 1
                             if (contentClientSize.h > 0) {
-                                contentGlueElementCSS[_strWidth] = Math.max(1, contentGlueElementCSS[_strWidth]);
-                                contentGlueElementCSS[_strHeight] = Math.max(1, contentGlueElementCSS[_strHeight]);
+                                contentGlueElementCSS[_strWidth] = MATH.max(1, contentGlueElementCSS[_strWidth]);
+                                contentGlueElementCSS[_strHeight] = MATH.max(1, contentGlueElementCSS[_strHeight]);
                             }
 
                             if (_isTextarea)
@@ -3685,8 +3685,8 @@
                         var contentBCRectW = contentBCRect[_strWidth] || 0;
                         var contentBCRectH = contentBCRect[_strHeight] || 0;
                         var contentScrollSize = {
-                            w: Math.max(contentMeasureElement[LEXICON.sW], contentMeasureElementGuaranty[LEXICON.sW]) + parseToZeroOrNumber(contentBCRectW) - contentBCRectW,
-                            h: Math.max(contentMeasureElement[LEXICON.sH], contentMeasureElementGuaranty[LEXICON.sH]) + parseToZeroOrNumber(contentBCRectH) - contentBCRectH
+                            w: MATH.max(contentMeasureElement[LEXICON.sW], contentMeasureElementGuaranty[LEXICON.sW]) + parseToZeroOrNumber(contentBCRectW) - contentBCRectW,
+                            h: MATH.max(contentMeasureElement[LEXICON.sH], contentMeasureElementGuaranty[LEXICON.sH]) + parseToZeroOrNumber(contentBCRectH) - contentBCRectH
                         };
                         contentScrollSize.c = contentSizeChanged = checkCacheDouble(contentScrollSize, _contentScrollSizeCache, force);
                         _contentScrollSizeCache = contentScrollSize;
@@ -3715,8 +3715,8 @@
                             y: overflowBehavior.y === 's'
                         };
                         var overflowAmount = {
-                            x: Math.max(0, Math.round((contentScrollSize.w - _viewportSize.w) * 100) / 100),
-                            y: Math.max(0, Math.round((contentScrollSize.h - _viewportSize.h) * 100) / 100)
+                            x: MATH.max(0, MATH.round((contentScrollSize.w - _viewportSize.w) * 100) / 100),
+                            y: MATH.max(0, MATH.round((contentScrollSize.h - _viewportSize.h) * 100) / 100)
                         };
                         var hideOverflowForceTextarea = _isTextarea && (_viewportSize.w === 0 || _viewportSize.h === 0);
                         var hideOverflowForceRounding = (_viewportElement[0].scrollLeftMax === 0 && overflowAmount.x > 0 && overflowAmount.x < 1) || (_viewportElement[0].scrollTopMax === 0 && overflowAmount.y > 0 && overflowAmount.y < 1);
@@ -3909,9 +3909,9 @@
                         if (cssDirectionChanged || widthAutoChanged || heightAutoChanged) {
                             if (_isRTL && widthAuto) {
                                 var floatTmp = _contentElement.css(_strFloat);
-                                var posLeftWithoutFloat = Math.round(_contentElement.css(_strFloat, _strEmpty).css(_strLeft, _strEmpty).position().left);
+                                var posLeftWithoutFloat = MATH.round(_contentElement.css(_strFloat, _strEmpty).css(_strLeft, _strEmpty).position().left);
                                 _contentElement.css(_strFloat, floatTmp);
-                                var posLeftWithFloat = Math.round(_contentElement.position().left);
+                                var posLeftWithFloat = MATH.round(_contentElement.position().left);
 
                                 if (posLeftWithoutFloat !== posLeftWithFloat)
                                     contentElementCSS[_strLeft] = posLeftWithoutFloat;
@@ -4358,7 +4358,7 @@
                                     var handleLength = scrollbarVars.i.hl;
                                     var scrollRange = scrollbarVars.i.ms;
                                     var scrollDuration = 270 * scrollDurationFactor;
-                                    var timeoutDelay = isFirstIteration ? Math.max(400, scrollDuration) : scrollDuration;
+                                    var timeoutDelay = isFirstIteration ? MATH.max(400, scrollDuration) : scrollDuration;
                                     var instantScrollPosition = scrollRange * ((mouseOffset - (handleLength / 2)) / (trackLength - handleLength)); // 100% * positionPercent
                                     var rtlIsNormal = _isRTL && isHorizontal && ((!_rtlScrollBehavior.i && !_rtlScrollBehavior.n) || _normalizeRTLCache);
                                     var decreaseScrollCondition = rtlIsNormal ? handleOffset < mouseOffset : handleOffset > mouseOffset;
@@ -4491,8 +4491,8 @@
                     var scrollbarVars = getScrollbarVars(isHorizontal);
                     var digit = 1000000;
                     //get and apply intended handle length
-                    var handleRatio = Math.min(1, (_hostSizeCache[scrollbarVars._wh] - (_paddingAbsoluteCache ? (isHorizontal ? _paddingX : _paddingY) : 0)) / _contentScrollSizeCache[scrollbarVars._wh]);
-                    handleCSS[scrollbarVars.wh] = (Math.floor(handleRatio * 100 * digit) / digit) + "%"; //the last * digit / digit is for flooring to the 4th digit
+                    var handleRatio = MATH.min(1, (_hostSizeCache[scrollbarVars._wh] - (_paddingAbsoluteCache ? (isHorizontal ? _paddingX : _paddingY) : 0)) / _contentScrollSizeCache[scrollbarVars._wh]);
+                    handleCSS[scrollbarVars.wh] = (MATH.floor(handleRatio * 100 * digit) / digit) + "%"; //the last * digit / digit is for flooring to the 4th digit
 
                     if (!nativeOverlayScrollbarsAreActive())
                         scrollbarVars.h.css(handleCSS);
@@ -4532,7 +4532,7 @@
                         maxScroll *= -1;
 
                     posRatio = currentScroll / maxScroll;
-                    posRatio = isNaN(posRatio) ? 0 : Math.min(1, posRatio);
+                    posRatio = isNaN(posRatio) ? 0 : MATH.min(1, posRatio);
 
                     scrollbarVars.i.ms = maxScroll;       //ms = max scroll
                     scrollbarVars.i.cs = currentScroll;   //cs = current scroll
@@ -4542,7 +4542,7 @@
                     offset = isNaN(offset) ? 0 : offset;
                     if (isRTLisHorizontal && !_rtlScrollBehavior.i)
                         offset = trackLength - handleLength - offset;
-                    offset = Math.max(0, offset);
+                    offset = MATH.max(0, offset);
 
                     if (_supportTransform) {
                         transformOffset = isRTLisHorizontal ? -(trackLength - handleLength - offset) : offset; //in px
@@ -4692,7 +4692,7 @@
                  * @param toFloat Indicates whether the number shall be parsed to a float.
                  */
                 function parseToZeroOrNumber(value, toFloat) {
-                    var num = toFloat ? window.parseFloat(value) : window.parseInt(value);
+                    var num = toFloat ? parseFloat(value) : parseInt(value);
                     return isNaN(num) ? 0 : num;
                 }
                 
@@ -5301,6 +5301,7 @@
                         var isRTLisX = _isRTL && isX;
                         var normalizeShortcuts = isRTLisX && _rtlScrollBehavior.n && !normalizeRTL;
                         var strReplace = 'replace';
+						var evalFunc = eval;
                         if (isString) {
                             //check operator
                             if (rawScroll[strLength] > 2) {
@@ -5323,7 +5324,7 @@
                             rawScroll = rawScroll[strReplace](/%/g, mult + (maxScroll * (isRTLisX && _rtlScrollBehavior.n ? -1 : 1) / 100.0));
                             rawScroll = rawScroll[strReplace](/vw/g, mult + _viewportSize.w);
                             rawScroll = rawScroll[strReplace](/vh/g, mult + _viewportSize.h);
-                            amount = parseToZeroOrNumber(parseToZeroOrNumber(window.eval(rawScroll), true).toFixed());
+                            amount = parseToZeroOrNumber(parseToZeroOrNumber(evalFunc(rawScroll), true).toFixed());
                         }
                         else {
                             amount = rawScroll;
@@ -5354,7 +5355,7 @@
                             }
                             finalValue = invert ? maxScroll - finalValue : finalValue;
                             finalValue *= negate ? -1 : 1;
-                            finalValue = isRTLisX && _rtlScrollBehavior.n ? Math.min(0, Math.max(maxScroll, finalValue)) : Math.max(0, Math.min(maxScroll, finalValue));
+                            finalValue = isRTLisX && _rtlScrollBehavior.n ? MATH.min(0, MATH.max(maxScroll, finalValue)) : MATH.max(0, MATH.min(maxScroll, finalValue));
                         }
                         return finalValue === currScroll ? undefined : finalValue;
                     };
@@ -5462,16 +5463,16 @@
                         elementOffset[_strTop] -= settingsMargin[0];
                         elementOffset[_strLeft] -= settingsMargin[3];
                         var elementScrollCoordinates = {
-                            x: Math.round(elementOffset[_strLeft] - viewportOffset[_strLeft] + viewportScroll.l),
-                            y: Math.round(elementOffset[_strTop] - viewportOffset[_strTop] + viewportScroll.t)
+                            x: MATH.round(elementOffset[_strLeft] - viewportOffset[_strLeft] + viewportScroll.l),
+                            y: MATH.round(elementOffset[_strTop] - viewportOffset[_strTop] + viewportScroll.t)
                         };
                         if (_isRTL) {
                             if (!_rtlScrollBehavior.n && !_rtlScrollBehavior.i)
-                                elementScrollCoordinates.x = Math.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + viewportScroll.l);
+                                elementScrollCoordinates.x = MATH.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + viewportScroll.l);
                             if (_rtlScrollBehavior.n && normalizeRTL)
                                 elementScrollCoordinates.x *= -1;
                             if (_rtlScrollBehavior.i && normalizeRTL)
-                                elementScrollCoordinates.x = Math.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + (_scrollHorizontalInfo.ms - viewportScroll.l));
+                                elementScrollCoordinates.x = MATH.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + (_scrollHorizontalInfo.ms - viewportScroll.l));
                         }
 
                         //measuring is required
@@ -5768,8 +5769,8 @@
                     var initBodyScroll;
                     if (_isBody) {
                         initBodyScroll = {};
-                        initBodyScroll.l = Math.max(_targetElement[_strScrollLeft](), _htmlElement[_strScrollLeft](), _windowElement[_strScrollLeft]());
-                        initBodyScroll.t = Math.max(_targetElement[_strScrollTop](), _htmlElement[_strScrollTop](), _windowElement[_strScrollTop]());
+                        initBodyScroll.l = MATH.max(_targetElement[_strScrollLeft](), _htmlElement[_strScrollLeft](), _windowElement[_strScrollLeft]());
+                        initBodyScroll.t = MATH.max(_targetElement[_strScrollTop](), _htmlElement[_strScrollTop](), _windowElement[_strScrollTop]());
                     }
 
                     //build Hide-scrollbars DOM
