@@ -1692,6 +1692,10 @@
                     if (mutationTarget === _contentElement[0])
                         return attributeName === null;
                     if (mutationType === 'attributes' && (attributeName === LEXICON.c || attributeName === LEXICON.s) && !_isTextarea) {
+                        //ignore className changes by the plugin
+                        if (attributeName === LEXICON.c && FRAMEWORK(mutation.target).hasClass(_classNameHostElement))
+                            return hostClassNamesChanged(mutation.oldValue, mutationTarget.getAttribute(LEXICON.c));
+                        
                         //only do it of browser support it natively
                         if (typeof mutationTarget[strClosest] != TYPES.f)
                             return true;
