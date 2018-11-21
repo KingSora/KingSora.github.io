@@ -554,19 +554,19 @@
                         var edge = ua[strIndexOf]('Edge/');
                         var rv = ua[strIndexOf]('rv:');
                         var result;
-                        var parseInt = parseInt;
+                        var parseIntFunc = parseInt;
 
                         // IE 10 or older => return version number
                         if (msie > 0)
-                            result = parseInt(ua[strSubString](msie + 5, ua[strIndexOf]('.', msie)), 10);
+                            result = parseIntFunc(ua[strSubString](msie + 5, ua[strIndexOf]('.', msie)), 10);
 
                         // IE 11 => return version number
                         else if (trident > 0)
-                            result = parseInt(ua[strSubString](rv + 3, ua[strIndexOf]('.', rv)), 10);
+                            result = parseIntFunc(ua[strSubString](rv + 3, ua[strIndexOf]('.', rv)), 10);
 
                         // Edge (IE 12+) => return version number
                         else if (edge > 0)
-                            result = parseInt(ua[strSubString](edge + 5, ua[strIndexOf]('.', edge)), 10);
+                            result = parseIntFunc(ua[strSubString](edge + 5, ua[strIndexOf]('.', edge)), 10);
 
                         // other browser
                         return result;
