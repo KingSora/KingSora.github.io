@@ -179,11 +179,16 @@
             /**
              * Gets the clicked mouse button of the given mouse event.
              * @param event The mouse event of which the clicked button shal be got.
-             * @returns {number} The number of the clicked mouse button. (1 : leftButton | 2 : middleButton | 3 : rightButton)
+             * @returns {number} The number of the clicked mouse button. (0 : none | 1 : leftButton | 2 : middleButton | 3 : rightButton)
              */
             mBtn: function(event) {
-                if (!event.which && event.button !== undefined)
-                    return (event.button & 1 ? 1 : (event.button & 2 ? 3 : (event.button & 4 ? 2 : 0)));
+                var button = event.button;
+                //var buttons = event.buttons;
+                //console.log(event);
+                //if(buttons !== undefined && !buttons)
+                //    return 0;
+                if (!event.which && button !== undefined)
+                    return (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
                 else
                     return event.which;
             },
@@ -248,11 +253,11 @@
             }
         };
         
-		var MATH = Math;
+        var MATH = Math;
         var JQUERY = framework;
         var EASING = framework.easing;
-		var FRAMEWORK = framework;
-		var INSTANCES = (function() {
+        var FRAMEWORK = framework;
+        var INSTANCES = (function() {
             var _targets = [ ];
             var _instancePropertyString = '__overlayScrollbars__';
 
@@ -894,10 +899,6 @@
                 var _viewportSize = { };
                 var _nativeScrollbarMinSize = { };
 
-                //scroll
-                var _scrollStopDelay = 175;
-                var _scrollStopTimeoutId;
-
                 //naming:
                 var _strMinusHidden = '-hidden';
                 var _strMarginMinus = 'margin-';
@@ -1069,21 +1070,13 @@
                 var _displayIsHiddenCache;
 
                 //MutationObserver:
-                var _mutationObserverContentLag = 11;
                 var _mutationObserverHost;
                 var _mutationObserverContent;
                 var _mutationObserverConnected;
                 var _supportMutationObserver;
 
                 //textarea:
-                var _textareaKeyDownRestrictedKeyCodes = [
-                    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 123,    //F1 to F12
-                    33, 34,                                                   //page up, page down
-                    37, 38, 39, 40,                                           //left, up, right, down arrows
-                    16, 17, 18, 19, 20, 144                                   //Shift, Ctrl, Alt, Pause, CapsLock, NumLock
-                ];
-                var _textareaKeyDownKeyCodesList = [ ];
-                var _textareaUpdateIntervalID;
+                var _textareaEvents = { };
                 var _textareaHasFocus;
 
                 //scrollbars:
@@ -1103,8 +1096,7 @@
                 var _resizeBoth;
                 var _resizeHorizontal;
                 var _resizeVertical;
-                var _resizeDragStartPosition = { };
-                var _resizeDragStartSize = { };
+                var _resizeOnMouseTouchDown;
 
 
                 //==== Add / Remove Passive Event Listener ====//
@@ -1372,12 +1364,100 @@
                 }
 
 
-                //==== Connect / Disconnect Mutation Observer ====//
+                //==== Mutation Observers ====//
 
+                /**
+                 * Creates MutationObservers for the host and content Element if they are supported.
+                 */
+                function createMutationObservers() {
+                    if (_supportMutationObserver) {
+                        var mutationObserverContentLag = 11;
+                        var mutationObserver = COMPATIBILITY.mO();
+                        var contentLastUpdate = COMPATIBILITY.now();
+                        var mutationTarget;
+                        var mutationAttrName;
+                        var contentTimeout;
+                        var now;
+                        var sizeAuto;
+                        var action;
+
+                        _mutationObserverHost = new mutationObserver(function (mutations) {
+                            if (!_initialized || _isSleeping)
+                                return;
+
+                            var doUpdate = false;
+                            //var doUpdateScrollbars = false;
+                            var mutation;
+                            FRAMEWORK.each(mutations, function () {
+                                mutation = this;
+                                mutationTarget = mutation.target;
+                                mutationAttrName = mutation.attributeName;
+
+                                if (mutationAttrName === LEXICON.c)
+                                    doUpdate = hostClassNamesChanged(mutation.oldValue, mutationTarget.className);
+                                else if (mutationAttrName === LEXICON.s)
+                                    doUpdate = mutation.oldValue !== mutationTarget[LEXICON.s].cssText;
+                                else
+                                    doUpdate = true;
+
+                                if (doUpdate)
+                                    return false;
+                            });
+
+                            if (doUpdate)
+                                _base.update(_strAuto);
+                            /*
+                            if(doUpdateScrollbars) {
+                                refreshScrollbarHandleLength(true);
+                                refreshScrollbarHandleOffset(true, _scrollHorizontalInfo.cs);
+                                refreshScrollbarHandleLength(false);
+                                refreshScrollbarHandleOffset(false, _scrollVerticalInfo.cs);
+                            }
+                            */
+                        });
+                        _mutationObserverContent = new mutationObserver(function (mutations) {
+                            if (!_initialized || _isSleeping)
+                                return;
+
+                            var doUpdate = false;
+                            var mutation;
+                            FRAMEWORK.each(mutations, function () {
+                                mutation = this;
+                                doUpdate = isUnknownMutation(mutation);
+                                return !doUpdate;
+                            });
+
+                            if (doUpdate) {
+                                now = COMPATIBILITY.now();
+                                sizeAuto = (_heightAutoCache || _widthAutoCache);
+                                action = function () {
+                                    if(!_destroyed) {
+                                        contentLastUpdate = now;
+
+                                        //if cols, rows or wrap attr was changed
+                                        if (_isTextarea)
+                                            textareaUpdate();
+
+                                        if (sizeAuto)
+                                            update();
+                                        else
+                                            _base.update(_strAuto);
+                                    }
+                                };
+                                clearTimeout(contentTimeout);
+                                if (mutationObserverContentLag <= 0 || now - contentLastUpdate > mutationObserverContentLag || !sizeAuto)
+                                    action();
+                                else
+                                    contentTimeout = setTimeout(action, mutationObserverContentLag);
+                            }
+                        });
+                    }
+                }
+                
                 /**
                  * Connects the MutationObservers if they are supported.
                  */
-                function mutationObserversConnect() {
+                function connectMutationObservers() {
                     if (_supportMutationObserver && !_mutationObserverConnected) {
                         _mutationObserverHost.observe(_hostElement[0], {
                             attributes: true,
@@ -1401,7 +1481,7 @@
                 /**
                  * Disconnects the MutationObservers if they are supported.
                  */
-                function mutationObserversDisconnect() {
+                function disconnectMutationObservers() {
                     if (_supportMutationObserver && _mutationObserverConnected) {
                         _mutationObserverHost.disconnect();
                         _mutationObserverContent.disconnect();
@@ -1436,7 +1516,7 @@
                         _hostElementSizeChangeDetectedCache = hostSize;
                     }
                 }
-
+    
                 /**
                  * The mouse enter event of the host element. This event is only needed for the autoHide feature.
                  */
@@ -1468,211 +1548,47 @@
                 }
 
                 /**
-                 * The scroll event of the viewport element. That is the main scroll event. It controls also the "scroll", "scrollStart" and "scrollStop" callbacks.
-                 * @param event The scroll event.
+                 * Adds mouse & touch events to the host element. (for handling auto-hiding of the scrollbars)
                  */
-                function viewportOnScroll(event) {
-                    if (_isSleeping)
-                        return;
-
-                    if (_scrollStopTimeoutId !== undefined)
-                        clearTimeout(_scrollStopTimeoutId);
+                function hostAddMouseTouchEvents() { 
+                    if (_supportPassiveEvents) {
+                        if(_scrollbarsAutoHideMove)
+                            addPassiveEventListener(_hostElement, _strMouseTouchMoveEvent, hostOnMouseMove);
+                        else {
+                            addPassiveEventListener(_hostElement, _strMouseTouchEnter, hostOnMouseEnter);
+                            addPassiveEventListener(_hostElement, _strMouseTouchLeave, hostOnMouseLeave);
+                        }
+                    }
                     else {
-                        if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
-                            refreshScrollbarsAutoHide(true);
-
-                        if (!nativeOverlayScrollbarsAreActive())
-                            addClass(_hostElement, _classNameHostScrolling);
-
-                        callCallback("onScrollStart", event);
-                    }
-
-                    refreshScrollbarHandleOffset(true, _viewportElement[_strScrollLeft]());
-                    refreshScrollbarHandleOffset(false, _viewportElement[_strScrollTop]());
-                    callCallback("onScroll", event);
-
-                    _scrollStopTimeoutId = setTimeout(function () {
-                        if(!_destroyed) {
-                            viewportOnScrollStop();
-                            callCallback("onScrollStop", event);
+                        if(_scrollbarsAutoHideMove)
+                            _hostElement.on(_strMouseTouchMoveEvent, hostOnMouseMove);
+                        else {
+                            _hostElement.on(_strMouseTouchEnter, hostOnMouseEnter)
+                                .on(_strMouseTouchLeave, hostOnMouseLeave);
                         }
-                    }, _scrollStopDelay);
-                }
-
-                /**
-                 * This method gets called if the scroll event stopped for a specified amount of time.
-                 */
-                function viewportOnScrollStop() {
-                    clearTimeout(_scrollStopTimeoutId);
-                    _scrollStopTimeoutId = undefined;
-                    if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
-                        refreshScrollbarsAutoHide(false);
-
-                    if (!nativeOverlayScrollbarsAreActive())
-                        removeClass(_hostElement, _classNameHostScrolling);
-                }
-
-                /**
-                 * The key input event of the textarea element.
-                 */
-                function textareaOnInput() {
-                    textareaUpdate();
-                    _base.update(_strAuto);
-                }
-
-                /**
-                 * The key down event of the textarea element. Is only applied if the input event isn't fully supported.
-                 * @param event The key down event.
-                 */
-                function textareaOnKeyDown(event) {
-                    var keyCode = event.keyCode;
-                    if (textareaIsRestrictedKeyCode(keyCode))
-                        return;
-                    if (_textareaKeyDownKeyCodesList.length === 0) {
-                        var action = function () {
-                            textareaUpdate();
-                            _base.update(_strAuto);
-                        };
-                        action();
-                        _textareaUpdateIntervalID = setInterval(action, 1000 / 60);
                     }
-                    if (FRAMEWORK.inArray(keyCode, _textareaKeyDownKeyCodesList) === -1)
-                        _textareaKeyDownKeyCodesList.push(keyCode);
-                }
 
+                    //if the plugin is initialized and the mouse is over the host element, make the scrollbars visible
+                    if(!_initialized)
+                        _hostElement.one("mouseover", hostOnMouseEnter);
+                }
+                
                 /**
-                 * The key up event of the textarea element. Is only applied if the input event isn't fully supported.
-                 * @param event The key up event.
+                 * Removes mouse & touch events of the host element. (for handling auto-hiding of the scrollbars)
                  */
-                function textareaOnKeyUp(event) {
-                    var keyCode = event.keyCode;
-                    if (textareaIsRestrictedKeyCode(keyCode))
-                        return;
-                    var index = FRAMEWORK.inArray(keyCode, _textareaKeyDownKeyCodesList);
-                    if (index > -1)
-                        _textareaKeyDownKeyCodesList.splice(index, 1);
-                    if (_textareaKeyDownKeyCodesList.length === 0) {
-                        textareaUpdate();
-                        _base.update(_strAuto);
-                        clearInterval(_textareaUpdateIntervalID);
+                function hostRemoveMouseTouchEvents() { 
+                    if (_supportPassiveEvents) {
+                        removePassiveEventListener(_hostElement, _strMouseTouchMoveEvent, hostOnMouseMove);
+                        removePassiveEventListener(_hostElement, _strMouseTouchEnter, hostOnMouseEnter);
+                        removePassiveEventListener(_hostElement, _strMouseTouchLeave, hostOnMouseLeave);
+                    }
+                    else {
+                        _hostElement.off(_strMouseTouchMoveEvent, hostOnMouseMove)
+                            .off(_strMouseTouchEnter, hostOnMouseEnter)
+                            .off(_strMouseTouchLeave, hostOnMouseLeave);
                     }
                 }
-
-                /**
-                 * The drop event of the textarea element.
-                 */
-                function textareaOnDrop() {
-                    setTimeout(function () {
-                        if(!_destroyed) {
-                            textareaUpdate();
-                            _base.update(_strAuto);
-                        }
-                    }, 50);
-                }
-
-                /**
-                 * The focus event of the textarea element.
-                 */
-                function textareaOnFocus() {
-                    _textareaHasFocus = true;
-                }
-
-                /**
-                 * The focus out event of the textarea element.
-                 */
-                function textareaOnFocusOut() {
-                    _textareaHasFocus = false;
-                    clearInterval(_textareaUpdateIntervalID);
-                    _textareaKeyDownKeyCodesList = [ ];
-                    textareaUpdate();
-                    _base.update(_strAuto);
-                }
-
-                /**
-                 * The scroll event of the textarea element.
-                 * @param event The scroll event.
-                 */
-                function textareaOnScroll(event) {
-                    _targetElement[_strScrollLeft](_rtlScrollBehavior.i && _normalizeRTLCache ? 9999999 : 0);
-                    _targetElement[_strScrollTop](0);
-                    COMPATIBILITY.prvD(event);
-                    COMPATIBILITY.stpP(event);
-                    return false;
-                }
-
-                /**
-                 * The mouse down event of the scrollbar corner element.
-                 * @param event The mouse down event.
-                 */
-                function scrollbarCornerOnMouseDown(event) {
-                    if (_isSleeping)
-                        return;
-
-                    var originalEvent = event.originalEvent || event;
-                    var isTouchEvent = originalEvent.touches !== undefined;
-
-                    if (COMPATIBILITY.mBtn(event) === 1 || isTouchEvent) {
-                        if (_mutationObserverConnected) {
-                            _resizeReconnectMutationObserver = true;
-                            mutationObserversDisconnect();
-                        }
-
-                        _resizeDragStartPosition = COMPATIBILITY.page(event);
-
-                        _resizeDragStartSize.w = _hostElement[0][LEXICON.oW] - (!_isBorderBox ? _paddingX : 0);
-                        _resizeDragStartSize.h = _hostElement[0][LEXICON.oH] - (!_isBorderBox ? _paddingY : 0);
-
-                        _documentElement.on(_strSelectStartEvent, documentOnSelectStart)
-                            .on(_strMouseTouchMoveEvent, scrollbarCornerOnResize)
-                            .on(_strMouseTouchUpEvent, scrollbarCornerOnResized);
-
-                        addClass(_bodyElement, _classNameDragging);
-                        if (_scrollbarCornerElement.setCapture)
-                            _scrollbarCornerElement.setCapture();
-
-                        COMPATIBILITY.prvD(event);
-                        COMPATIBILITY.stpP(event);
-                    }
-                }
-
-                /**
-                 * The mouse move event if the scrollbar corner element is resizable and gets dragged.
-                 * @param event The mouse move event.
-                 */
-                function scrollbarCornerOnResize(event) {
-                    var pageOffset = COMPATIBILITY.page(event);
-                    var hostElementCSS = { };
-                    if (_resizeHorizontal || _resizeBoth)
-                        hostElementCSS[_strWidth] = (_resizeDragStartSize.w + pageOffset.x - _resizeDragStartPosition.x);
-                    if (_resizeVertical || _resizeBoth)
-                        hostElementCSS[_strHeight] = (_resizeDragStartSize.h + pageOffset.y - _resizeDragStartPosition.y);
-                    _hostElement.css(hostElementCSS);
-                    COMPATIBILITY.stpP(event);
-                }
-
-                /**
-                 * The mouse up event if the scrollbar corner element is resizable and was dragged and now the mouse button is released.
-                 * @param event The mouse up event.
-                 */
-                function scrollbarCornerOnResized(event) {
-                    var eventIsTrusted = event !== undefined;
-
-                    _documentElement.off(_strSelectStartEvent, documentOnSelectStart)
-                        .off(_strMouseTouchMoveEvent, scrollbarCornerOnResize)
-                        .off(_strMouseTouchUpEvent, scrollbarCornerOnResized);
-
-                    removeClass(_bodyElement, _classNameDragging);
-                    if (_scrollbarCornerElement.releaseCapture)
-                        _scrollbarCornerElement.releaseCapture();
-
-                    if (eventIsTrusted) {
-                        if (_resizeReconnectMutationObserver)
-                            mutationObserversConnect();
-                        _base.update(_strAuto);
-                    }
-                    _resizeReconnectMutationObserver = false;
-                }
-
+            
                 /**
                  * Prevents text from deselection if attached to the document element on the mousedown event of a DOM element.
                  * @param event The select start event.
@@ -2193,22 +2109,22 @@
                     //set correct auto Update
                     if (autoUpdateChanged) {
                         if (autoUpdate === true) {
-                            mutationObserversDisconnect();
+                            disconnectMutationObservers();
                             autoUpdateLoop.add(_base);
                         }
                         else if (autoUpdate === null) {
                             if (_autoUpdateRecommended) {
-                                mutationObserversDisconnect();
+                                disconnectMutationObservers();
                                 autoUpdateLoop.add(_base);
                             }
                             else {
                                 autoUpdateLoop.remove(_base);
-                                mutationObserversConnect();
+                                connectMutationObservers();
                             }
                         }
                         else {
                             autoUpdateLoop.remove(_base);
-                            mutationObserversConnect();
+                            connectMutationObservers();
                         }
                     }
 
@@ -2880,8 +2796,8 @@
                         if (_isBody)
                             addClass(_hostElement, _classNameHostResizeDisabled);
                         if (resizeChanged) {
-                            var addCornerEvents = function () { _scrollbarCornerElement.on(_strMouseTouchDownEvent, scrollbarCornerOnMouseDown); };
-                            var removeCornerEvents = function () { _scrollbarCornerElement.off(_strMouseTouchDownEvent, scrollbarCornerOnMouseDown); };
+                            var addCornerEvents = function () { _scrollbarCornerElement.on(_strMouseTouchDownEvent, _resizeOnMouseTouchDown); };
+                            var removeCornerEvents = function () { _scrollbarCornerElement.off(_strMouseTouchDownEvent, _resizeOnMouseTouchDown); };
                             if (_resizeNone) {
                                 addClass(_hostElement, _classNameHostResizeDisabled);
                                 removeClass(_scrollbarCornerElement, [
@@ -2940,46 +2856,12 @@
 
                         //manage the scrollbars auto hide feature (auto hide them after specific actions)
                         if (scrollbarsAutoHideChanged || ignoreOverlayScrollbarHidingChanged) {
-                            var addMouseTouchEvents = function (move) {
-                                if (_supportPassiveEvents) {
-                                    if(move)
-                                        addPassiveEventListener(_hostElement, _strMouseTouchMoveEvent, hostOnMouseMove);
-                                    else {
-                                        addPassiveEventListener(_hostElement, _strMouseTouchEnter, hostOnMouseEnter);
-                                        addPassiveEventListener(_hostElement, _strMouseTouchLeave, hostOnMouseLeave);
-                                    }
-                                }
-                                else {
-                                    if(move)
-                                        _hostElement.on(_strMouseTouchMoveEvent, hostOnMouseMove);
-                                    else {
-                                        _hostElement.on(_strMouseTouchEnter, hostOnMouseEnter)
-                                            .on(_strMouseTouchLeave, hostOnMouseLeave);
-                                    }
-                                }
-
-                                //if the plugin is initialized and the mouse is over the host element, make the scrollbars visible
-                                if(!_initialized)
-                                    _hostElement.one("mouseover", hostOnMouseEnter);
-                            };
-                            var removeMouseTouchEvents = function () {
-                                if (_supportPassiveEvents) {
-                                    removePassiveEventListener(_hostElement, _strMouseTouchMoveEvent, hostOnMouseMove);
-                                    removePassiveEventListener(_hostElement, _strMouseTouchEnter, hostOnMouseEnter);
-                                    removePassiveEventListener(_hostElement, _strMouseTouchLeave, hostOnMouseLeave);
-                                }
-                                else {
-                                    _hostElement.off(_strMouseTouchMoveEvent, hostOnMouseMove)
-                                        .off(_strMouseTouchEnter, hostOnMouseEnter)
-                                        .off(_strMouseTouchLeave, hostOnMouseLeave);
-                                }
-                            };
                             if (_scrollbarsAutoHideLeave || _scrollbarsAutoHideMove) {
-                                removeMouseTouchEvents();
-                                addMouseTouchEvents(_scrollbarsAutoHideMove);
+                                hostRemoveMouseTouchEvents();
+                                hostAddMouseTouchEvents();
                             }
                             else {
-                                removeMouseTouchEvents();
+                                hostRemoveMouseTouchEvents();
                             }
 
                             if (_scrollbarsAutoHideNever)
@@ -3014,7 +2896,7 @@
                                 var lastCol = textareaInfo.c;
                                 var cursorPos = textareaInfo.p;
                                 var cursorMax = textareaInfo.m;
-                                var cursorIsLastPosition = (cursorMax === cursorPos && _textareaHasFocus);
+                                var cursorIsLastPosition = (cursorPos >= cursorMax && _textareaHasFocus);
                                 var doScroll = {
                                     x: (!textareaAutoWrapping && (cursorCol === lastCol && cursorRow === widestRow)) ? _overflowAmountCache.x : -1,
                                     y: (textareaAutoWrapping ? cursorIsLastPosition || textareaRowsChanged && (previousOverflow !== undefined ? (currScroll.t === previousOverflow.y) : false) : (cursorIsLastPosition || textareaRowsChanged) && cursorRow === lastRow) ? _overflowAmountCache.y : -1
@@ -3107,11 +2989,196 @@
                     _currentPreparedOptions = extend(true, {}, _currentPreparedOptions, _pluginsOptions.v(newOptions, _pluginsOptions.t, false, true));
                 }
 
+                
+                //==== Structure ====//
+                
+                /**
+                 * Builds the wrapper and helper DOM elements.
+                 */
+                function buildStructure() {
+                    if (_isTextarea) {
+                        var hostElementCSS = {};
+                        if (!_currentPreparedOptions.sizeAutoCapable) {
+                            hostElementCSS[_strWidth] = _targetElement.css(_strWidth);
+                            hostElementCSS[_strHeight] = _targetElement.css(_strHeight);
+                        }
+                        
+                        _targetElement.wrap(generateDiv(_classNameHostTextareaElement));
+                        _hostElement = _targetElement.parent();
+                        _hostElement.css(hostElementCSS)
+                            .wrapInner(generateDiv(_classNameContentElement + _strSpace + _classNameTextInherit))
+                            .wrapInner(generateDiv(_classNameViewportElement + _strSpace + _classNameTextInherit))
+                            .wrapInner(generateDiv(_classNamePaddingElement + _strSpace + _classNameTextInherit));
+                        _contentElement = findFirst(_hostElement, _strDot + _classNameContentElement);
+                        _viewportElement = findFirst(_hostElement, _strDot + _classNameViewportElement);
+                        _paddingElement = findFirst(_hostElement, _strDot + _classNamePaddingElement);
+                        _textareaCoverElement = FRAMEWORK(generateDiv(_classNameTextareaCoverElement));
+                        _contentElement.prepend(_textareaCoverElement);
 
+                        addClass(_targetElement, _classNameTextareaElement + _strSpace + _classNameTextInherit);
+                    } 
+                    else {
+                        _hostElement = _targetElement;
+                        _hostElement.wrapInner(generateDiv(_classNameContentElement))
+                            .wrapInner(generateDiv(_classNameViewportElement))
+                            .wrapInner(generateDiv(_classNamePaddingElement));
+                        _contentElement = findFirst(_hostElement, _strDot + _classNameContentElement);
+                        _viewportElement = findFirst(_hostElement, _strDot + _classNameViewportElement);
+                        _paddingElement = findFirst(_hostElement, _strDot + _classNamePaddingElement);
+
+                        addClass(_targetElement, _classNameHostElement);
+                    }
+                    
+                    if (_nativeScrollbarStyling)
+                        addClass(_viewportElement, _nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y ? _classNameViewportNativeScrollbarsOverlaid : _classNameViewportNativeScrollbarsInvisible);
+                    if (_isBody)
+                        addClass(_htmlElement, _classNameHTMLElement);
+                    
+                    _sizeObserverElement = FRAMEWORK(generateDiv('os-resize-observer-host'));
+                    _hostElement.prepend(_sizeObserverElement);
+                }
+                
+                /**
+                 * Initializes all wrapper elements interactivity.
+                 */
+                function setStructureInteractivity(destroy) {
+                    var textareaKeyDownRestrictedKeyCodes = [
+                        112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 123,    //F1 to F12
+                        33, 34,                                                   //page up, page down
+                        37, 38, 39, 40,                                           //left, up, right, down arrows
+                        16, 17, 18, 19, 20, 144                                   //Shift, Ctrl, Alt, Pause, CapsLock, NumLock
+                    ];
+                    var textareaKeyDownKeyCodesList = [ ];
+                    var textareaUpdateIntervalID;
+                    var scrollStopDelay = 175;
+                    var scrollStopTimeoutId;
+                    var strOnOff = destroy ? 'off' : 'on';
+                    
+                    if(!destroy && _isTextarea) {
+                        function updateTextarea(doClearInterval) {
+                            textareaUpdate();
+                            _base.update(_strAuto);
+                            if(doClearInterval)
+                                clearInterval(textareaUpdateIntervalID);
+                        }
+                        _textareaEvents[_strScroll] = function(event) {
+                            _targetElement[_strScrollLeft](_rtlScrollBehavior.i && _normalizeRTLCache ? 9999999 : 0);
+                            _targetElement[_strScrollTop](0);
+                            COMPATIBILITY.prvD(event);
+                            COMPATIBILITY.stpP(event);
+                            return false;
+                        }
+                        _textareaEvents['drop'] = function() {
+                            setTimeout(function () {
+                                if(!_destroyed)
+                                    updateTextarea();
+                            }, 50);
+                        }
+                        _textareaEvents['focus'] = function() { 
+                            _textareaHasFocus = true; 
+                        }
+                        _textareaEvents['focusout'] = function() {
+                            _textareaHasFocus = false;
+                            textareaKeyDownKeyCodesList = [ ];
+                            updateTextarea(true);
+                        }
+                        if (_msieVersion > 9 || !_autoUpdateRecommended) {
+                            _textareaEvents['input'] = function textareaOnInput() {
+                                updateTextarea();
+                            }
+                        }
+                        else {
+                            _textareaEvents[_strKeyDownEvent] = function textareaOnKeyDown(event) {
+                                var keyCode = event.keyCode;
+                                if (FRAMEWORK.inArray(keyCode, textareaKeyDownRestrictedKeyCodes) > -1)
+                                    return;
+                                if (!textareaKeyDownKeyCodesList.length) {
+                                    updateTextarea();
+                                    textareaUpdateIntervalID = setInterval(updateTextarea, 1000 / 60);
+                                }
+                                if (FRAMEWORK.inArray(keyCode, textareaKeyDownKeyCodesList) === -1)
+                                    textareaKeyDownKeyCodesList.push(keyCode);
+                            }
+                            _textareaEvents[_strKeyUpEvent] = function(event) {
+                                var keyCode = event.keyCode;
+                                var index = FRAMEWORK.inArray(keyCode, textareaKeyDownKeyCodesList);
+                                
+                                if (FRAMEWORK.inArray(keyCode, textareaKeyDownRestrictedKeyCodes) > -1)
+                                    return;
+                                if (index > -1)
+                                    textareaKeyDownKeyCodesList.splice(index, 1);
+                                if (!textareaKeyDownKeyCodesList.length)
+                                    updateTextarea(true);
+                            }
+                        }
+                    }
+                    
+                    if (_isTextarea) {
+                        FRAMEWORK.each(_textareaEvents, function(key, value) {
+                            _targetElement[strOnOff](key, value);
+                        });
+                    } 
+                    else {
+                        _contentElement[strOnOff](_strTransitionEndEvent, function (event) {
+                            if (_autoUpdateCache === true)
+                                return;
+                            event = event.originalEvent || event;
+                            if (isSizeAffectingCSSProperty(event.propertyName))
+                                update(_strAuto);
+                        });
+                    }
+                    
+                    if(!destroy) {
+                        function viewportOnScroll(event) {
+                            if (_isSleeping)
+                                return;
+
+                            if (scrollStopTimeoutId !== undefined)
+                                clearTimeout(scrollStopTimeoutId);
+                            else {
+                                if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                                    refreshScrollbarsAutoHide(true);
+
+                                if (!nativeOverlayScrollbarsAreActive())
+                                    addClass(_hostElement, _classNameHostScrolling);
+
+                                callCallback("onScrollStart", event);
+                            }
+
+                            refreshScrollbarHandleOffset(true, _viewportElement[_strScrollLeft]());
+                            refreshScrollbarHandleOffset(false, _viewportElement[_strScrollTop]());
+                            callCallback("onScroll", event);
+
+                            scrollStopTimeoutId = setTimeout(function () {
+                                if(!_destroyed) {
+                                    //OnScrollStop:
+                                    clearTimeout(scrollStopTimeoutId);
+                                    scrollStopTimeoutId = undefined;
+                                    
+                                    if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                                        refreshScrollbarsAutoHide(false);
+
+                                    if (!nativeOverlayScrollbarsAreActive())
+                                        removeClass(_hostElement, _classNameHostScrolling);
+
+                                    callCallback("onScrollStop", event);
+                                }
+                            }, scrollStopDelay);
+                        }
+
+                        if (_supportPassiveEvents)
+                            addPassiveEventListener(_viewportElement, _strScroll, viewportOnScroll);
+                        else
+                            _viewportElement.on(_strScroll, viewportOnScroll);
+                    }
+                }
+
+                
+                
                 //==== Scrollbars ====//
 
                 /**
-                 * Builds all scrollbars if they aren't already build.
+                 * Builds all scrollbar DOM elements (scrollbar, track, handle)
                  */
                 function buildScrollbars() {
                     _scrollbarHorizontalElement = FRAMEWORK(generateDiv(_classNameScrollbar + _strSpace + _classNameScrollbarHorizontal));
@@ -3128,26 +3195,6 @@
 
                     _paddingElement.after(_scrollbarVerticalElement);
                     _paddingElement.after(_scrollbarHorizontalElement);
-
-                    //scrollbar events
-                    if (_supportTransition) {
-                        _scrollbarHorizontalElement.on(_strTransitionEndEvent, function (event) {
-                            if (event.target !== _scrollbarHorizontalElement[0])
-                                return;
-                            refreshScrollbarHandleLength(true);
-                            refreshScrollbarHandleOffset(true, _viewportElement[_strScrollLeft]());
-                        });
-                        _scrollbarVerticalElement.on(_strTransitionEndEvent, function (event) {
-                            if (event.target !== _scrollbarVerticalElement[0])
-                                return;
-                            refreshScrollbarHandleLength(false);
-                            refreshScrollbarHandleOffset(false, _viewportElement[_strScrollTop]());
-                        });
-                    }
-                    initScrollbarInteractivity(true);
-                    initScrollbarInteractivity(false);
-                    _scrollbarCornerElement = FRAMEWORK(generateDiv(_classNameScrollbarCorner));
-                    _hostElement.append(_scrollbarCornerElement);
                 }
 
                 /**
@@ -3183,27 +3230,26 @@
                     function onMouseTouchDownContinue(event) {
                         var originalEvent = event.originalEvent || event;
                         var isTouchEvent = originalEvent.touches !== undefined;
-                        return _isSleeping || nativeOverlayScrollbarsAreActive() || !_scrollbarsDragScrollingCache || (isTouchEvent && !_scrollbarsTouchSupport) ? false : COMPATIBILITY.mBtn(event) === 1 || isTouchEvent;
+                        return _isSleeping || _destroyed || nativeOverlayScrollbarsAreActive() || !_scrollbarsDragScrollingCache || (isTouchEvent && !_scrollbarsTouchSupport) ? false : COMPATIBILITY.mBtn(event) === 1 || isTouchEvent;
                     };
-                    function handleDragMove(event) {
-                        if(!onMouseTouchDownContinue(event)) {
-                            documentMouseTouchUp(event);
-                            return;
-                        }
-                            
-                        var trackLength = scrollbarVars.i.tl;
-                        var handleLength = scrollbarVars.i.hl;
-                        var scrollRange = scrollbarVars.i.ms;
-                        var scrollRaw = (_msieVersion && insideIFrame ? event['screen' + XY] : COMPATIBILITY.page(event)[xy]) - mouseDownOffset; //use screen coordinates in EDGE & IE because the page values are incorrect in frames.
-                        var scrollDeltaPercent = scrollRaw / (trackLength - handleLength);
-                        var scrollDelta = (scrollRange * scrollDeltaPercent);
-                        scrollDelta = isFinite(scrollDelta) ? scrollDelta : 0;
-                        if (_isRTL && isHorizontal && !_rtlScrollBehavior.i)
-                            scrollDelta *= -1;
-                        _viewportElement[scroll](mouseDownScroll + scrollDelta);
+                    function documentDragMove(event) {
+                        if(onMouseTouchDownContinue(event)) {
+                            var trackLength = scrollbarVars.i.tl;
+                            var handleLength = scrollbarVars.i.hl;
+                            var scrollRange = scrollbarVars.i.ms;
+                            var scrollRaw = (_msieVersion && insideIFrame ? event['screen' + XY] : COMPATIBILITY.page(event)[xy]) - mouseDownOffset; //use screen coordinates in EDGE & IE because the page values are incorrect in frames.
+                            var scrollDeltaPercent = scrollRaw / (trackLength - handleLength);
+                            var scrollDelta = (scrollRange * scrollDeltaPercent);
+                            scrollDelta = isFinite(scrollDelta) ? scrollDelta : 0;
+                            if (_isRTL && isHorizontal && !_rtlScrollBehavior.i)
+                                scrollDelta *= -1;
+                            _viewportElement[scroll](mouseDownScroll + scrollDelta);
 
-                        if (!_supportPassiveEvents)
-                            COMPATIBILITY.prvD(event);
+                            if (!_supportPassiveEvents)
+                                COMPATIBILITY.prvD(event);
+                        }
+                        else
+                            documentMouseTouchUp(event);
                     };
                     function documentMouseTouchUp(event) {
                         event = event || event.originalEvent;
@@ -3213,7 +3259,7 @@
                         removeClass(scrollbarVars.t, strActive);
                         removeClass(scrollbarVars.s, strActive);
 
-                        _documentElement.off(_strMouseTouchMoveEvent, handleDragMove)
+                        _documentElement.off(_strMouseTouchMoveEvent, documentDragMove)
                             .off(_strMouseTouchUpEvent, documentMouseTouchUp)
                             .off(_strKeyDownEvent, documentKeyDown)
                             .off(_strKeyUpEvent, documentKeyUp)
@@ -3249,7 +3295,7 @@
                         addClass(scrollbarVars.h, strActive);
                         addClass(scrollbarVars.s, strActive);
 
-                        _documentElement.on(_strMouseTouchMoveEvent, handleDragMove)
+                        _documentElement.on(_strMouseTouchMoveEvent, documentDragMove)
                             .on(_strMouseTouchUpEvent, documentMouseTouchUp)
                             .on(_strSelectStartEvent, documentOnSelectStart);
 
@@ -3350,6 +3396,14 @@
                     scrollbarVars.s.on(_strMouseTouchDownEvent, function(event) {
                         COMPATIBILITY.stpP(event);
                     });
+                    if (_supportTransition) {
+                        scrollbarVars.s.on(_strTransitionEndEvent, function(event) {
+                            if (event.target !== scrollbarVars.s[0])
+                                return;
+                            refreshScrollbarHandleLength(isHorizontal);
+                            refreshScrollbarHandleOffset(isHorizontal, _viewportElement[scroll]());
+                        });
+                    }
                 }
 
                 /**
@@ -3440,7 +3494,7 @@
                     //measure the handle length to respect min & max length
                     //DONT use the variable '_contentScrollSizeCache[scrollbarVars._wh]' instead of '_viewportElement[0]['scroll' + scrollbarVars.WH]'
                     // because its a bit behind during the small delay when content size updates
-                    //(delay = _mutationObserverContentLag, if its 0 then this var could be used)
+                    //(delay = mutationObserverContentLag, if its 0 then this var could be used)
                     var maxScroll = _viewportElement[0][_strScroll + scrollbarVars.WH] - _viewportElement[0]['client' + scrollbarVars.WH];
                     var handleLength = scrollbarVars.i.hl;
                     var trackLength = scrollbarVars.t[0]['offset' + scrollbarVars.WH];
@@ -3524,7 +3578,93 @@
                     };
                 }
 
+                
+                //==== Scrollbar Corner ====//
+                
+                /**
+                 * Builds the scrollbar corner DOM element.
+                 */
+                function buildScrollbarCorner() {
+                     _scrollbarCornerElement = FRAMEWORK(generateDiv(_classNameScrollbarCorner));
+                    _hostElement.append(_scrollbarCornerElement);
+                 }
+                
+                /**
+                 * Initializes all scrollbar corner interactivity.
+                 */
+                function initScrollbarCornerInteractivity() {
+                    var insideIFrame = _windowElement.top !== _windowElement;
+                    var resizeDragStartPosition = { };              
+                    var resizeDragStartSize = { };
+                    
+                    _resizeOnMouseTouchDown = function(event) {
+                        if (onMouseTouchDownContinue(event)) {
+                            if (_mutationObserverConnected) {
+                                _resizeReconnectMutationObserver = true;
+                                disconnectMutationObservers();
+                            }
 
+                            resizeDragStartPosition = getCoordinates(event);
+
+                            resizeDragStartSize.w = _hostElement[0][LEXICON.oW] - (!_isBorderBox ? _paddingX : 0);
+                            resizeDragStartSize.h = _hostElement[0][LEXICON.oH] - (!_isBorderBox ? _paddingY : 0);
+
+                            _documentElement.on(_strSelectStartEvent, documentOnSelectStart)
+                                .on(_strMouseTouchMoveEvent, documentDragMove)
+                                .on(_strMouseTouchUpEvent, documentMouseTouchUp);
+
+                            addClass(_bodyElement, _classNameDragging);
+                            if (_scrollbarCornerElement.setCapture)
+                                _scrollbarCornerElement.setCapture();
+
+                            COMPATIBILITY.prvD(event);
+                            COMPATIBILITY.stpP(event);
+                        }
+                    }
+                    function documentDragMove(event) {
+                        if (onMouseTouchDownContinue(event)) {
+                            var pageOffset = getCoordinates(event);
+                            var hostElementCSS = { };
+                            if (_resizeHorizontal || _resizeBoth)
+                                hostElementCSS[_strWidth] = (resizeDragStartSize.w + pageOffset.x - resizeDragStartPosition.x);
+                            if (_resizeVertical || _resizeBoth)
+                                hostElementCSS[_strHeight] = (resizeDragStartSize.h + pageOffset.y - resizeDragStartPosition.y);
+                            _hostElement.css(hostElementCSS);
+                            COMPATIBILITY.stpP(event);
+                        }
+                        else {
+                            documentMouseTouchUp(event);
+                        }
+                    }
+                    function documentMouseTouchUp(event) {
+                        var eventIsTrusted = event !== undefined;
+
+                        _documentElement.off(_strSelectStartEvent, documentOnSelectStart)
+                            .off(_strMouseTouchMoveEvent, documentDragMove)
+                            .off(_strMouseTouchUpEvent, documentMouseTouchUp);
+
+                        removeClass(_bodyElement, _classNameDragging);
+                        if (_scrollbarCornerElement.releaseCapture)
+                            _scrollbarCornerElement.releaseCapture();
+
+                        if (eventIsTrusted) {
+                            if (_resizeReconnectMutationObserver)
+                                connectMutationObservers();
+                            _base.update(_strAuto);
+                        }
+                        _resizeReconnectMutationObserver = false;
+                    }
+                    function onMouseTouchDownContinue(event) {
+                        var originalEvent = event.originalEvent || event;
+                        var isTouchEvent = originalEvent.touches !== undefined;
+                        return _isSleeping || _destroyed ? false : COMPATIBILITY.mBtn(event) === 1 || isTouchEvent;
+                    };
+                    function getCoordinates(event) {
+                        return _msieVersion && insideIFrame ? { x : event.screenX , y : event.screenY } : COMPATIBILITY.page(event);
+                    }
+                }
+
+                
                 //==== Utils ====//
 
                 /**
@@ -3618,7 +3758,6 @@
                     return isNaN(num) ? 0 : num;
                 }
                 
-
                 /**
                  * Gets several information of the textarea and returns them as a object or undefined if the browser doesn't support it.
                  * @returns {{cursorRow: Number, cursorCol, rows: Number, cols: number, wRow: number, pos: number, max : number}} or undefined if not supported.
@@ -3660,19 +3799,6 @@
                         p: textareaCursorPosition, //pos
                         m: textareaLength //max
                     };
-                }
-
-                /**
-                 * Checks the given key code and returns a boolean which is indicating if the given key code is a restricted one.
-                 * @param keyCode The key code which shall be checked.
-                 * @returns {boolean} True if the given key code is restricted, false otherwise.
-                 */
-                function textareaIsRestrictedKeyCode(keyCode) {
-                    for (var i = 0; i < _textareaKeyDownRestrictedKeyCodes.length; i++) {
-                        if (keyCode === _textareaKeyDownRestrictedKeyCodes[i])
-                            return true;
-                    }
-                    return false;
                 }
 
                 /**
@@ -3752,6 +3878,7 @@
                     FRAMEWORK.extend(obj, extendObjRoot, true);
                 }
 
+                
                 //==== Utils Cache ====//
 
                 /**
@@ -3815,7 +3942,7 @@
                     return false;
                 }
 
-
+                
                 //==== Shortcuts ====//
 
                 /**
@@ -3948,7 +4075,7 @@
                     _destroyed = true;
 
                     autoUpdateLoop.remove(_base);
-                    mutationObserversDisconnect();
+                    disconnectMutationObservers();
                     removeResizeObserver(_sizeObserverElement);
                     if (_sizeAutoObserverAdded)
                         removeResizeObserver(_sizeAutoObserverElement);
@@ -3964,23 +4091,13 @@
                     if (_sizeAutoObserverAdded)
                         remove(_sizeAutoObserverElement);
 
-                    if (_supportPassiveEvents) {
-                        removePassiveEventListener(_hostElement, _strMouseTouchMoveEvent, hostOnMouseMove);
-                        removePassiveEventListener(_hostElement, _strMouseTouchEnter, hostOnMouseEnter);
-                        removePassiveEventListener(_hostElement, _strMouseTouchLeave, hostOnMouseLeave);
-                    }
-                    else {
-                        _hostElement.off(_strMouseTouchMoveEvent, hostOnMouseMove)
-                            .off(_strMouseTouchEnter, hostOnMouseEnter)
-                            .off(_strMouseTouchLeave, hostOnMouseLeave);
-                    }
+                    setStructureInteractivity(true);
+                    hostRemoveMouseTouchEvents();
 
                     remove(_scrollbarHorizontalElement);
                     remove(_scrollbarVerticalElement);
                     if(_scrollbarCornerElement)
                         remove(_scrollbarCornerElement);
-                    if (!_resizeNone)
-                        scrollbarCornerOnResized();
 
                     _contentElement.contents()
                         .unwrap()
@@ -3990,19 +4107,7 @@
                     if (_isBody)
                         removeClass(_htmlElement, _classNameHTMLElement);
 
-
                     if (_isTextarea) {
-                        _targetElement.off(_strScroll, textareaOnScroll)
-                            .off('drop', textareaOnDrop)
-                            .off('focus', textareaOnFocus)
-                            .off('focusout', textareaOnFocusOut);
-                        if (_msieVersion > 9 || !_autoUpdateRecommended)
-                            _targetElement.off('input', textareaOnInput);
-                        else {
-                            _targetElement.off(_strKeyDownEvent, textareaOnKeyDown)
-                                .off(_strKeyUpEvent, textareaOnKeyUp);
-                        }
-
                         remove(_textareaCoverElement);
                         removeClass(_targetElement, _classNameTextareaElement + _strSpace + _classNameTextInherit)
                             .unwrap()
@@ -4223,7 +4328,7 @@
                         var isRTLisX = _isRTL && isX;
                         var normalizeShortcuts = isRTLisX && _rtlScrollBehavior.n && !normalizeRTL;
                         var strReplace = 'replace';
-						var evalFunc = eval;
+                        var evalFunc = eval;
                         if (isString) {
                             //check operator
                             if (rawScroll[strLength] > 2) {
@@ -4695,161 +4800,27 @@
                         initBodyScroll.t = MATH.max(_targetElement[_strScrollTop](), _htmlElement[_strScrollTop](), _windowElement[_strScrollTop]());
                     }
 
-                    //build Hide-scrollbars DOM
-                    if (_isTextarea) {
-                        _targetElement.wrap(generateDiv(_classNameHostTextareaElement));
-                        addClass(_targetElement, _classNameTextareaElement + _strSpace + _classNameTextInherit);
-                        _hostElement = _targetElement.parent();
-                        var hostElementCSS = {};
-                        if (!_currentPreparedOptions.sizeAutoCapable) {
-                            hostElementCSS[_strWidth] = _targetElement.css(_strWidth);
-                            hostElementCSS[_strHeight] = _targetElement.css(_strHeight);
-                        }
-                        _hostElement.css(hostElementCSS)
-                            .wrapInner(generateDiv(_classNameContentElement + _strSpace + _classNameTextInherit))
-                            .wrapInner(generateDiv(_classNameViewportElement + _strSpace + _classNameTextInherit))
-                            .wrapInner(generateDiv(_classNamePaddingElement + _strSpace + _classNameTextInherit));
-                        _contentElement = findFirst(_hostElement, _strDot + _classNameContentElement);
-                        _viewportElement = findFirst(_hostElement, _strDot + _classNameViewportElement);
-                        _paddingElement = findFirst(_hostElement, _strDot + _classNamePaddingElement);
-                        _textareaCoverElement = FRAMEWORK(generateDiv(_classNameTextareaCoverElement));
-                        _contentElement.prepend(_textareaCoverElement);
+                    //build OverlayScrollbars DOM and Events
+                    buildStructure();
+                    setStructureInteractivity();
 
-                        _targetElement.on(_strScroll, textareaOnScroll)
-                            .on('drop', textareaOnDrop)
-                            .on('focus', textareaOnFocus)
-                            .on('focusout', textareaOnFocusOut);
-                        if (_msieVersion > 9 || !_autoUpdateRecommended) {
-                            _targetElement.on('input', textareaOnInput);
-                        }
-                        else {
-                            _targetElement.on(_strKeyDownEvent, textareaOnKeyDown)
-                                .on(_strKeyUpEvent, textareaOnKeyUp);
-                        }
-                    } else {
-                        addClass(_targetElement, _classNameHostElement);
-                        _hostElement = _targetElement;
-                        _hostElement.wrapInner(generateDiv(_classNameContentElement))
-                            .wrapInner(generateDiv(_classNameViewportElement))
-                            .wrapInner(generateDiv(_classNamePaddingElement));
-                        _contentElement = findFirst(_hostElement, _strDot + _classNameContentElement);
-                        _viewportElement = findFirst(_hostElement, _strDot + _classNameViewportElement);
-                        _paddingElement = findFirst(_hostElement, _strDot + _classNamePaddingElement);
-
-                        //add transitionend event
-                        _contentElement.on(_strTransitionEndEvent, function (event) {
-                            if (_autoUpdateCache === true)
-                                return;
-                            event = event.originalEvent || event;
-                            if (isSizeAffectingCSSProperty(event.propertyName))
-                                update(_strAuto);
-                        });
-                    }
-
+                    //build Scrollbars DOM and Events
                     buildScrollbars();
+                    initScrollbarInteractivity(true);
+                    initScrollbarInteractivity(false);
+                    
+                    //build Scrollbar Corner DOM and Events
+                    buildScrollbarCorner();
+                    initScrollbarCornerInteractivity();
 
-                    //add scroll event
-                    if (_supportPassiveEvents)
-                        addPassiveEventListener(_viewportElement, _strScroll, viewportOnScroll);
-                    else
-                        _viewportElement.on(_strScroll, viewportOnScroll);
+                    //create mutation observers
+                    createMutationObservers();
 
-                    if (_nativeScrollbarStyling)
-                        addClass(_viewportElement, _nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y ? _classNameViewportNativeScrollbarsOverlaid : _classNameViewportNativeScrollbarsInvisible);
-
-                    //build mutation observers
-                    if (_supportMutationObserver) {
-                        var mutationObserver = COMPATIBILITY.mO();
-                        var contentLastUpdate = COMPATIBILITY.now();
-                        var mutationTarget;
-                        var mutationAttrName;
-                        var contentTimeout;
-                        var now;
-                        var sizeAuto;
-                        var action;
-
-                        _mutationObserverHost = new mutationObserver(function (mutations) {
-                            if (!_initialized || _isSleeping)
-                                return;
-
-                            var doUpdate = false;
-                            //var doUpdateScrollbars = false;
-                            var mutation;
-                            FRAMEWORK.each(mutations, function () {
-                                mutation = this;
-                                mutationTarget = mutation.target;
-                                mutationAttrName = mutation.attributeName;
-
-                                if (mutationAttrName === LEXICON.c)
-                                    doUpdate = hostClassNamesChanged(mutation.oldValue, mutationTarget.className);
-                                else if (mutationAttrName === LEXICON.s)
-                                    doUpdate = mutation.oldValue !== mutationTarget[LEXICON.s].cssText;
-                                else
-                                    doUpdate = true;
-
-                                if (doUpdate)
-                                    return false;
-                            });
-
-                            if (doUpdate)
-                                _base.update(_strAuto);
-                            /*
-                            if(doUpdateScrollbars) {
-                                refreshScrollbarHandleLength(true);
-                                refreshScrollbarHandleOffset(true, _scrollHorizontalInfo.cs);
-                                refreshScrollbarHandleLength(false);
-                                refreshScrollbarHandleOffset(false, _scrollVerticalInfo.cs);
-                            }
-                            */
-                        });
-                        _mutationObserverContent = new mutationObserver(function (mutations) {
-                            if (!_initialized || _isSleeping)
-                                return;
-
-                            var doUpdate = false;
-                            var mutation;
-                            FRAMEWORK.each(mutations, function () {
-                                mutation = this;
-                                doUpdate = isUnknownMutation(mutation);
-                                return !doUpdate;
-                            });
-
-                            if (doUpdate) {
-                                now = COMPATIBILITY.now();
-                                sizeAuto = (_heightAutoCache || _widthAutoCache);
-                                action = function () {
-                                    if(!_destroyed) {
-                                        contentLastUpdate = now;
-
-                                        //if cols, rows or wrap attr was changed
-                                        if (_isTextarea)
-                                            textareaUpdate();
-
-                                        if (sizeAuto)
-                                            update();
-                                        else
-                                            _base.update(_strAuto);
-                                    }
-                                };
-                                clearTimeout(contentTimeout);
-                                if (_mutationObserverContentLag <= 0 || now - contentLastUpdate > _mutationObserverContentLag || !sizeAuto)
-                                    action();
-                                else
-                                    contentTimeout = setTimeout(action, _mutationObserverContentLag);
-                            }
-                        });
-                    }
-
+                    //apply the body scroll to handle it right in the update method
+                    if(_isBody)
+                        _viewportElement[_strScrollLeft](initBodyScroll.l)[_strScrollTop](initBodyScroll.t);
+                    
                     //build resize observer for the host element
-                    if (_isBody) {
-                        addClass(_htmlElement, _classNameHTMLElement);
-
-                        //apply the body scroll to handle it right in the update method
-                        _viewportElement[_strScrollLeft](initBodyScroll.l);
-                        _viewportElement[_strScrollTop](initBodyScroll.t);
-                    }
-                    _sizeObserverElement = FRAMEWORK(generateDiv('os-resize-observer-host'));
-                    _hostElement.prepend(_sizeObserverElement);
                     addResizeObserver(_sizeObserverElement, hostOnResized);
 
                     //update for the first time
