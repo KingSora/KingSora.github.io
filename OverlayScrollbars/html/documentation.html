@@ -138,8 +138,9 @@
 		touchSupport     : true
 	},
 	textarea : {
-		dynWidth  : false,
-		dynHeight : false
+		dynWidth       : false,
+		dynHeight      : false,
+		inheritedAttrs : ["style", "class"]
 	},
 	callbacks : {
 		onInitialized               : null,
@@ -747,6 +748,39 @@
 									</div>
 								</td>
 							</tr>
+							<tr>
+								<td>inheritedAttrs</td>
+								<td>string / array / null</td>
+								<td>-</td>
+								<td>["style", "class"]</td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									<div>
+										<code class="code-inline">added in v1.6.0</code><br>
+										You can pass a array of strings which represents attribute names: <code class="code-inline js">["style", "class"]</code><br>
+										or a string where you separate multiple attributes with a whitespace: <code class="code-inline js">"style class"</code><br>
+										or <code class="code-inline js">null</code> which represents a empty array, a empty string or simply no attributes.<br>
+										<br>
+										<b>During initialization:</b> Attributes which the generated host-element shall inherit from from the target textarea-element.<br>
+										<b>During destruction:</b> Attributes which the target textarea-element shall inherit from from the generated host-element.<br>
+										<br>
+										This option was created to increase the control over the styling of textarea instances, but you can use it for any kind of attributes.<br>
+										<br>
+										Let's say you initialize the plugin to: <code class="code-inline html">&lt;textarea class=&quot;foo bar&quot; style=&quot;background: red;&quot;&gt;&lt;/textarea&gt;</code> 
+										and the inheritedAttrs are <code class="code-inline js">["style", "class"]</code>. Then the resulting generated DOM structure will look like this:
+										<pre><code class="html code-noscroll">&lt;!-- the host-element --&gt;
+&lt;div class=&quot;foo bar os-host-textarea ...&quot; style=&quot;background: red;&quot;&gt;
+    &lt;!-- ... --&gt;
+    &lt;textarea class=&quot;foo bar&quot style=&quot;background: red;&quot;&gt;&lt;/textarea&gt;
+    &lt;!-- ... --&gt;
+&lt;/div&gt;</code></pre>
+										
+										If the inheritedAttrs would be <code class="code-inline js">null</code> then the host-element wouldn't have the style and the class attributes of the textarea element. 
+										This was the default behavior before this option was introduced.
+									</div>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 					<p>}</p>
@@ -1004,7 +1038,7 @@
 											Structure:
 											<pre><code class="json code-noscroll">eventArgs : {
 	isRTL : <span class="txtc-secondary-color">boolean</span>,
-	dir   : <span class="txtc-secondary-color">number</span>
+	dir   : <span class="txtc-secondary-color">string</span>
 }</code></pre>
 											Description:
 											<div class="plainobjectproperty-documentation-box">
@@ -1188,10 +1222,9 @@ body.os-host > .os-padding > .os-viewport > .os-content-arrange {
 				<div class="txtbox txtbox-yellow">
 					<i class="mdi mdi-information-outline"></i>
 					<span>
-						Because of this wrapping <b>you have to redefine the styles of your textarea element</b>.<br>
-						The plugin offers the selector <code class="code-inline css">.os-host-textarea</code> which acts a the new selector for textarea styling.<br>
-						<b>Please use this selector</b> if you want to style textareas, to which the plugin is applied, in general.<br>
-						<b>For individual styling</b> use the <code class="code-inline js">className</code> option, to give your textarea individual class name(s).<br>
+						Because of this wrapping <b>you might have to redefine the styles of your textarea element</b>.<br>
+						The plugin offers the basic selector <code class="code-inline css">.os-host-textarea</code>, every textarea-host-element has this class applied.<br>
+						<b>For individual styling</b> use the <code class="code-inline js">inheritedAttrs</code> or <code class="code-inline js">className</code> options, to give your textarea individual classes or styles.<br>
 					</span>
 				</div>
 				
@@ -1304,6 +1337,21 @@ for(var i = 0; i < instances.length; i++) {
     //do something with the instance
 }
 </code></pre>
+				Since <code class="code-inline">v1.6.0</code> you can pass a custom filtering function.<br>
+				This function has to return a boolean and takes two arguments:<br>
+				The first argument is called <b>element</b>. This is the current <b>HTMLElement</b> which gets checked.<br>
+				The second argument is called <b>instance</b>. This is the <b>OverlayScrollbars instance</b> of the current element which gets checked.<br>
+<pre><code class="js">//returns a array with all instances which are not undefined and applied to a div-tag-element
+var instances = OverlayScrollbars(document.querySelectorAll("*"), 
+    function(element, instance) { 
+        return element.tagName === 'DIV' && instance !== undefined;
+    }
+); 
+
+for(var i = 0; i < instances.length; i++) {
+    //do something with the instance
+}
+</code></pre>
 				
 				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
 				The <b>initialization with extensions</b> provides a possibility to initialize your instance with one or multiple extensions.<br>
@@ -1394,6 +1442,19 @@ var instances = $("*").overlayScrollbars("!");
 $.each(instances, function(index, instance) {
     //do domething with the instance
 });
+</code></pre>
+				Since <code class="code-inline">v1.6.0</code> you can pass a custom filtering function.<br>
+				This function has to return a boolean and takes two arguments:<br>
+				The first argument is called <b>element</b>. This is the current <b>HTMLElement</b> which gets checked.<br>
+				The second argument is called <b>instance</b>. This is the <b>OverlayScrollbars instance</b> of the current element which gets checked.<br>
+<pre><code class="js">//returns a array with all instances which are not undefined and applied to a div-tag-element
+var instances = $("*").overlayScrollbars(function(element, instance) { 
+    return element.tagName === 'DIV' && instance !== undefined;
+}); 
+
+for(var i = 0; i < instances.length; i++) {
+    //do something with the instance
+}
 </code></pre>
 
 				<div class="content-navigation-sub-caption">Initialize with Extensions <code class="code-inline">added in v1.5.0</code></div>
@@ -1635,6 +1696,173 @@ instance.sleep();
 									<div class="expander-content" data-expander-value="getScrollPlainObjectDocumentation">
 										Structure:
 										<pre><code class="json">{
+	position : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	ratio : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	max : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	handleOffset : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	handleLength : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	handleLengthRatio : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	trackLength : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
+	isRTL           : <span class="txtc-secondary-color">boolean</span>,
+	isRTLNormalized : <span class="txtc-secondary-color">boolean</span>
+}</code></pre>
+										Description:
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												position.x
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The current x-axis scroll position in pixel. (scrollLeft equivalent)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												position.y
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The current y-axis scroll position in pixel. (scrollTop equivalent)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												ratio.x
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The current x-axis scroll position in percent. (Number between 0 and 1)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												ratio.y
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The current y-axis scroll position in percent. (Number between 0 and 1)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												max.x            
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The max scroll position of the x-axis in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												max.y               
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The max scroll position of the y-axis in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleOffset.x                
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle offset of the horizontal scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleOffset.y                   
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle offset of the vertical scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleLength.x                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle length of the horizontal scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleLength.y                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle length of the vertical scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleLengthRatio.x                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle length of the horizontal scrollbar in percent. (Number between 0 and 1)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												handleLengthRatio.y                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The handle length of the vertical scrollbar in percent. (Number between 0 and 1)
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												trackLength.x                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The track length of the horizontal scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												trackLength.y                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												The track length of the vertical scrollbar in pixel.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												isRTL                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												Indicates whether the values are rtl values.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												isRTLNormalized                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												Indicates whether rtl values are normalized.
+											</div>
+										</div>
+										<div class="expander-header" data-expander-key="deprecatedScrollReturn">
+											<i class="mdi mdi-chevron-down"></i>
+											<span><code class="code-inline">deprecated since v1.6.0</code></span>
+										</div>
+										<div class="expander-content" data-expander-value="deprecatedScrollReturn">
+											Structure:
+											<pre><code class="json">{
 	x : {
 		position          : <span class="txtc-secondary-color">number</span>,
 		ratio             : <span class="txtc-secondary-color">number</span>,
@@ -1656,133 +1884,134 @@ instance.sleep();
 		trackLength       : <span class="txtc-secondary-color">number</span> 
 	}
 }</code></pre>
-										Description:
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.position
+											Description:
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.position
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The current x-axis scroll position in pixel. (scrollLeft equivalent)
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The current x-axis scroll position in pixel. (scrollLeft equivalent)
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.ratio
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The current x-axis scroll position in percent. (Number between 0 and 1)
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.ratio
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.max               
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The max scroll position of the x-axis in pixel.
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The current x-axis scroll position in percent. (Number between 0 and 1)
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.handleOffset                     
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle offset of the horizontal scrollbar in pixel.
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.max               
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.handleLength                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle length of the horizontal scrollbar in pixel.
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The max scroll position of the x-axis in pixel.
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.handleLengthRatio                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle length of the horizontal scrollbar in percent. (Number between 0 and 1)
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.handleOffset                     
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.trackLength                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The track length of the horizontal scrollbar in pixel.
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle offset of the horizontal scrollbar in pixel.
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.isRTL                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													Indicates whether the values are rtl values.
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.handleLength                           
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													x.isRTLNormalized                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													Indicates whether rtl values are normalized.
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle length of the horizontal scrollbar in pixel.
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.position
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The current y-axis scroll position in pixel. (scrollTop equivalent)
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.handleLengthRatio                           
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.ratio
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The current y-axis scroll position in percent. (Number between 0 and 1)
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle length of the horizontal scrollbar in percent. (Number between 0 and 1)
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.max               
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The max scroll position of the y-axis in pixel.
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.trackLength                           
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.handleOffset                     
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle offset of the vertical scrollbar in pixel.
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The track length of the horizontal scrollbar in pixel.
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.handleLength                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle length of the vertical scrollbar in pixel.
+												</div>
 											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.isRTL                           
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.handleLengthRatio                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The handle length of the vertical scrollbar in percent. (Number between 0 and 1)
+												</div>
 											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												Indicates whether the values are rtl values.
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												x.isRTLNormalized                           
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												Indicates whether rtl values are normalized.
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.position
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The current y-axis scroll position in pixel. (scrollTop equivalent)
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.ratio
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The current y-axis scroll position in percent. (Number between 0 and 1)
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.max               
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The max scroll position of the y-axis in pixel.
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.handleOffset                     
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle offset of the vertical scrollbar in pixel.
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.handleLength                           
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle length of the vertical scrollbar in pixel.
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.handleLengthRatio                           
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The handle length of the vertical scrollbar in percent. (Number between 0 and 1)
-											</div>
-										</div>
-										<div class="plainobjectproperty-documentation-box">
-											<div class="plainobjectproperty-documentation-box-title">
-												y.trackLength                           
-											</div>
-											<div class="plainobjectproperty-documentation-box-content">
-												The track length of the vertical scrollbar in pixel.
+											<div class="plainobjectproperty-documentation-box">
+												<div class="plainobjectproperty-documentation-box-title">
+													y.trackLength                           
+												</div>
+												<div class="plainobjectproperty-documentation-box-content">
+													The track length of the vertical scrollbar in pixel.
+												</div>
 											</div>
 										</div>
 									</div>
@@ -2189,7 +2418,7 @@ instance.scroll({ y : "-= 50px"  });
 												<b>This property is deprecated. Please use the new "scroll" property instead!</b>
 												<div class="expander-header" data-expander-key="method-scroll-axis">
 													<i class="mdi mdi-chevron-down"></i>
-													<span>Old documentation</span>
+													<span>Old documentation:</span>
 												</div>
 												<div class="expander-content" data-expander-value="method-scroll-axis">
 													The axis which shall be scrolled. The Default value is <span class="txtc-primary-color">"xy"</span>.<br>
@@ -2241,11 +2470,14 @@ instance.scroll({ y : "-= 50px"  });
 							</div>
 							<div class="method-documentation-box-description-param">
 								<p>easing</p>
-								<p>Type: string | stringArray</p>
+								<p>Type: string | array | object</p>
 								<div>
 									The easing of the scroll-animation.<br>
-                                    A single string represents the easing for both axis.<br>
-                                    If you pass a string array, the first entry is the easing for the x axis and the second entry is the easing for the y axis.<br>
+                                    A single <b>string</b> represents the easing for both axis.<br>
+                                    If you pass a <b>array</b>, the first entry is the easing for the x axis and the second entry is the easing for the y axis.<br>
+                                    <br>
+									<code class="code-inline">added in v1.6.0</code><br>
+									If you pass a <b>object</b>, the x property represents the easing for the x axis and the y property represents the easing for the y axis.<br>
                                     If undefined the easing is "swing".
 								</div>
 							</div>
@@ -2269,13 +2501,13 @@ instance.scroll({ x : "50%", y : "50%" }, 1000);
 instance.scroll([ 0, "100%" ], 2500);
 
 //scroll to 50% on both axis with a duration of 5500ms
-//use a "linear" easing on the x axis and a "easeOutElastic" easing on the y axis
-instance.scroll("50%", 5500, [ "linear", "easeOutElastic" ]);
+//use a "linear" easing on the x axis and a "easeOutBounce" easing on the y axis
+instance.scroll("50%", 5500, { x : "linear", y : "easeOutBounce" });
 
 //set the x-axis scroll-offset to 0 and add a calculatd value to the y-axis scroll-offset
 //with a duration of 1500ms
-//with a "easeOutElastic" easing for both axis
-instance.scroll({ x : 0, y : "+= 30% - 25px" }, 1500, "easeOutElastic");
+//with a "easeOutBounce" easing for both axis
+instance.scroll({ x : 0, y : "+= 30% - 25px" }, 1500, "easeOutBounce");
 
 //subtract 10 pixel from the current x-axis scroll-offset and set the y-axis scroll-offset to 10 pixel
 instance.scroll({ x : "-= 10px", y : 10 });
@@ -3332,7 +3564,7 @@ var globals = OverlayScrollbars.globals();</code></pre>
 				<div class="content-navigation-sub-caption">Signatures</div>
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						OverlayScrollbars.extension( extensionName, extension [, defaultOptions] )
+						OverlayScrollbars.extension( extensionName, extensionFactory [, defaultOptions] )
 					</div>
 					<div class="method-documentation-box-description">
 						Registers a extension globally to the plugin, so it can be used by instances.
@@ -3347,10 +3579,11 @@ var globals = OverlayScrollbars.globals();</code></pre>
 								</div>
 							</div>
 							<div class="method-documentation-box-description-param">
-								<p>extension</p>
+								<p>extensionFactory</p>
 								<p>Type: function</p>
 								<div>
-									A function which returns the instance of your extension.
+									A function which returns the instance of your extension.<br>
+									It takes three arguments which are described in more detail in <a class="inline-btn" data-navigation="[1]extensions-basics">this</a> section.
 								</div>
 							</div>
 							<div class="method-documentation-box-description-param">
@@ -3373,7 +3606,7 @@ OverlayScrollbars.extension("myExtension", function() { return { }; });</code></
 				
 				<div class="method-documentation-box">
 					<div class="method-documentation-box-signature">
-						OverlayScrollbars.extension( extensionName, extension )
+						OverlayScrollbars.extension( extensionName, extensionFactory )
 					</div>
 					<div class="method-documentation-box-description">
 						Unregisters a extension globally from the plugin.
@@ -3388,10 +3621,11 @@ OverlayScrollbars.extension("myExtension", function() { return { }; });</code></
 								</div>
 							</div>
 							<div class="method-documentation-box-description-param">
-								<p>extension</p>
-								<p>Type: null</p>
+								<p>extensionFactory</p>
+								<p>Type: null | undefined</p>
 								<div>
-									You can pass anything here, as long as it is no function the extension with the given name will be unregistered.
+									You can pass anything here, as long as it is no function the extension with the given name will be unregistered.<br>
+									I suggest to pass null or undefined.
 								</div>
 							</div>
 						</div>
@@ -3428,9 +3662,9 @@ OverlayScrollbars.extension("myExtension", null);</code></pre>
 									The returned plain object is just a copy, which means that changes to the returned object won't have any effect to the original object.<br><br>
 									Structure:
 									<pre><code class="json">{
-	name           : <span class="txtc-secondary-color">string</span>,
-	extension      : <span class="txtc-secondary-color hljs-no-escape">function</span>,
-	defaultOptions : <span class="txtc-secondary-color">object | undefined</span>
+	name             : <span class="txtc-secondary-color">string</span>,
+	extensionFactory : <span class="txtc-secondary-color hljs-no-escape">function</span>,
+	defaultOptions   : <span class="txtc-secondary-color">object | undefined</span>
 }</code></pre>
 									Description:
 									<div class="plainobjectproperty-documentation-box">
@@ -3443,7 +3677,7 @@ OverlayScrollbars.extension("myExtension", null);</code></pre>
 									</div>
 									<div class="plainobjectproperty-documentation-box">
 										<div class="plainobjectproperty-documentation-box-title">
-											extension
+											extensionFactory
 										</div>
 										<div class="plainobjectproperty-documentation-box-content">
 											The function which returns the instance of your extension.
@@ -3509,17 +3743,17 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 				
 				
 				<div class="content-navigation-sub-caption">Interface</div>
-				A extension is basically a function which is returning a object. This object is the instance of your extension.<br>
+				A <b>extensionFactory</b> is basically a function which is returning a object. This object is the instance of your extension.<br>
 				The most simple extension would look like this:<br>
-				<pre><code class="js code-noscroll">var extension = function() { 
-	return { };
+				<pre><code class="js code-noscroll">var extensionFactory = function() { 
+	return { }; //<- this is the actual extension
 };
 </code></pre>
 				In order to make it more simple and comfortable for developers, the function has a bunch of parameters which are making the development much more easy.
-				Furthermore the <code class="code-inline">this</code>-context of the function is the <b>OverlayScrollbars instance</b> which is trying to add the extension.
-				<pre><code class="js code-noscroll">var extension = function(defaultOptions, framework, compatibility) { 
+				Furthermore the <code class="code-inline">this</code>-context of the extensionFactory function is the <b>OverlayScrollbars instance</b> which is trying to add the extension.
+				<pre><code class="js code-noscroll">var extensionFactory = function(defaultOptions, framework, compatibility) { 
 	var osInstance = this;
-	return { };
+	return { }; //<- this is the actual extension
 };
 </code></pre>
 				<table>
@@ -3600,26 +3834,26 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 					</tbody>
 				</table>
 				A small code example:
-				<pre><code class="js code-noscroll">var extension = function(compatibility, framework, defaultOptions) { 
+				<pre><code class="js code-noscroll">var extensionFactory = function(defaultOptions, compatibility, framework) { 
 	var osInstance = this;
-	var extInstance = { };
+	var extension = { };
 	
 	//the reserved "contract" method, can't be called freely
-	extInstance.contract = function(global) { /* code... */ }
+	extension.contract = function(global) { /* code... */ }
 	
 	//the reserved "added" method, can't be called freely
-	extInstance.added = function(options) { /* code... */ };
+	extension.added = function(options) { /* code... */ };
 	
 	//the reserved "removed" method, can't be called freely
-	extInstance.removed = function() { /* code... */ };
+	extension.removed = function() { /* code... */ };
 	
 	//the reserved "on" method, can't be called freely
-	extInstance.on = function(callbackName, callbackArgs) { /* code... */ };
+	extension.on = function(callbackName, callbackArgs) { /* code... */ };
 	
 	//a custom method which can be called freely
-	extInstance.myCustomMethod = function() { /* code... */ };
+	extension.myCustomMethod = function() { /* code... */ };
 	
-	return extInstance;
+	return extension;
 };
 </code></pre>
 			
@@ -3643,12 +3877,12 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 					This extension adds a red div to the handles of the scrollbars.
 					<pre><code class="js">OverlayScrollbars.extension("myBasicExtension", function(defaultOptions, framework, compatibility) { 
 	var osInstance = this;
-	var extInstance = { };
+	var extension = { };
 	
 	var handleElmHorizontal;
 	var handleElmVertical;
 	
-	extInstance.added = function() { 
+	extension.added = function() { 
 		var instanceElements = osInstance.getElements();
 		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.handle;
 		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.handle;
@@ -3661,12 +3895,12 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 		framework(scrollbarVerticalHandle).append(handleElmVertical);
 	}
 	
-	extInstance.removed = function() { 
+	extension.removed = function() { 
 		handleElmHorizontal.remove();
 		handleElmVertical.remove();
 	}
 	
-	return extInstance;
+	return extension;
 });</code></pre>
 				
 					<div class="extensions-createextensions-examples-playground">
@@ -3710,7 +3944,7 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 					The position and size of the custom divs gets adjusted if you scroll.
 					<pre><code class="js">OverlayScrollbars.extension("myAdvancedExtension", function(defaultOptions, framework, compatibility) { 
 	var osInstance = this;
-	var extInstance = { };
+	var extension = { };
 	
 	var trackElmHorizontal;
 	var trackElmHorizontal2;
@@ -3718,7 +3952,7 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 	var trackElmVertical2;
 	
 	//add the divs after the extension has been added to a instance
-	extInstance.added = function(options) { 
+	extension.added = function(options) { 
 		//extend the defaultOptions with the passed options
 		//to determine the correct color
 		var parsedOptions = framework.extend(true, { }, defaultOptions, options); 
@@ -3753,7 +3987,7 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 	}
 	
 	//remove the divs after the extension has been removed from a instance
-	extInstance.removed = function() { 
+	extension.removed = function() { 
 		trackElmHorizontal.remove();
 		trackElmHorizontal2.remove();
 		trackElmVertical.remove();
@@ -3761,7 +3995,7 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 	}
 	
 	//hide the custom divs during scrolling
-	extInstance.on = function(callbackName, args) {
+	extension.on = function(callbackName, args) {
 		switch(callbackName) {
 			case "scroll":
 				var sX = osInstance.scroll().x;
@@ -3786,14 +4020,14 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 	}
 	
 	//a custom method which changes the colors of the added divs
-	extInstance.changeColor = function(color) {
+	extension.changeColor = function(color) {
 		trackElmHorizontal.css("background", color);
 		trackElmHorizontal2.css("background", color);
 		trackElmVertical.css("background", color);
 		trackElmVertical2.css("background", color);
 	}
 	
-	return extInstance;
+	return extension;
 }, { //defaultOptions:
 	color : "orange"
 });</code></pre>
@@ -3855,24 +4089,24 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 					This extension needs jQuery to work correctly, else it won't be added to the instance.
 					<pre><code class="js">OverlayScrollbars.extension("myDependencyExtension", function(defaultOptions, framework, compatibility) { 
 	var osInstance = this;
-	var extInstance = { };
+	var extension = { };
 	
 	//determine if jQuery is available
-	extInstance.contract = function(global) { 
+	extension.contract = function(global) { 
 		return global.jQuery && global.jQuery.fn;
 	}
 	
 	//write a message if this extension is added successfully
-	extInstance.added = function() { 
+	extension.added = function() { 
 		console.log("The dependency extension was added successfully.");
 	}
 	
 	//write a message if this extension is removed successfully
-	extInstance.removed = function() { 
+	extension.removed = function() { 
 		console.log("The dependency extension was removed successfully.");
 	}
 
-	return extInstance;
+	return extension;
 });
 </code></pre>
 				</div>

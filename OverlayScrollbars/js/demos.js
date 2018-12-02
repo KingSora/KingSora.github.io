@@ -1,4 +1,12 @@
 window._framework.defaultPagePath = 'basic';
+window._framework.onPagePathChange = function(obj) { 
+	if(!obj.isEmpty && obj.path[0] === 'callbacks') {
+		setTimeout(function() {
+			$('#callbacks-reset').trigger('click');
+		}, 50);
+	}
+};
+
 var changeTimeoutId;
 var basicDemoCodeMirror = CodeMirror(document.getElementById("basicdemo-options-codemirror"), {
 	value: "{\n\tclassName       : \"os-theme-dark\",\n\tresize          : \"both\",\n\tsizeAutoCapable : true,\n\tpaddingAbsolute : true\n}",
@@ -348,8 +356,8 @@ var plugin = window.i = $('#capabilitiesdemo-target').overlayScrollbars({
 	clipAlways : false,
 	callbacks : {
 		onScroll : function() { 
-			$('#capabilitiesdemo-native').scrollTop($('#capabilitiesdemo-target').overlayScrollbars().scroll().y.position);
-			$('#capabilitiesdemo-native').scrollLeft($('#capabilitiesdemo-target').overlayScrollbars().scroll().x.position);
+			$('#capabilitiesdemo-native').scrollTop($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.y);
+			$('#capabilitiesdemo-native').scrollLeft($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.x);
 		},
 	}
 }).overlayScrollbars();
@@ -358,8 +366,8 @@ var pluginTextarea = window.t = $('#capabilitiesdemo-target-textarea').overlaySc
 	clipAlways : false,
 	callbacks : {
 		onScroll : function() { 
-			$('#capabilitiesdemo-native-textarea').scrollTop($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().y.position);
-			$('#capabilitiesdemo-native-textarea').scrollLeft($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().x.position);
+			$('#capabilitiesdemo-native-textarea').scrollTop($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.y);
+			$('#capabilitiesdemo-native-textarea').scrollLeft($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.x);
 		},
 	}
 }).overlayScrollbars();
@@ -644,7 +652,7 @@ var textareaDemoTxt = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr,"
 "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 $('#textarea-demo-plugin').val(textareaDemoTxt);
 var textareaDemoPlugin = $('#textarea-demo-plugin').overlayScrollbars({ 
-	className : 'os-theme-dark textarea-demo-plugin',
+	className : 'os-theme-dark',
 	resize : 'both',
 }).overlayScrollbars();
 
@@ -862,7 +870,7 @@ $('#scroll-demo-easing').on('click', function() {
 });
 $('#scroll-demo-specialeasing').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;
-	scrollDemoCodeMirror.getDoc().setValue('scroll("100%", 3300, [ "linear", "easeOutBounce" ]);');
+	scrollDemoCodeMirror.getDoc().setValue('scroll("100%", 3300, { x : "linear", y : "easeOutBounce" });');
 });
 $('#scroll-demo-elementwmargin').on('click', function() {
 	scrollCodeMirrorChangeTimeoutDelay = 0;

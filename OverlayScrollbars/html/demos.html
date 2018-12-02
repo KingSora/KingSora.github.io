@@ -600,7 +600,7 @@
 						</div>
 					</div>
 					<div class="textarea-demo-right">
-						<textarea id="textarea-demo-plugin"></textarea>
+						<textarea id="textarea-demo-plugin" class="textarea-demo-plugin"></textarea>
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -1203,7 +1203,7 @@
                 
 				<div class="iframe-demo">
 					<iframe id="iframe-demo-element" 
-					onload="window.osiFrame = OverlayScrollbars(document.getElementById('iframe-demo-element').contentWindow.document.body, { autoUpdate : false })" 
+					onload="window.osiFrame = OverlayScrollbars(document.getElementById('iframe-demo-element').contentWindow.document.body, { autoUpdate : false, resize: 'both' })" 
 					src="iframe.html" 
 					frameborder="0"></iframe>
 				</div>

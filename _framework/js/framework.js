@@ -704,8 +704,8 @@ $(document).ready(function() {
 		var viewportHeight = $(window).height();
 		var contentNavHeight = contentNav.height();
 		var contentNavWrapperHeight = _content.height();
-		var scrollTop = _mainScrollElement ? _mainScrollElement.scroll().y.position : _window.scrollTop();
-		var scrollLeft = _mainScrollElement ? _mainScrollElement.scroll().x.position : _window.scrollLeft();
+		var scrollTop = _mainScrollElement ? _mainScrollElement.scroll().position.y : _window.scrollTop();
+		var scrollLeft = _mainScrollElement ? _mainScrollElement.scroll().position.x : _window.scrollLeft();
 		var navHeight = _nav.height();
 		var maxHeight = Math.min(viewportHeight - navHeight, contentNavWrapperHeight - scrollTop);
 		
