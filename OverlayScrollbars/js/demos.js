@@ -683,7 +683,7 @@ $('#textarea-demo-reset').on('click', function() {
 	$('#textarea-demo-rows').trigger('dropdownvaluechanged');
 	$('#textarea-demo-dynwidth').prop('checked', false).trigger('change');
 	$('#textarea-demo-dynheight').prop('checked', false).trigger('change');
-	$('.textarea-demo-plugin').removeAttr('style');
+	$('.os-host-textarea.textarea-demo-plugin').removeAttr('style');
 });
 $('#textarea-demo-full-dynwidth').on('click', function() { 
 	$('#textarea-demo-width > .dropdown-value').text($('#textarea-demo-width > .dropdown-list > div').last().text());
