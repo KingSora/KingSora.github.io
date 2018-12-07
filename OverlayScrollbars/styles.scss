@@ -1058,16 +1058,16 @@ $scrollbar-corner-background-color: transparent;
 	position: relative;
 	top: 10px;
 }
-.textarea-demo-plugin {
+.os-host-textarea.textarea-demo-plugin {
 	border: 2px solid $primary-color;
 	border-radius: 4px;
 	padding: 10px;
 	height: 350px;
 }
-.textarea-demo-plugin.auto-height {
+.os-host-textarea.textarea-demo-plugin.auto-height {
 	height: auto !important;
 }
-.textarea-demo-plugin.auto-width {
+.os-host-textarea.textarea-demo-plugin.auto-width {
 	width: auto !important;
 	float: left !important;
 }
