@@ -10111,31 +10111,34 @@ td.cell-secondary {
 .split-table-main > .split-table-main-body table {
   margin-left: -200px; }
 
-.split-table-main > .split-table-main-head table > tbody,
-.split-table-side > .split-table-side-head table > tbody,
-.split-table-main > .split-table-main-head table > tbody > tr,
-.split-table-main > .split-table-main-head table > tbody > tr > td,
-.split-table-side > .split-table-main-head table > tbody > tr,
-.split-table-side > .split-table-side-head table > tbody > tr > td {
-  visibility: collapse; }
+/* visibility collapse polyfill: */
+.split-table-body table > thead,
+.split-table-body table > thead td,
+.split-table-body table > thead td *,
+.split-table-head table > tbody,
+.split-table-head table > tbody td,
+.split-table-head table > tbody td * {
+  height: 0 !important;
+  max-height: 0 !important;
+  line-height: 0 !important;
+  overflow: hidden !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top-width: 0 !important;
+  border-bottom-width: 0 !important; }
 
-.split-table-main > .split-table-main-body table > thead,
-.split-table-side > .split-table-side-body table > thead,
-.split-table-main > .split-table-main-body table > thead > tr,
-.split-table-main > .split-table-main-body table > thead > tr > td,
-.split-table-main > .split-table-main-body table > thead > tr > th,
-.split-table-side > .split-table-side-body table > thead > tr,
-.split-table-side > .split-table-side-body table > thead > tr > td,
-.split-table-side > .split-table-side-body table > thead > tr > th {
-  visibility: collapse; }
+.split-table-body table > thead td > *,
+.split-table-head table > tbody td > * {
+  display: block !important; }
 
-.split-table-main > .split-table-main-head table > tbody tr td:first-child,
-.split-table-main > .split-table-main-head table > thead tr td:first-child,
-.split-table-main > .split-table-main-head table > thead tr th:first-child,
-.split-table-main > .split-table-main-body table > tbody tr td:first-child,
-.split-table-main > .split-table-main-body table > thead tr td:first-child,
-.split-table-main > .split-table-main-body table > thead tr th:first-child {
-  visibility: collapse; }
+/* visibility collapse: */
+.split-table-head table > tbody,
+.split-table-head table > tbody * {
+  visibility: collapse !important; }
+
+.split-table-body table > thead,
+.split-table-body table > thead * {
+  visibility: collapse !important; }
 
 .split-table-main-body:before,
 .split-table-main-body:after,
