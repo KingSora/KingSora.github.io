@@ -28,6 +28,9 @@ $(document).ready(function() {
 	var _defaultHash;
 	var _hasherPrepareHash = '!';
 	var _hasherSeparator = '/';
+	var _navigationContentNavigation;
+	var _navButton;
+	var _navBackdrop;
 	var _nav;
 	var _body;
 	var _window;
@@ -62,9 +65,11 @@ $(document).ready(function() {
 	function hideLoading() {
 		if(_mainScrollElement)
 			_mainScrollElement.update(); //wakeup from sleeping
-		_nav.overlayScrollbars().options('overflowBehavior.x', 'scroll');
-		_nav.overlayScrollbars().update(true); //FF fix for fixed elements.
-		if(!_header.hasClass('shrinked')) {
+		if(_nav.overlayScrollbars()) {
+			_nav.overlayScrollbars().options('overflowBehavior.x', 'scroll');
+			_nav.overlayScrollbars().update(true); //FF fix for fixed elements.
+		}
+		if(!_header.hasClass('shrinked') && _nav.overlayScrollbars()) {
 			_nav.overlayScrollbars().options('overflowBehavior.x', 'hidden');
 		}
 		_loading.removeClass(_strActive);
@@ -92,7 +97,7 @@ $(document).ready(function() {
 			_window.off('resize', updateContentNavigation).on('resize', updateContentNavigation);
 		}
 	}
-	
+
 	function onHashChange(newHash, oldHash){
 		if(_ajaxContentRequest)
 			_ajaxContentRequest.abort();
@@ -182,7 +187,8 @@ $(document).ready(function() {
 				}
 				else {
 					_header.addClass('shrinked');
-					_nav.overlayScrollbars().update();
+					if(_nav.overlayScrollbars())
+						_nav.overlayScrollbars().update();
 				}
 				
 				//scroll To top:
@@ -197,25 +203,54 @@ $(document).ready(function() {
 	}
 	
 	function pagePathChange(newHash, oldHash) {
-		//Generate correct hash after data-navigation element was klicked
-		$('[' + _dataAttrNavigation + ']').on('click', function(e) {
+		var openLinkInSameTab = function(e) { 
+			var ee = e.originalEvent || e;
+			
+			//on normal mouse click or triggered event
+			if(((ee.which === 1 || ee.buttons === 1 || ee.button === 1) && ee.ctrlKey !== true) || e.originalEvent === undefined) {
+				var navigationValue = $(e.currentTarget).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
+				if(navigationValue) {
+					var newHashArray = generateHashArray(navigationValue);
+					var newHashArrayParamString = '';
+					for(var i = 0; i < newHashArray.length; i++)
+						newHashArrayParamString += "\"" + newHashArray[i] + "\", ";
+					newHashArrayParamString = newHashArrayParamString.substring(0, newHashArrayParamString.length - 2);
+
+					window.eval('hasher.setHash(' + newHashArrayParamString + ');');
+				}
+			}
+		};
+		var openLinkInNewTab = function(e) { 
 			var ee = e.originalEvent || e;
 			//on strg + left mouse button OR middle mouse button
 			if((ee.ctrlKey !== undefined && ee.ctrlKey === true && (ee.which === 1 || ee.buttons === 1 || ee.buttons === 4 || ee.which === 2))) {
-				var navigationValue = $(this).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
-				var newHashArray = generateHashArray(navigationValue);
-				var newHashArrayParamString = '#' + _hasherPrepareHash;
-				for(var i = 0; i < newHashArray.length; i++)
-					newHashArrayParamString += (i == 0 ? "" : _hasherSeparator) + newHashArray[i] + "";
-				window.open(hasher.getBaseURL() + newHashArrayParamString, '_blank');
+				var navigationValue = $(e.currentTarget).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
+				if(navigationValue) {
+					var newHashArray = generateHashArray(navigationValue);
+					var newHashArrayParamString = '#' + _hasherPrepareHash;
+					for(var i = 0; i < newHashArray.length; i++)
+						newHashArrayParamString += (i == 0 ? "" : _hasherSeparator) + newHashArray[i] + "";
+					window.open(hasher.getBaseURL() + newHashArrayParamString, '_blank');
+					
+					e.stopPropagation();
+					e.stopImmediatePropagation();
+					return false;
+				}
+			}
+			if(e.originalEvent === undefined) {
+				openLinkInSameTab(e);
 				
 				e.stopPropagation();
 				e.stopImmediatePropagation();
 				return false;
 			}
-		});	
+		};
+		//Generate correct hash after data-navigation element was klicked
+		$('[' + _dataAttrNavigation + ']:not(option)').on('click', openLinkInNewTab);	
+		$('[' + _dataAttrNavigation + ']:not(option)').on('mousedown', openLinkInSameTab);
+		
 		/*
-		$('[' + _dataAttrNavigation + ']').on('mousedown', function(e) {
+		$('[' + _dataAttrNavigation + ']:not(option)').on('mousedown', function(e) {
 			var ee = e.originalEvent || e;
 			//on middle mouse button
 			if((ee.buttons === 4 || ee.which === 2)) {
@@ -232,22 +267,6 @@ $(document).ready(function() {
 			}
 		});
 		*/
-		$('[' + _dataAttrNavigation + ']').on('mousedown', function(e) {
-			var ee = e.originalEvent || e;
-			
-			//on normal mouse click
-			if((ee.which === 1 || ee.buttons === 1 || ee.button === 1) && ee.ctrlKey !== true) {
-				var navigationValue = $(this).closest('[' + _dataAttrNavigation + ']').attr(_dataAttrNavigation);
-				var newHashArray = generateHashArray(navigationValue);
-				var newHashArrayParamString = '';
-				for(var i = 0; i < newHashArray.length; i++)
-					newHashArrayParamString += "\"" + newHashArray[i] + "\", ";
-				newHashArrayParamString = newHashArrayParamString.substring(0, newHashArrayParamString.length - 2);
-
-				window.eval('hasher.setHash(' + newHashArrayParamString + ');');
-			}
-		});
-		
 		
 		var oldMainHash = oldHash === undefined ? '' : oldHash.split(_hasherSeparator)[0];
 		var newMainHash = newHash.split(_hasherSeparator)[0];
@@ -347,20 +366,48 @@ $(document).ready(function() {
 				}
 			});
 		}
+		
+		var contentNavigation = $('#content-navigation');
+		if(contentNavigation.length > 0) {
+			var activeTab = contentNavigation.children().find('.active').first().attr(_dataAttrTabKey);
+			_navigationContentNavigation.val(_navigationContentNavigation.find('[' + _dataAttrTabKey + '="' + activeTab +  '"]').text());
+		}
 	}
 	
 	function contentLoad(currentMainHash) {
 		updateContentNavigation();
+		_navigationContentNavigation.empty();
 		
-		//custom scrollbar on content menu (sidebar menu)
-		$('#content-navigation').overlayScrollbars({ 
-			scrollbars : { 
-				autoHide : 'leave',
-			},
-			overflowBehavior : {
-				x : 'hidden'
+		var contentNavigation = $('#content-navigation');
+		if(contentNavigation.length > 0) {
+			//build also a select with optgroups:
+			var items = contentNavigation.children();
+			var group;
+			for(var i = 0; i < items.length; i++) {
+				var text = items.eq(i).find('span').first().text();
+				if(items.eq(i).hasClass('content-navigation-item-clickable')) {
+					var appendTo = group ? group : _navigationContentNavigation;
+					var option = $('<option value="' + text + '">' + text + '</option>');
+					option.attr(_dataAttrTabKey, items.eq(i).attr(_dataAttrTabKey));
+					option.attr(_dataAttrNavigation, items.eq(i).attr(_dataAttrNavigation));
+					appendTo.append(option);
+				}
+				else {	
+					group = $('<optgroup label="' + text + '" />');
+					_navigationContentNavigation.append(group);
+				}
 			}
-		});
+			
+			//custom scrollbar on content menu (sidebar menu)
+			contentNavigation.overlayScrollbars({ 
+				scrollbars : { 
+					autoHide : 'leave',
+				},
+				overflowBehavior : {
+					x : 'hidden'
+				}
+			});
+		}
 		
 		//modal
 		$('.modal .modal-window-header-close').on('click', function(e) {
@@ -569,7 +616,7 @@ $(document).ready(function() {
 		
 		//tabs
 		$('[' + _dataAttrTabValue + ']:not(.' + _strActive + ')').hide();
-		$('[' + _dataAttrTabKey + ']').on('click', function(e) { 
+		$('[' + _dataAttrTabKey + ']:not(option)').on('click', function(e) { 
 			var currElem = $(this).closest('[' + _dataAttrTabKey + ']');
 			if(currElem.hasClass(_strActive)) {
 				e.stopPropagation();
@@ -584,7 +631,7 @@ $(document).ready(function() {
 			var target = $('[' + _dataAttrTabValue + '="' + currElem.attr(_dataAttrTabKey) + '"]');
 			var parent = target.parent();
 			var currActive = parent.children('.' + _strActive).first().removeClass(_strActive);
-			var doScroll = parent.attr('id') === 'content-navigation-main';
+			var doScroll = currElem.attr(_dataAttrNavigation) !== undefined && currElem.attr(_dataAttrNavigation) !== null;
 			var action = function() {
 				target.stop().fadeIn(_tabsFadeDuration).addClass(_strActive);
 				if(doScroll) {
@@ -599,9 +646,12 @@ $(document).ready(function() {
 			else
 				currActive.stop().fadeOut(_tabsFadeDuration, action);
 			
-			currElem.parent().find('[' + _dataAttrTabKey + ']').removeClass(_strActive);
-			currElem.addClass(_strActive);
+			$('[' + _dataAttrTabKey + '="' + currElem.attr(_dataAttrTabKey) + '"]').each(function() { 
+				$(this).parent().find('[' + _dataAttrTabKey + ']').removeClass(_strActive);
+			}).addClass(_strActive);
 		});
+		
+		
 		
 		//options table expand on click
 		$('.options-table > tbody > tr:nth-child(2n+1)').on('click', function(e) {		
@@ -836,11 +886,14 @@ $(document).ready(function() {
 		_body = $('body');
 		_header = $('#header');
 		_nav = $('#navigation');
+		_navButton = $('#navigation-button');
+		_navBackdrop = $('#navigation-backdrop');
 		_content = $('#content');
 		_footer = $('#footer');
 		_loading = $('#loading');
 		_debugModal = $('#modal-debug');
 		_debugModalContent = $('#modal-debug-content');
+		_navigationContentNavigation = $('#navigation-content-navigation');
 		
 		//setup hasher
 		hasher.prependHash = _hasherPrepareHash;
@@ -862,17 +915,29 @@ $(document).ready(function() {
 		$('#navigation-logo').on('click', function() {
 			hasher.setHash(_defaultHash);
 		});
-		_nav.overlayScrollbars({ 
+		//navigation scrollbar
+		$('#navigation-menu').overlayScrollbars({ 
 			className : 'os-theme-light',
-			scrollbars : {
-				visibility : "hidden",
-				autoHide : "leave"
-			},
-			overflowBehavior : { y : 'hidden' } 
+			paddingAbsolute: true,
+			overflowBehavior : { y : 's', x : 'h' }
 		});
+		//navigation toggle
+		_navButton.on('click', function(e) { 
+			_nav.toggleClass(_strActive);
+		});
+		_navBackdrop.on('click', function(e) { 
+			_nav.removeClass(_strActive);
+		});
+		
+		//set scrollbars
 		setBodyScrollbars();
-		_header.scrollLeft(0);
-		_header.scrollTop(0);
+		
+		//navigation select:
+		_navigationContentNavigation.on('change', function() { 
+			var selectedValue = _navigationContentNavigation.val();
+			var selectedElm = _navigationContentNavigation.find('option').filter(function() { return $(this).text() === selectedValue; });
+			$('#content-navigation').find('[' + _dataAttrTabKey + '="' + selectedElm.attr(_dataAttrTabKey) + '"]').trigger('click');
+		});
 		
 		//debug
 		_debugModalContent.html(JSON.stringify(_debug, null, 2));

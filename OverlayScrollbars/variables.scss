@@ -44,8 +44,15 @@ $content-navigation-border-size: 6px;
 
 $footer-color: #323750;
 
-$min-width: 992px;
+$min-width: 800px;
+$shrink-width: 900px;
+$max-width: 1200px;
+
+$navigation-button-icon-shrink: 6px;
+$navigation-button-icon-stroke: 3px;
 
 $navigation-height: 76px;
+$navigation-height-small: 56px;
+$navigation-sidebar-width: 240px;
 $header-height: 422px;
 $footer-height: 55px;

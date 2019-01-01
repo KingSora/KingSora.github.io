@@ -10,7 +10,7 @@
         <meta name="application-name" content="Overlay Scrollbars"/> 
         <meta name="msapplication-tooltip" content="Overlay Scrollbars"/> 
         <meta name="apple-mobile-web-app-title" content="Overlay Scrollbars"/> 
-		<meta name="viewport" content="width=850, initial-scale=1.0, user-scalable=yes">
+		<meta name="viewport" content="width=800, initial-scale=1.0, user-scalable=yes">
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <title>Overlay Scrollbars - Javascript scrollbar plugin which hides the native scrollbars and provides custom styleable overlay scrollbars.</title>
         
@@ -85,7 +85,7 @@
                 <div class="header-content">
                     <h1 class="header-content-plugin-name">Overlay Scrollbars</h1>
                     <br>
-                    <h2 class="header-content-plugin-description">A javascript scrollbar plugin which hides the native scrollbars and provides<br>custom styleable overlay scrollbars, but keeps the native functionality and feeling.</h2>
+                    <h2 class="header-content-plugin-description">A javascript scrollbar plugin which hides native scrollbars, provides<br>custom styleable overlay scrollbars and keeps the native functionality and feeling.</h2>
                     <br>
                     <a href="https://github.com/KingSora/OverlayScrollbars/archive/master.zip" class="header-content-download">
                         Download
@@ -98,37 +98,63 @@
 			</svg>
         </div>
         <div id="navigation">
-            <div class="container">
-                <div class="navigation-lr p-left">
-                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 509.859 267.977" enable-background="new 0 0 509.859 267.977" xml:space="preserve" id="navigation-logo">
-                         <filter id="dropshadow" height="130%">
-                            <feGaussianBlur in="SourceAlpha" stdDeviation="9"/>
-                            <feOffset dx="0" dy="2" result="offsetblur"/>
-                            <feComponentTransfer>
-                                <feFuncA type="linear" slope="0.11"/>
-                            </feComponentTransfer>
-                            <feMerge> 
-                                <feMergeNode/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                        <path fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round" stroke-miterlimit="10" d="M221.701,200.343
-                            c-26.105,37.487-71.17,44.146-89.964,44.146c-64.057,0-111.557-50.929-111.557-109.61c0-60.64,50.166-110.14,111.557-110.14
-                            c148.193,0,121.027,219.75,285.693,219.75c48.5,0,70.5-22,70.5-54c0-44.5-64.535-51.119-104.5-61c-49-12.114-57-34.114-57-52.614
-                            s12.938-52.073,73.938-52.073s77.396,39.355,77.396,39.355l0.229,1.208" style="filter:url(#dropshadow)"/>
-                        <circle fill="#FFFFFF" cx="131.737" cy="135.156" r="15.938" style="filter:url(#dropshadow)" />
-                    </svg>
+			<div id="navigation-backdrop">
+			</div>
+            <div id="navigation-menu" class="container">
+                <div class="navigation-menu-lr p-left">
                 </div>
-                <div class="navigation-lr p-right">
-                    <div data-navigation="overview" class="navigation-item">Overview</div>
-                    <div data-navigation="demos" class="navigation-item">Demos</div>
-                    <div data-navigation="documentation" class="navigation-item">Documentation</div>
-                    <div data-navigation="themes" class="navigation-item">Themes</div>
-                    <div data-navigation="extensions" class="navigation-item">Extensions</div>
-                    <div data-navigation="faq" class="navigation-item">FAQ</div>
-                    <a href="https://github.com/KingSora/OverlayScrollbars" target="_blank" class="navigation-item"><i class="mdi mdi-github-circle"></i></a>
+                <div class="navigation-menu-lr p-right">
+                    <div data-navigation="overview" class="navigation-menu-item">Overview</div>
+                    <div data-navigation="demos" class="navigation-menu-item">Demos</div>
+                    <div data-navigation="documentation" class="navigation-menu-item">Documentation</div>
+                    <div data-navigation="themes" class="navigation-menu-item">Themes</div>
+                    <div data-navigation="extensions" class="navigation-menu-item">Extensions</div>
+                    <div data-navigation="faq" class="navigation-menu-item">FAQ</div>
+                    <a href="https://github.com/KingSora/OverlayScrollbars" target="_blank" class="navigation-menu-item"><i class="mdi mdi-github-circle"></i></a>
                 </div>
             </div>
+			<div class="container">
+				<div id="navigation-button">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+				<svg id="navigation-logo" version="1.1" 
+				xmlns="http://www.w3.org/2000/svg" 
+				xmlns:xlink="http://www.w3.org/1999/xlink" 
+				x="0px" y="0px" 
+				viewBox="38.25 53.25 99.75 66"
+				enable-background="new 38.25 53.25 99.75 66"
+				xml:space="preserve">
+					 <filter id="dropshadow" height="130%">
+						<feGaussianBlur in="SourceAlpha" stdDeviation="9"/>
+						<feOffset dx="0" dy="2" result="offsetblur"/>
+						<feComponentTransfer>
+							<feFuncA type="linear" slope="0.11"/>
+						</feComponentTransfer>
+						<feMerge> 
+							<feMergeNode/>
+							<feMergeNode in="SourceGraphic"/>
+						</feMerge>
+					</filter>
+					<g id="Stroke" style="filter:url(#dropshadow)">
+						<path fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" d="M120,101.25H97.5
+							c-2.379,0-4.568,1.093-6.006,2.999c-0.458,0.612-0.826,1.295-1.083,2.015c-0.276,0.788-0.42,1.633-0.42,2.486v0.23
+							c0.019,0.732,0.162,1.525,0.424,2.267c0.081,0.223,0.174,0.444,0.27,0.636c0.33,0.688,0.687,1.24,1.092,1.7
+							c1.457,1.712,3.529,2.667,5.724,2.667H120c4.764,0,9.143-2.188,12.014-6.004c1.314-1.758,2.248-3.836,2.693-6.002
+							c0.191-0.973,0.293-1.987,0.293-2.994s-0.102-2.021-0.298-3.02c-0.44-2.142-1.374-4.22-2.695-5.984
+							c-2.864-3.809-7.243-5.996-12.007-5.996h-15c-4.136,0-7.5-3.364-7.5-7.5s3.364-7.5,7.5-7.5h22.5c3.177,0,6.02-2.008,7.073-4.996
+							c0.282-0.807,0.427-1.65,0.427-2.504s-0.145-1.697-0.43-2.51c-0.813-2.317-2.799-4.138-5.18-4.747
+							c-0.617-0.165-1.242-0.243-1.891-0.243H71.26c-6.947,0-13.469,2.305-18.862,6.666c-2.367,1.918-4.417,4.162-6.089,6.667
+							c-1.406,2.094-2.532,4.333-3.352,6.662c-0.767,2.182-1.278,4.422-1.519,6.657c-0.126,1.104-0.188,2.224-0.188,3.348
+							s0.063,2.243,0.186,3.325c0.243,2.258,0.754,4.498,1.522,6.682c0.819,2.327,1.945,4.566,3.346,6.653
+							c1.678,2.512,3.728,4.756,6.098,6.677c5.389,4.358,11.911,6.663,18.858,6.663c1.091,0,2.105-0.055,3.1-0.167"/>
+						
+							<circle fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" cx="71.25" cy="86.25" r="15"/>
+					</g>
+				</svg>
+			</div>
+			<select id="navigation-content-navigation"></select>
         </div>
         <div id="content">
         </div>
