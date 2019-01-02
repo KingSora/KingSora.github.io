@@ -72,17 +72,19 @@ var githubInfosTemplate = {
 }
 var pageCache = window.localStorage;
 var pageCacheName = hasher.getURL();
-var cache = pageCache ? pageCache.getItem(pageCacheName) : null;
-cache = typeof cache === 'string' ? JSON.parse(cache) : null;
+var pageCacheGithubProperty = "github";
+var cache = pageCache ?  JSON.parse(pageCache.getItem(pageCacheName)) : null;
 var refreshGithubCache = true;
+var refreshGithubCacheMinsDiff = 60 * 12;
 var githubCache = { };
 
 if(cache !== null) {
-	if(cache.hasOwnProperty("github")) {
-		githubCache = cache.github;
-		refreshGithubCache = !(dayjs().diff(githubCache.timestamp, 'days', true) < 0.5);
+	if(cache.hasOwnProperty(pageCacheGithubProperty)) {
+		githubCache = cache[pageCacheGithubProperty];
+		refreshGithubCache = dayjs().diff(githubCache.timestamp, 'minutes', true) > refreshGithubCacheMinsDiff;
 	}
 }
+
 if(refreshGithubCache) {
 	var myArr = [ ];
 	$.each(githubInfosTemplate, function(key, value) { 
@@ -101,9 +103,9 @@ if(refreshGithubCache) {
 	$.when.apply($, myArr).always(function() { 
 		githubCache.timestamp = dayjs().valueOf();
 		if(pageCache) {
-			pageCache.setItem(pageCacheName, JSON.stringify({
-				github : githubCache
-			}));
+			var obj = { };
+			obj[pageCacheGithubProperty] = githubCache;
+			pageCache.setItem(pageCacheName, JSON.stringify(obj));
 		}
 		insertGithubData(githubCache);
 	})

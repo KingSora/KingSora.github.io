@@ -2667,7 +2667,7 @@
                  * A callback which will be called after a img element has downloaded its src asynchronous.
                  */
                 function imgOnLoad() {
-                    update();
+                    _base.update("auto+");
                 }
 
 

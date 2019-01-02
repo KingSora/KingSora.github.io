@@ -12705,6 +12705,75 @@ body.resizing * {
 .extensions-createextensions-examples-playground-execute > code {
   padding-left: 46px; }
 
+#extensions-refreshed {
+  font-size: 9pt; }
+
+#extensions-count {
+  font-size: 16pt;
+  color: #31485B;
+  font-weight: 600;
+  margin-bottom: 30px; }
+
+.extensions-list-item {
+  padding: 14px 32px;
+  background: #fff;
+  margin-bottom: 26px;
+  box-shadow: 0 15px 20px -15px rgba(0, 0, 0, 0.1), 0 55px 50px -35px rgba(0, 0, 0, 0.015);
+  border-radius: 6px;
+  position: relative; }
+
+.extensions-list-item:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  background: #36befd;
+  left: 15px;
+  width: 3px;
+  border-radius: 10px; }
+
+.extensions-list-item a {
+  color: #36befd !important; }
+
+.extensions-list-item a:hover {
+  text-decoration: underline !important;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05) !important; }
+
+.extensions-list-item a:before,
+.extensions-list-item a:after {
+  display: none; }
+
+.extensions-list-item-name {
+  color: #36befd;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 13pt; }
+
+.extensions-list-item-description {
+  margin-bottom: 10px; }
+
+.extensions-list-item-author > * {
+  vertical-align: middle; }
+
+.extensions-list-item-author > img {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  margin-right: 5px; }
+
+.extensions-list-item-infos * {
+  font-family: "Fira Mono", monospace !important;
+  font-size: 9pt;
+  display: inline-block; }
+
+.extensions-list-item-infos *:after {
+  content: '\2022';
+  margin: 0 10px; }
+
+.extensions-list-item-infos *:last-child:after {
+  display: none; }
+
 #faq-comparison-table {
   width: 100%; }
 
