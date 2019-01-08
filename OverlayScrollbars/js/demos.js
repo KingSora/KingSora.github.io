@@ -26,7 +26,7 @@ basicDemoCodeMirror.on("change", function(obj) {
 	changeTimeoutId = setTimeout(function() {
 		$('#basicdemo-options-codemirror').removeClass('codemirror-error');
 		try {
-			$('#basicdemo-options-codemirror-result').stop().animationRunningate({ opacity : 0 }, 300, function() { 
+			$('#basicdemo-options-codemirror-result').stop().animate({ opacity : 0 }, 300, function() { 
 				$('#basicdemo-options-codemirror-messages').stop().slideUp(300);
 				$('#basicdemo-options-codemirror-result').find('pre').addClass('hidden');
 				$('#basicdemo-options-codemirror-result-target').show();
@@ -42,21 +42,21 @@ basicDemoCodeMirror.on("change", function(obj) {
 							"} catch(e) { " +
 								"$('#basicdemo-options-codemirror').addClass('codemirror-error'); " +
 								"$('#basicdemo-options-codemirror-result-target').hide(); " + 
-								"$('#basicdemo-options-codemirror-result').stop().animationRunningate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e); " + 
+								"$('#basicdemo-options-codemirror-result').stop().animate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e); " + 
 							"}");
 				} catch(e) { 
 					$('#basicdemo-options-codemirror').addClass('codemirror-error');
 					$('#basicdemo-options-codemirror-result-target').hide(); 
-					$('#basicdemo-options-codemirror-result').stop().animationRunningate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e);
+					$('#basicdemo-options-codemirror-result').stop().animate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e);
 				}
-				$('#basicdemo-options-codemirror-result').stop().animationRunningate({ opacity : 1 }, 300);
+				$('#basicdemo-options-codemirror-result').stop().animate({ opacity : 1 }, 300);
 				console.warn = oldWarn;
 			});
 		}
 		catch (e) {
 			$('#basicdemo-options-codemirror').addClass('codemirror-error');
 			$('#basicdemo-options-codemirror-result-target').hide(); 
-			$('#basicdemo-options-codemirror-result').stop().animationRunningate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e);
+			$('#basicdemo-options-codemirror-result').stop().animate({ opacity : 1 }, 300).find('pre').removeClass('hidden').text(e);
 		}
 	}, 500);
 });
