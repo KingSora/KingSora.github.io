@@ -91,7 +91,7 @@ function insertGithubData(data) {
 			itemTemplate += '</div>';
 
 			itemTemplate += '</div>';
-			
+
 			list.append(itemTemplate);
 		});
 	}
