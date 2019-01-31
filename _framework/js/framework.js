@@ -329,6 +329,7 @@ $(document).ready(function() {
 					_contentNavigationScrollTimeout = setTimeout(function() {
 						if(osInstance) {
 							try {
+								updateContentNavigation();			
 								osInstance.scrollStop();
 								osInstance.scroll({ el : item, margin : { top : 5, bottom: 40 }, block : "nearest", scroll : { y : "ifneeded" } }, 300);
 							}
