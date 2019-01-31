@@ -62,7 +62,7 @@ function insertGithubData(data) {
 	var refreshed = $('#extensions-refreshed');
 	var list = $('#extensions-list');
 	
-	if($.isEmptyObject(data) || data.extensions === undefined || data.extensions.length < 1) {
+	if(!data || $.isEmptyObject(data) || data.extensions === undefined || data.extensions.length < 1) {
 		count.text('No Extensions found');
 	}
 	else {
