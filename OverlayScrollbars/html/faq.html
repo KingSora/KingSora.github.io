@@ -12,7 +12,7 @@
 	<div class="container">
 		<div class="expander-header" data-expander-key="faq-scrollbar-handle-length">
 			<i class="mdi mdi-chevron-down"></i>
-			<span>Is it possible to limit / adjust the scrollbabar-handle length?</span>
+			<span>Is it possible to limit / adjust the scrollbar-handle length?</span>
 		</div>
 		<div class="expander-content" data-expander-value="faq-scrollbar-handle-length">
 			<b>Yes.</b> You can adjust the min- or max-length of the scrollbar-handle via CSS.<br>
@@ -251,7 +251,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 		<div class="expander-content" data-expander-value="faq-ifnativescrollbarsareoverlaid">
 			If you don't want to initialize the plugin if the native scrollbars are already overlaid (for example like in mobile browsers, or UNIX operating systems), I've created the option <code class="code-inline js">nativeScrollbarsOverlaid.initialize</code>.
 			The default value is <code class="code-inline js">true</code>, but if you set it to <code class="code-inline js">false</code> the plugin won't initialize in such a environment.<br><br>
-			A very important thing to note here is, that if a initialization gets cancelled because of this option, the callback <code class="code-inline">onInitializationWithdrawn</code> will be triggered, in order to make it more easy for you to handle this case in your code.
+			A very important thing to note here is, that if an initialization gets cancelled because of this option, the callback <code class="code-inline">onInitializationWithdrawn</code> will be triggered, in order to make it easier for you to handle this case in your code.
 		</div>
 		
 		<div class="expander-header" data-expander-key="faq-animations">
@@ -260,7 +260,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 		</div>
 		<div class="expander-content" data-expander-value="faq-animations">
 			The plugin updates the everytime it detects a breaking change in the DOM. Javascript-animations are doing very heavy and frequent DOM changes.<br>
-			In order to gain the maximal performance call the <a data-navigation="documentation/method-sleep" class="inline-btn">sleep method</a> before your animation begins, so the plugin wont update automatically during the animation.<br>
+			In order to gain the maximum performance, call the <a data-navigation="documentation/method-sleep" class="inline-btn">sleep method</a> before your animation begins, so the plugin won't update automatically during the animation.<br>
 			After your animation has ended call the <a data-navigation="documentation/method-update" class="inline-btn">update method</a> to re-activate the plugin.
 		</div>
 		
@@ -281,7 +281,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 			<div class="content-message-content">
 				On the internet you'll find many scrollbar plugins. Below I've compared the features of a few of them.<br>
 				Hover or click on certain entries to see additional information or a description.<br>
-				If I've done a mistake or if you want to enhance this table, please feel free to open a issue on <a href="https://github.com/KingSora/KingSora.github.io/issues" target="_blank" class="inline-btn">github</a>.<br><br>
+				If I've made a mistake or if you want to enhance this table, please feel free to open a issue on <a href="https://github.com/KingSora/KingSora.github.io/issues" target="_blank" class="inline-btn">github</a>.<br><br>
 				The Github information were refreshed on: <b id="github-infos-timestamp">?</b><br>
 				The table was last edited on: <b id="table-infos-timestamp">July 25, 2018 - 16:02</b>
 			</div>
@@ -414,7 +414,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Dependencyless</b></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Has also a optional jQuery version.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Also has an optional jQuery version.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
@@ -465,7 +465,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white" data-tooltip><span class="tooltip">The plugin doesn't automatically run a infinity loop to check for DOM changes.</span><b>Doesn't require timer or loop for updating</b></td>
+						<td class="cell-white" data-tooltip><span class="tooltip">The plugin doesn't automatically run an infinity loop to check for DOM changes.</span><b>Doesn't require timer or loop for updating</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
@@ -647,17 +647,17 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white" data-tooltip><span class="tooltip">It's possible to initialize the plugin inside a iFrame from the outside.</span><b>Supports iFrames</b></td>
+						<td class="cell-white" data-tooltip><span class="tooltip">It's possible to initialize the plugin inside an iFrame from the outside.</span><b>Supports iFrames</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes but it looks messed up and you can't scroll via dragging the handles..<br>Its buggy and you can tell this feature isn't supported.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes but it looks messed up and you can't scroll via dragging the handles.<br>It's buggy and you can tell this feature isn't supported.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll via dragging the handles.<br>Iframe support isn't mentioned anywhere.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll via dragging the handles.<br>iFrame support isn't mentioned anywhere.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes.<br>The plugin deosn't inject its default styles into the iframe.<br>Yout can't scroll with dragging the handles.<br>Iframe support isn't mentioned anywhere.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll via dragging the handles.<br>Iframe support isn't mentioned anywhere.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes.<br>The plugin deosn't inject its default styles into the iframe.<br>You can't scroll with dragging the handles.<br>iFrame support isn't mentioned anywhere.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll via dragging the handles.<br>iFrame support isn't mentioned anywhere.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Everything worked, but in my test-case the horizontal scrollbar was out of place.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin won't initialize properly.<br>In older versions the plugin initializes but scrolling is only<br>possible vertically and you can't scroll via dragging the handles.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll with dragging the handles.<br>Iframe support isn't mentioned anywhere.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light" data-tooltip><span class="tooltip">The plugin initializes and looks alright.<br>But you can't scroll with dragging the handles.<br>iFrame support isn't mentioned anywhere.</span></i></td>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Supports nesting</b></td>
@@ -688,28 +688,28 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 					<tr>
 						<td class="cell-white"><b>Adjustable scrollbar handle <u>min</u>-length</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via CSS-styling in all CSS units.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in percent.</span></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-help-circle txtc-light"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Adjustable scrollbar handle <u>max</u>-length</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via CSS-styling in all CSS units.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in percent.</span></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-help-circle txtc-light"></i></td>
-						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixel.</span></i></td>
+						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">Via plugin-options, only in pixels.</span></i></td>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Scrollbar handle can have fixed length</b></td>
@@ -829,7 +829,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white" data-tooltip><span class="tooltip">A feedback or a animation if you reached the minimum or maximum scroll offset.</span><b>Overscroll animation / feedback</b></td>
+						<td class="cell-white" data-tooltip><span class="tooltip">A feedback or an animation if you reached the minimum or maximum scroll offset.</span><b>Overscroll animation / feedback</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
