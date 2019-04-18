@@ -28,6 +28,14 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="content" data-navigation="[1]content">
 				<span>Content</span>
 			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="scale" data-navigation="[1]scale">
+				<span>Scale</span>
+			</div>
+			<!--
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="snapping" data-navigation="[1]snapping">
+				<span>Snapping</span>
+			</div>
+			-->
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="iframe" data-navigation="[1]iframe">
 				<span>iFrame</span>
 			</div>
@@ -1179,6 +1187,117 @@
 						<div class="content-demo-input-textarea">
 							<textarea rows="1" class="content-demo-input-textarea-plugin" placeholder="enter your message..."></textarea>
 						</div>
+					</div>
+				</div>
+			</div>
+		
+			<div id="scale" data-tab-value="scale">
+				<div class="content-navigation-main-caption">Scale Demo</div>
+				This demo shows how the plugin is handling a <b>scaled</b> host-element.<br>
+				Change the scale value below and verify the plugins functionality.<br>
+				<br>
+				<div class="scale-demo-control">
+					<div class="scale-demo-control-left">
+						<b>Scale:</b>
+					</div>
+					<div class="scale-demo-control-right">
+						<div id="scale-demo-input-numeric" class="input-numeric" data-input-numeric-min="0.1" data-input-numeric-max="2.5" data-input-numeric-step=".1">
+							<div class="button input-numeric-button input-numeric-button-decrease">
+								<i class="mdi mdi-minus"></i>
+							</div>
+							<div class="button input-numeric-button input-numeric-button-increase">
+								<i class="mdi mdi-plus"></i>
+							</div>
+							<div class="input-numeric-input">
+								<input class="input" type="text" value="1" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="scale-demo-plugin">
+					<div id="scale-demo-plugin-content">
+						<div></div>
+						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy<br> eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.<br>
+						At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata<br> sanctus est Lorem ipsum dolor sit amet. <br>
+						<div></div>
+						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br> nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br>
+						At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd<br> gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+						<div></div>
+						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy<br> eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.<br>
+						At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata<br> sanctus est Lorem ipsum dolor sit amet. <br>
+						<div></div>
+						Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br> nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br>
+						At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd<br> gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<br>
+						<div></div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="snapping" data-tab-value="snapping">
+				<div class="content-navigation-main-caption">Snapping Demo</div>
+				This demo shows how the plugins behavior with CSS scroll snapping.<br>
+				<br>
+				
+				<div id="hi" class="snap-container">
+					<div>
+						<h2>
+						Browser  Support
+					  </h2>
+						<p>
+							This sample should work on Chrome 69+ (Canary, due to be released in September 2018), Firefox, Edge, IE 11, and Safari (iOS).
+						</p>
+					</div>
+					<div>
+						<h2>
+						Chrome
+					  </h2>
+						<p>
+							Chrome version 69 has the most up-to-date CSS snap implementation. It uses <code>scroll-snap-align</code>, while other browsers still use <code>scroll-snap-coordinate</code>.
+						</p>
+					</div>
+					<div>
+						<h2>
+						Safari/iOS
+					  </h2>
+						<p>
+							Safari supports CSS snapping with a couple of caveats (in addition to using the <code>-webkit-</code> prefix):
+						</p>
+						<ul>
+							<li>You must set <code>-webkit-overflow-scrolling: touch;</code>.</li>
+						</ul>
+						<ul>
+							<li>The elements being scrolled must have <code>overflow: none;</code> (the default setting).</li>
+						</ul>
+					</div>
+					<div>
+						<h2>
+						Edge
+					  </h2>
+						<p>
+							On Edge, dragging the scrollbar thumb doesn't cause snapping. Touching or clicking the pagination area in the scroll bar does.
+						</p>
+						<p>
+							Edge requires the <code>-ms-</code> prefix for the CSS properties related to snap points.
+						</p>
+					</div>
+					<div>
+						<h2>
+						IE 11
+					  </h2>
+						<p>
+							On IE11, snapping is supported for touch only.
+						</p>
+						<p>
+							IE11 requires the <code>-ms-</code> prefix for the CSS properties related to snap points.
+						</p>
+					</div>
+					<div>
+						<h2>
+						Touch Support
+					  </h2>
+						<p>
+							CSS snapping works with touch on recent Android and iOS phones and tablets. It is a great option for implementing scroll-based interfaces on narrow screens.
+						</p>
 					</div>
 				</div>
 			</div>

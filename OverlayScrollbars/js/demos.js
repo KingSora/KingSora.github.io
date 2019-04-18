@@ -9,7 +9,7 @@ window._framework.onPagePathChange = function(obj) {
 
 var changeTimeoutId;
 var basicDemoCodeMirror = CodeMirror(document.getElementById("basicdemo-options-codemirror"), {
-	value: "{\n\tclassName       : \"os-theme-dark\",\n\tresize          : \"both\",\n\tsizeAutoCapable : true,\n\tpaddingAbsolute : true\n}",
+	value: "{\n\tclassName       : \"os-theme-dark\",\n\tresize          : \"both\",\n\tsizeAutoCapable : true,\n\tpaddingAbsolute : true,\n\tscrollbars : {\n\t\tclickScrolling : true\n\t}\n}",
 	smartIndent : true,
 	lineNumbers : true,
 	lineWrapping: true,
@@ -734,20 +734,20 @@ var onScrollCallback = function() {
 	var host = $(instance.getElements().host);
 	var scrollInfo = instance.scroll();
 	host.css({ 
-		//'background' : 'rgba(' + Math.min(Math.round(54 * scrollInfo.y.ratio), 255) + ', ' + Math.max((255 - Math.round(190 * scrollInfo.y.ratio)), Math.round(190 * scrollInfo.y.ratio)) + ', ' + Math.max(Math.round(253 * scrollInfo.y.ratio), 30) + ', ' + 1 + ')',
+		//'background' : 'rgba(' + Math.min(Math.round(54 * scrollInfo.ratio.y), 255) + ', ' + Math.max((255 - Math.round(190 * scrollInfo.ratio.y)), Math.round(190 * scrollInfo.ratio.y)) + ', ' + Math.max(Math.round(253 * scrollInfoy.ratio.y), 30) + ', ' + 1 + ')',
 		'background' : 'rgb(' + 
-		(100 - Math.round((100 - 46) * scrollInfo.y.ratio)) + ', ' + 
-		(97 - Math.round((97 - 190) * scrollInfo.y.ratio)) + ', ' + 
-		(246 - Math.round((246 - 253) * scrollInfo.y.ratio)) + ')',
-		'color' : 'rgb(' + Math.round(255 * scrollInfo.y.ratio) + ', ' + Math.round(255 * scrollInfo.y.ratio) + ', ' + Math.round(255 * scrollInfo.y.ratio) + ')'
+		(100 - Math.round((100 - 46) * scrollInfo.ratio.y)) + ', ' + 
+		(97 - Math.round((97 - 190) * scrollInfo.ratio.y)) + ', ' + 
+		(246 - Math.round((246 - 253) * scrollInfo.ratio.y)) + ')',
+		'color' : 'rgb(' + Math.round(255 * scrollInfo.ratio.y) + ', ' + Math.round(255 * scrollInfo.ratio.y) + ', ' + Math.round(255 * scrollInfo.ratio.y) + ')'
 	});
 	if(show) {
-		if(scrollInfo.y.ratio > 0)
+		if(scrollInfo.ratio.y > 0)
 			gradientTop.css('opacity', 1);
 		else
 			gradientTop.css('opacity', 0);
 		
-		if(scrollInfo.y.ratio < 1)
+		if(scrollInfo.ratio.y < 1)
 			gradientBot.css('opacity', 1);
 		else
 			gradientBot.css('opacity', 0);
@@ -1081,7 +1081,7 @@ var doScroll;
 var animationRunning = false;
 var setDoScroll = function() {
 	if(!animationRunning)
-		doScroll = this.scroll().y.ratio === 1;
+		doScroll = this.scroll().ratio.y === 1;
 	else
 		doScroll = true;
 };
@@ -1144,3 +1144,32 @@ $('body').on("contentDestruct", function() {
         iFrameInstance.destroy();
 	try { delete window.osiFrame; } catch(e) { }
 });
+
+
+var scaleDemoTarget = $('#scale-demo-plugin');
+var scaleDemo = scaleDemoTarget.overlayScrollbars({ 
+	paddingAbsolute: true,
+	resize: 'both'
+}).overlayScrollbars();
+$('#scale-demo-input-numeric').on('valuechanged', function(e, value) {
+	scaleDemoTarget.css({ transform : 'scale(' + value + ')' });
+});
+
+
+
+var snappedHandle = $('<div class="os-scrollbar-handle" style="background: red;"></div>');
+var updateSnappedHandle = function() {
+	snappedHandle.css('width', $(this.getElements().scrollbarHorizontal.handle)[0].offsetWidth);
+	snappedHandle.css('transform', 'translate(' + this.scroll().snappedHandleOffset.x + 'px, 0)');
+};
+var os = $('#hi').overlayScrollbars({ 
+	scrollbars : {
+		clickScrolling : true,
+		snapHandle : false
+	},
+	callbacks : {
+		onInitialized : updateSnappedHandle,
+		onScroll : updateSnappedHandle
+	}
+}).overlayScrollbars();
+$(os.getElements().scrollbarHorizontal.track).prepend(snappedHandle);

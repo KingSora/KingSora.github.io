@@ -123,26 +123,25 @@ OverlayScrollbars.extension("myAdvancedExtension", function(defaultOptions, fram
 		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.track;
 		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.track;
 		var html = '<div style="height: 100%; width: 100%; top: 0; left: 0; position: absolute;"></div>';
-		var sX = osInstance.scroll().x;
-		var sY = osInstance.scroll().y;
+		var sInfo = osInstance.scroll();
 		
 		trackElmHorizontal = framework(html).css({
 			background : parsedOptions.color,
-			width : sX.handleOffset
+			width : sInfo.handleOffset.x
 		});
 		trackElmHorizontal2 = framework(html).css({
 			background : parsedOptions.color,
-			width : sX.trackLength - (sX.handleOffset + sX.handleLength),
-			left : sX.handleOffset + sX.handleLength
+			width : sInfo.trackLength.x - (sInfo.handleOffset.x + sInfo.handleLength.x),
+			left : sInfo.handleOffset.x + sInfo.handleLength.x
 		});
 		trackElmVertical = framework(html).css({
 			background : parsedOptions.color,
-			height : sY.handleOffset
+			height : sInfo.handleOffset.y
 		});
 		trackElmVertical2 = framework(html).css({
 			background : parsedOptions.color,
-			height : sY.trackLength - (sY.handleOffset + sY.handleLength),
-			top : sY.handleOffset + sY.handleLength
+			height : sInfo.trackLength.y - (sInfo.handleOffset.y + sInfo.handleLength.y),
+			top : sInfo.handleOffset.y + sInfo.handleLength.y
 		});
 
 		framework(scrollbarHorizontalHandle).append([trackElmHorizontal, trackElmHorizontal2])
@@ -161,22 +160,21 @@ OverlayScrollbars.extension("myAdvancedExtension", function(defaultOptions, fram
 	extInstance.on = function(callbackName, args) {
 		switch(callbackName) {
 			case "scroll":
-				var sX = osInstance.scroll().x;
-				var sY = osInstance.scroll().y;
+				var sInfo = osInstance.scroll();
 		
 				trackElmHorizontal.css({
-					width : sX.handleOffset
+					width : sInfo.handleOffset.x
 				});
 				trackElmHorizontal2.css({
-					width : sX.trackLength - (sX.handleOffset + sX.handleLength),
-					left : sX.handleOffset + sX.handleLength
+					width : sInfo.trackLength.x - (sInfo.handleOffset.x + sInfo.handleLength.x),
+					left : sInfo.handleOffset.x + sInfo.handleLength.x
 				});
 				trackElmVertical.css({
-					height : sY.handleOffset
+					height : sInfo.handleOffset.y
 				});
 				trackElmVertical2.css({
-					height : sY.trackLength - (sY.handleOffset + sY.handleLength),
-					top : sY.handleOffset + sY.handleLength
+					height : sInfo.trackLength.y - (sInfo.handleOffset.y + sInfo.handleLength.y),
+					top : sInfo.handleOffset.y + sInfo.handleLength.y
 				});
 				break;
 		}

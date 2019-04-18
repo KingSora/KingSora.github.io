@@ -126,7 +126,8 @@
 		autoHideDelay    : 800,
 		dragScrolling    : true,
 		clickScrolling   : false,
-		touchSupport     : true
+		touchSupport     : true,
+		snapHandle       : false
 	},
 	textarea : {
 		dynWidth       : false,
@@ -689,6 +690,24 @@
 								<td colspan="4">
 									<div>
 										Indicates whether the scrollbar reacts to touch events.
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>snapHandle</td>
+								<td>boolean</td>
+								<td>-</td>
+								<td>false</td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									<div>
+										<code class="code-inline">added in v1.7.0</code><br>
+										Indicates whether the scrollbar handle-offset shall be snapped or not.<br><br>
+										
+										This option is only interesting if you use  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type" target="_blank" class="inline-btn">CSS Scroll snapping</a>.<br>
+										Some browsers, like Google Chrome, will snap the scrollbar handle to the next possible position.
+										By default the unsnapped (normal) handleOffset will be used, but you can change this behavior with this option.
 									</div>
 								</td>
 							</tr>
@@ -1715,6 +1734,10 @@ instance.sleep();
 		x : <span class="txtc-secondary-color">number</span>,
 		y : <span class="txtc-secondary-color">number</span>
 	},
+	snappedHandleOffset : {
+		x : <span class="txtc-secondary-color">number</span>,
+		y : <span class="txtc-secondary-color">number</span>
+	},
 	isRTL           : <span class="txtc-secondary-color">boolean</span>,
 	isRTLNormalized : <span class="txtc-secondary-color">boolean</span>
 }</code></pre>
@@ -1833,6 +1856,26 @@ instance.sleep();
 										</div>
 										<div class="plainobjectproperty-documentation-box">
 											<div class="plainobjectproperty-documentation-box-title">
+												snappedHandleOffset.x                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												<code class="code-inline">added in v1.7.0</code> The snapped handle offset of the horizontal scrollbar in pixels.<br>
+												If you use  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type" target="_blank" class="inline-btn">CSS Scroll snapping</a> some browsers, like Google Chrome, will snap the scrollbar handle to the next possible position.
+												By default the unsnapped (normal) handleOffset will be used, but you can change this behavior with the <code class="code-inline js hljs javascript">scrollbars.snapHandle</code> option.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
+												snappedHandleOffset.y                           
+											</div>
+											<div class="plainobjectproperty-documentation-box-content">
+												<code class="code-inline">added in v1.7.0</code> The snapped handle offset of the vertical scrollbar in pixels.<br>
+												If you use  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type" target="_blank" class="inline-btn">CSS Scroll snapping</a> some browsers, like Google Chrome, will snap the scrollbar handle to the next possible position.
+												By default the unsnapped (normal) handleOffset will be used, but you can change this behavior with the <code class="code-inline js hljs javascript">scrollbars.snapHandle</code> option.
+											</div>
+										</div>
+										<div class="plainobjectproperty-documentation-box">
+											<div class="plainobjectproperty-documentation-box-title">
 												isRTL                           
 											</div>
 											<div class="plainobjectproperty-documentation-box-content">
@@ -1849,7 +1892,7 @@ instance.sleep();
 										</div>
 										<div class="expander-header" data-expander-key="deprecatedScrollReturn">
 											<i class="mdi mdi-chevron-down"></i>
-											<span><code class="code-inline">deprecated since v1.6.0</code></span>
+											<span><code class="code-inline">deprecated since v1.6.0 & removed since v1.7.0</code></span>
 										</div>
 										<div class="expander-content" data-expander-value="deprecatedScrollReturn">
 											Structure:
@@ -3951,26 +3994,25 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 		var scrollbarHorizontalHandle = instanceElements.scrollbarHorizontal.track;
 		var scrollbarVerticalHandle = instanceElements.scrollbarVertical.track;
 		var html = '&lt;div style="height: 100%; width: 100%; top: 0; left: 0; position: absolute;"&gt;&lt;/div&gt;';
-		var sX = osInstance.scroll().x;
-		var sY = osInstance.scroll().y;
+		var sInfo = osInstance.scroll();
 		
 		trackElmHorizontal = framework(html).css({
 			background : parsedOptions.color,
-			width : sX.handleOffset
+			width : sInfo.handleOffset.x
 		});
 		trackElmHorizontal2 = framework(html).css({
 			background : parsedOptions.color,
-			width : sX.trackLength - (sX.handleOffset + sX.handleLength),
-			left : sX.handleOffset + sX.handleLength
+			width : sInfo.trackLength.x - (sInfo.handleOffset.x + sInfo.handleLength.x),
+			left : sInfo.handleOffset.x + sInfo.handleLength.x
 		});
 		trackElmVertical = framework(html).css({
 			background : parsedOptions.color,
-			height : sY.handleOffset
+			height : sInfo.handleOffset.y
 		});
 		trackElmVertical2 = framework(html).css({
 			background : parsedOptions.color,
-			height : sY.trackLength - (sY.handleOffset + sY.handleLength),
-			top : sY.handleOffset + sY.handleLength
+			height : sInfo.trackLength.y - (sInfo.handleOffset.y + sInfo.handleLength.y),
+			top : sInfo.handleOffset.y + sInfo.handleLength.y
 		});
 
 		framework(scrollbarHorizontalHandle).append([trackElmHorizontal, trackElmHorizontal2])
@@ -3989,22 +4031,21 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 	extension.on = function(callbackName, args) {
 		switch(callbackName) {
 			case "scroll":
-				var sX = osInstance.scroll().x;
-				var sY = osInstance.scroll().y;
+				var sInfo = osInstance.scroll();
 		
 				trackElmHorizontal.css({
-					width : sX.handleOffset
+					width : sInfo.handleOffset.x
 				});
 				trackElmHorizontal2.css({
-					width : sX.trackLength - (sX.handleOffset + sX.handleLength),
-					left : sX.handleOffset + sX.handleLength
+					width : sInfo.trackLength.x - (sInfo.handleOffset.x + sInfo.handleLength.x),
+					left : sInfo.handleOffset.x + sInfo.handleLength.x
 				});
 				trackElmVertical.css({
-					height : sY.handleOffset
+					height : sInfo.handleOffset.y
 				});
 				trackElmVertical2.css({
-					height : sY.trackLength - (sY.handleOffset + sY.handleLength),
-					top : sY.handleOffset + sY.handleLength
+					height : sInfo.trackLength.y - (sInfo.handleOffset.y + sInfo.handleLength.y),
+					top : sInfo.handleOffset.y + sInfo.handleLength.y
 				});
 				break;
 		}

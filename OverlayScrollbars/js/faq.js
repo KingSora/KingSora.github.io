@@ -41,8 +41,8 @@ $('.split-table').each(function() {
 				sideBody.css("height", e.height);
 			},
 			onScroll : function() {
-				osMainHead.scroll({ x : this.scroll().x.position });
-				osSideBody.scroll({ y : this.scroll().y.position });
+				osMainHead.scroll({ x : this.scroll().position.x });
+				osSideBody.scroll({ y : this.scroll().position.y });
 			}
 		}
 	}).overlayScrollbars();

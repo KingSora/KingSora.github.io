@@ -449,8 +449,8 @@ $(document).ready(function() {
 		(function() { 
 			$('.input-numeric').each(function() {
 				var mainElem = $(this);
-				var floaty = mainElem.attr(_dataAttrInputNumeric + "-float") == "true";
-				var parseFunc = floaty ? window.parseFloat : window.parseInt;
+				var parseFunc = window.parseFloat;
+				var toFixedNum = 8;
 				
 				var min = parseFunc(mainElem.attr(_dataAttrInputNumeric + "-min"));
 				var max = parseFunc(mainElem.attr(_dataAttrInputNumeric + "-max"));
@@ -499,6 +499,7 @@ $(document).ready(function() {
 					clearTimeout(buttonPressedTimeout);
 					buttonPressed(function() { 
 						value -= step;
+						value = parseFunc(value.toFixed(toFixedNum));
 						updateValue();
 					});
 					$(document).one('mouseup', function(e) { 
@@ -509,6 +510,7 @@ $(document).ready(function() {
 					clearTimeout(buttonPressedTimeout);
 					buttonPressed(function() { 
 						value += step;
+						value = parseFunc(value.toFixed(toFixedNum));
 						updateValue();
 					});
 					$(document).one('mouseup', function(e) { 
