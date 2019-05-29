@@ -10929,18 +10929,19 @@ td.cell-secondary {
 
 .sponsors-sponsor > .sponsors-sponsor-logo {
   padding-right: 8px;
-  padding-left: 8px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none; }
+  padding-left: 8px; }
 
 .sponsors-sponsor > .sponsors-sponsor-logo img {
   display: block;
   margin: 0;
   padding: 0;
   -o-object-fit: cover;
-     object-fit: cover; }
+     object-fit: cover;
+  max-width: 300px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
 
 .sponsors-sponsor > .sponsors-sponsor-text {
   padding-left: 8px;
