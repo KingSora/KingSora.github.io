@@ -2833,6 +2833,42 @@ td.cell-secondary {
 	opacity: 0.25;
 }
 
+
+//SPONSORS
+.sponsors {
+	width: 100%;
+	display: table;
+}
+.sponsors-sponsor {
+	background: #fff;
+	padding: 12px 0px;
+	margin: 24px auto;
+	box-shadow: 0 14px 16px -18px rgba(35, 80, 129, 0.1), 0 14px 50px -18px rgba(35, 80, 129, 0.1);
+	border-radius: 6px;
+}
+.sponsors-sponsor > .sponsors-sponsor-logo,
+.sponsors-sponsor > .sponsors-sponsor-text {
+	display: table-cell;
+	vertical-align: middle;
+	
+}
+.sponsors-sponsor > .sponsors-sponsor-logo {
+	padding-right: 8px;
+	padding-left: 8px;
+	user-select: none;
+}
+.sponsors-sponsor > .sponsors-sponsor-logo img {
+	display: block;
+	margin: 0;
+	padding: 0;
+	object-fit: cover;
+}
+.sponsors-sponsor > .sponsors-sponsor-text {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+
 //DONATE BUTTON
 a.button-dontate {
 	width: 200px;
