@@ -70,6 +70,9 @@
 			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-extension" data-navigation="[1]gmethod-extension">
 				<span>extension</span>
 			</div>
+			<div class="content-navigation-item content-navigation-item-clickable" data-tab-key="global-valid" data-navigation="[1]gmethod-valid">
+				<span>valid</span>
+			</div>
 			<div class="content-navigation-item content-navigation-item-caption">
 				<span>Extensions:</span>
 			</div>
@@ -3770,7 +3773,49 @@ var firstRegisteredExtensionObject = extensionObjects[0]; //get the first regist
 					</div>
 				</div>
 			</div>
-		
+			
+			<div id="global-valid" data-tab-value="global-valid">
+				<div class="content-navigation-main-caption">OverlayScrollbars.valid Method</div>
+				<div class="content-navigation-sub-caption">Description</div>
+				Checks whether a passed object is a non-destroyed OverlayScrollbars instance. <code class="code-inline">added in v1.9.0</code>
+				<div class="content-navigation-sub-caption">Signatures</div>
+				<div class="method-documentation-box">
+					<div class="method-documentation-box-signature">
+						OverlayScrollbars.valid(<span>osInstance</span>)
+					</div>
+					<div class="method-documentation-box-description">
+						Checks whether the passed object is a non-destroyed OverlayScrollbars instance.
+						<div class="method-documentation-box-description-wrapper">
+							<span>Parameters:</span>
+							<div class="method-documentation-box-description-param">
+								<p>osInstance</p>
+								<p>Type: *</p>
+								<div>
+									The potential OverlayScrollbars instance which shall be checked.
+								</div>
+							</div>
+						</div>
+						<div class="method-documentation-box-description-wrapper">
+							<span>examples:</span>
+							<pre><code class="js">//create OverlayScrollbars instance
+var osInstance = OverlayScrollbars(document.body, { });
+
+//returns true
+OverlayScrollbars.valid(osInstance);
+
+//destroy the instance
+osInstance.destroy();
+
+//returns false
+OverlayScrollbars.valid(osInstance);
+
+//returns false
+OverlayScrollbars.valid({ });
+</code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
 		
 			<div id="extensions-basics" data-tab-value="extensions-basics">
 				<div class="content-navigation-main-caption">Extensions</div>
