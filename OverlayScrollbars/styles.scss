@@ -3,9 +3,108 @@
 /* Base */
 @import "../_framework/scss/base";
 
+/* Plugins */
+@import "../_framework/plugins/css/highlightjs/sora.css";
+@import "../_framework/plugins/css/codemirror/codemirror.css";
+@import "../_framework/plugins/css/tippy/tippy.css";
+
+/* OverlayScrollbars */
+@import "../_framework/css/OverlayScrollbars.css";
+@import "etc/os-theme-minimal-dark.css";
+@import "etc/os-theme-minimal-light.css";
+@import "etc/os-theme-thin-dark.css";
+@import "etc/os-theme-thin-light.css";
+@import "etc/os-theme-thick-dark.css";
+@import "etc/os-theme-thick-light.css";
+@import "etc/os-theme-round-dark.css";
+@import "etc/os-theme-round-light.css";
+@import "etc/os-theme-block-dark.css";
+@import "etc/os-theme-block-light.css";
 
 
-
+.three-col-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    margin: 44px auto;
+}
+.three-col-content-item {
+    display: block;
+    width: 33.33%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-base: auto;
+    padding: 6px;
+}
+.three-col-content-item-content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+.three-col-content-item-content-framework-wrapper {
+    display: table;
+    height: 100%;
+    width: auto;
+    margin: 0px auto;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+.three-col-content-item-content-framework-wrapper-icon {
+    display: block;
+    height: auto;
+    width: auto;
+    position: relative;
+    margin: 8px;
+}
+.three-col-content-item-content-framework-wrapper-icon:before {
+    content: '';
+    display: block;
+    position: relative;
+    opacity: .8;
+    width: 110px;
+    height: 110px;
+    border-radius: 100%;
+    left: calc(50% - 55px);
+    z-index: 1;
+    transition: transform 0.3s;
+}
+.three-col-content-item-content-framework-wrapper-icon-react:before {
+    background: #61dafb linear-gradient(45deg, rgba(#61dafb, 0.5) 0%, rgba(#3963ff, 0.5) 100%);
+    box-shadow: 0 14px 16px -18px rgba(#3963ff, 0.35), 0 14px 50px -18px rgba(#61dafb, 0.7);
+}
+.three-col-content-item-content-framework-wrapper-icon-vue:before {
+    background: #41b883 linear-gradient(45deg, rgba(#41b883, 0.5) 0%, rgba(#c7e68a, 0.5) 100%);
+    box-shadow: 0 14px 16px -18px rgba(#34495e, 0.35), 0 14px 50px -18px rgba(#41b883, 0.7);
+}
+.three-col-content-item-content-framework-wrapper-icon-angular:before {
+    background: #dd0031 linear-gradient(45deg, rgba(#dd0031, 0.5) 0%, rgba(#fc9c62, 0.5) 100%);
+    box-shadow: 0 14px 16px -18px rgba(#fc9c62, 0.35), 0 14px 50px -18px rgba(#dd0031, 0.7);
+}
+.three-col-content-item-content-framework-wrapper-icon svg {
+    position: absolute;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 60px;
+    z-index: 2;
+}
+.three-col-content-item-content-framework-wrapper h4 {
+    text-align: center;
+    margin: 26px auto;
+    font-size: 16pt;
+    font-weight: $font-weight-semibold;
+    color: $text-color-gray;
+    display: table;
+    border-bottom: 1px dotted transparent;
+    transition: border-color 0.3s;
+}
+.three-col-content-item-content-framework-wrapper:hover .three-col-content-item-content-framework-wrapper-icon:before {
+    transform: scale(1.1);
+}
+.three-col-content-item-content-framework-wrapper:hover h4 {
+    border-bottom-color: $text-color-gray;
+}
 
 
 

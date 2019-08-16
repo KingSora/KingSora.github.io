@@ -27,7 +27,7 @@
 			<b>Yes.</b> You can adjust the position of the scrollbars via CSS.<br>
 			Please read <a data-navigation="documentation/styling" class="inline-btn">this article</a> for further information.
 		</div>
-
+		
 		<div class="expander-header" data-expander-key="faq-click-scrolling">
 			<i class="mdi mdi-chevron-down"></i>
 			<span>Can I click on the scrollbar-track to scroll to a certain offset?</span>
@@ -161,22 +161,12 @@
 			<div class="clear"></div>
 		</div>
 		
-        <div class="expander-header" data-expander-key="faq-pad-host-container-when-scrollbars-visible">
-			<i class="mdi mdi-chevron-down"></i>
-			<span>Is it possible to add padding to the host container only when scrollbars are visible?</span>
-		</div>
-		<div class="expander-content" data-expander-value="faq-pad-host-container-when-scrollbars-visible">
-			<b>Yes.</b> You can use the <code class="code-inline">onOverflowChanged</code> callback.<br>
-			Please see <a href="http://jsfiddle.net/dbmnpw3c/1/" target="_blank" class="inline-btn">this jsfiddle</a> for an example.
-			Also, there is a detailed explanation in <a href="https://github.com/KingSora/OverlayScrollbars/issues/72" target="_blank" class="inline-btn">this github issue</a>.
-		</div>
-        
 		<div class="expander-header" data-expander-key="faq-scrollTo">
 			<i class="mdi mdi-chevron-down"></i>
 			<span>Does the plugin provide a "scrollTo" method?</span>
 		</div>
 		<div class="expander-content" data-expander-value="faq-scrollTo">
-			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo" target="_blank" class="inline-btn">scrollTo</a> method, but the functionality is the same.<br>
+			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo" target="_blank" rel="noopener" class="inline-btn">scrollTo</a> method, but the functionality is the same.<br>
 			Actually, the method is capable of much more than its native counterpart. For example you can use relative coordinates, custom animation-duration, custom animation-easing and more.<br>
 			<pre><code class="js code-noscroll">var element = document.getElementById("box");
 
@@ -198,7 +188,7 @@ instance.scroll({ y : "50%", x : "50%" }, 1000, "easeOutElastic");</code></pre>
 			<span>Does the plugin provide a "scrollIntoView" method?</span>
 		</div>
 		<div class="expander-content" data-expander-value="faq-scrollintoview">
-			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank" class="inline-btn">scrollIntoView</a> method, but the functionality is the same.<br>
+			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank" rel="noopener" class="inline-btn">scrollIntoView</a> method, but the functionality is the same.<br>
 			Actually, the method is capable of much more than its native counterpart, please read the <a data-navigation="documentation/method-scroll" class="inline-btn">documentation</a> to get further information.<br>
 			Below you can see some examples: 
 			<pre><code class="js code-noscroll">var element = document.getElementById("box");
@@ -224,7 +214,7 @@ instance.scroll(element); </code></pre>
 			<span>Does the plugin provide a "scrollIntoViewIfNeeded" method?</span>
 		</div>
 		<div class="expander-content" data-expander-value="faq-scrollintoviewifneeded">
-			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" class="inline-btn">scrollIntoViewIfNeeded</a> method, but the functionality is the same.<br>
+			<b>Yes.</b> The <a data-navigation="documentation/method-scroll" class="inline-btn">scroll method</a> offers such a functionality. The API is a bit different to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" rel="noopener" class="inline-btn">scrollIntoViewIfNeeded</a> method, but the functionality is the same.<br>
 			Actually, the method is capable of much more than its native counterpart, please read the <a data-navigation="documentation/method-scroll" class="inline-btn">documentation</a> to get further information.<br>
 			Below you can see some examples: 
 			<pre><code class="js code-noscroll">var element = document.getElementById("box");
@@ -291,7 +281,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 			<div class="content-message-content">
 				On the internet you'll find many scrollbar plugins. Below I've compared the features of a few of them.<br>
 				Hover or click on certain entries to see additional information or a description.<br>
-				If I've made a mistake or if you want to enhance this table, please feel free to open a issue on <a href="https://github.com/KingSora/KingSora.github.io/issues" target="_blank" class="inline-btn">github</a>.<br><br>
+				If I've made a mistake or if you want to enhance this table, please feel free to open a issue on <a href="https://github.com/KingSora/KingSora.github.io/issues" target="_blank" rel="noopener" class="inline-btn">github</a>.<br><br>
 				The Github information were refreshed on: <b id="github-infos-timestamp">?</b><br>
 				The table was last edited on: <b id="table-infos-timestamp">July 25, 2018 - 16:02</b>
 			</div>
@@ -305,16 +295,16 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 				<thead>
 					<tr>
 						<td><div class="split-table-expand"><i class="mdi mdi-arrow-expand"></i></div></td>
-						<td><a href="https://github.com/KingSora/OverlayScrollbars" target="_blank" class="inline-btn">OverlayScrollbars</a></td>
-						<td><a href="https://github.com/Grsmto/simplebar" target="_blank" class="inline-btn">Simplebar</a></td>
-						<td><a href="https://github.com/utatti/perfect-scrollbar" target="_blank" class="inline-btn">perfect-scrollbar</a></td>
-						<td><a href="https://github.com/noeldelgado/gemini-scrollbar" target="_blank" class="inline-btn">gemini-scrollbar</a></td>
-						<td><a href="https://github.com/jamesflorentino/nanoScrollerJS" target="_blank" class="inline-btn">nanoScrollerJS</a></td>
-						<td><a href="https://github.com/idiotWu/smooth-scrollbar" target="_blank" class="inline-btn">Smooth Scrollbar</a></td>
-						<td><a href="https://github.com/albertogasparin/Optiscroll" target="_blank" class="inline-btn">Optiscroll</a></td>
-						<td><a href="https://github.com/inuyaksa/jquery.nicescroll" target="_blank" class="inline-btn">jQuery.NiceScroll</a></td>
-						<td><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin" target="_blank" class="inline-btn">malihu custom scrollbar plugin</a></td>
-						<td><a href="https://github.com/vitch/jScrollPane" target="_blank" class="inline-btn">jScrollPane</a></td>
+						<td><a href="https://github.com/KingSora/OverlayScrollbars" target="_blank" rel="noopener" class="inline-btn">OverlayScrollbars</a></td>
+						<td><a href="https://github.com/Grsmto/simplebar" target="_blank" rel="noopener" class="inline-btn">Simplebar</a></td>
+						<td><a href="https://github.com/utatti/perfect-scrollbar" target="_blank" rel="noopener" class="inline-btn">perfect-scrollbar</a></td>
+						<td><a href="https://github.com/noeldelgado/gemini-scrollbar" target="_blank" rel="noopener" class="inline-btn">gemini-scrollbar</a></td>
+						<td><a href="https://github.com/jamesflorentino/nanoScrollerJS" target="_blank" rel="noopener" class="inline-btn">nanoScrollerJS</a></td>
+						<td><a href="https://github.com/idiotWu/smooth-scrollbar" target="_blank" rel="noopener" class="inline-btn">Smooth Scrollbar</a></td>
+						<td><a href="https://github.com/albertogasparin/Optiscroll" target="_blank" rel="noopener" class="inline-btn">Optiscroll</a></td>
+						<td><a href="https://github.com/inuyaksa/jquery.nicescroll" target="_blank" rel="noopener" class="inline-btn">jQuery.NiceScroll</a></td>
+						<td><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin" target="_blank" rel="noopener" class="inline-btn">malihu custom scrollbar plugin</a></td>
+						<td><a href="https://github.com/vitch/jScrollPane" target="_blank" rel="noopener" class="inline-btn">jScrollPane</a></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -412,14 +402,14 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 					<tr>
 						<td class="cell-white"><b>Browser Support</b></td>
 						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 8+ | Firefox | Chrome | Opera | Edge | Safari 6+</span><b>IE 8+</b></td>
-						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 11 | Firefox | Chrome | Opera | Edge | Safari<br><a href="https://github.com/Grsmto/simplebar#2-browsers-support" target="_blank" class="inline-btn">More info for IE10 and below</a></span><b>IE 11+</b></td>
-						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 11 | Firefox | Chrome | Opera | Edge | Safari<br><a href="https://github.com/utatti/perfect-scrollbar#ie-support" target="_blank" class="inline-btn">but may have some issues in IE11"</a></span><b>IE 11+</b></td>
+						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 11 | Firefox | Chrome | Opera | Edge | Safari<br><a href="https://github.com/Grsmto/simplebar#2-browsers-support" target="_blank" rel="noopener" class="inline-btn">More info for IE10 and below</a></span><b>IE 11+</b></td>
+						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 11 | Firefox | Chrome | Opera | Edge | Safari<br><a href="https://github.com/utatti/perfect-scrollbar#ie-support" target="_blank" rel="noopener" class="inline-btn">but may have some issues in IE11"</a></span><b>IE 11+</b></td>
 						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 9+ | Firefox | Chrome | Opera | Edge | Safari</span><b>IE 9+</b></td>
-						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 7+ | Firefox 3+ | Chrome | Safari 4+ | Opera 11.60+<br><a href="https://github.com/jamesflorentino/nanoScrollerJS#browser-compatibility" target="_blank" class="inline-btn">check it out here</a></span><b>IE 7+</b></td>
-						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 10+ | Firefox 16+ | Chrome 22+ | Safari 8+<br><a href="https://github.com/idiotWu/smooth-scrollbar#browser-compatibility" target="_blank" class="inline-btn">check it out here</a></span><b>IE 10+</b></td>
+						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 7+ | Firefox 3+ | Chrome | Safari 4+ | Opera 11.60+<br><a href="https://github.com/jamesflorentino/nanoScrollerJS#browser-compatibility" target="_blank" rel="noopener" class="inline-btn">check it out here</a></span><b>IE 7+</b></td>
+						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 10+ | Firefox 16+ | Chrome 22+ | Safari 8+<br><a href="https://github.com/idiotWu/smooth-scrollbar#browser-compatibility" target="_blank" rel="noopener" class="inline-btn">check it out here</a></span><b>IE 10+</b></td>
 						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 11+ | Firefox | Chrome | Opera | Edge | Safari</span><b>IE 11+</b></td>
 						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 8+ | Firefox | Chrome | Opera | Edge | Safari</span><b>IE 8+</b></td>
-						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 8+ | Firefox | Chrome | Opera | Safari <br><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin#browser-compatibility" target="_blank" class="inline-btn">check it out here</a></span><b>IE 8+</b></td>
+						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 8+ | Firefox | Chrome | Opera | Safari <br><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin#browser-compatibility" target="_blank" rel="noopener" class="inline-btn">check it out here</a></span><b>IE 8+</b></td>
 						<td class="cell-white font-weight-semibold" data-tooltip><span class="tooltip">IE 8+ | Firefox | Chrome | Opera | Edge | Safari</span><b>IE 8+</b></td>
 					</tr>
 					<tr>
@@ -554,24 +544,24 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Supports Textarea-Element</b></td>
-						<td class="cell-white"><a href="https://kingsora.github.io/OverlayScrollbars/#!documentation/supportedelements" target="_blank"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
+						<td class="cell-white"><a href="https://kingsora.github.io/OverlayScrollbars/#!documentation/supportedelements" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/318#issuecomment-91620732" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/318#issuecomment-91620732" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/104#issuecomment-12391970" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/104#issuecomment-12391970" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
-						<td class="cell-white"><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin/blob/master/examples/textarea_example.html" target="_blank"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/malihu/malihu-custom-scrollbar-plugin/blob/master/examples/textarea_example.html" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
 						<td class="cell-white"><b>Supports Body-Element</b></td>
-						<td class="cell-white"><a href="https://kingsora.github.io/OverlayScrollbars/#!documentation/supportedelements" target="_blank"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
+						<td class="cell-white"><a href="https://kingsora.github.io/OverlayScrollbars/#!documentation/supportedelements" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
-						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/340#issuecomment-114099116" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
-						<td class="cell-white"><a href="https://github.com/noeldelgado/gemini-scrollbar#notes" target="_blank"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
-						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/335#issuecomment-362910690" target="_blank"><i class="mdi mdi-help-circle txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/340#issuecomment-114099116" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/noeldelgado/gemini-scrollbar#notes" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/335#issuecomment-362910690" target="_blank" rel="noopener"><i class="mdi mdi-help-circle txtc-light"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-help-circle txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-help-circle txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
@@ -608,9 +598,9 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><b>Supports Direction-RTL</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-help-circle txtc-light"></i></td>
-						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/689" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
-						<td class="cell-white"><a href="https://github.com/noeldelgado/gemini-scrollbar/issues/20" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
-						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/87" target="_blank"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/utatti/perfect-scrollbar/issues/689" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/noeldelgado/gemini-scrollbar/issues/20" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
+						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/87" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
@@ -675,7 +665,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
-						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/135#issuecomment-16599587" target="_blank"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">It works but has one bug if you use a certain option.</span></i></a></td>
+						<td class="cell-white"><a href="https://github.com/jamesflorentino/nanoScrollerJS/issues/135#issuecomment-16599587" target="_blank" rel="noopener"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color" data-tooltip><span class="tooltip">It works but has one bug if you use a certain option.</span></i></a></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
@@ -787,7 +777,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td></td>
 					</tr>
 					<tr>
-						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo" target="_blank" class="inline-btn">scrollTo</a>-like method</b></td>
+						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollTo" target="_blank" rel="noopener" class="inline-btn">scrollTo</a>-like method</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
@@ -800,7 +790,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank" class="inline-btn">scrollIntoView</a>-like method</b></td>
+						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView" target="_blank" rel="noopener" class="inline-btn">scrollIntoView</a>-like method</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
@@ -813,7 +803,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" class="inline-btn">scrollIntoViewIfNeeded</a>-like method</b></td>
+						<td class="cell-white"><b><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoViewIfNeeded" target="_blank" rel="noopener" class="inline-btn">scrollIntoViewIfNeeded</a>-like method</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
@@ -826,7 +816,7 @@ var scrollTop = scrollInfo.position.y;</code></pre>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 					</tr>
 					<tr>
-						<td class="cell-white"><b>Provides <a href="https://www.w3schools.com/cssref/css3_pr_resize.asp" target="_blank" class="inline-btn">CSS3 resize</a> functionality</b></td>
+						<td class="cell-white"><b>Provides <a href="https://www.w3schools.com/cssref/css3_pr_resize.asp" target="_blank" rel="noopener" class="inline-btn">CSS3 resize</a> functionality</b></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-marked-circle txtc-primary-color"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>
 						<td class="cell-white"><i class="mdi mdi-checkbox-blank-circle-outline txtc-light"></i></td>

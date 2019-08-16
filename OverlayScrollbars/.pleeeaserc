@@ -1,6 +1,6 @@
 {
 	"in": "styles.scss",
-	"out": "styles.css",
+	"out": "styles.min.css",
 	"autoprefixer": {"browsers": [">0.5%", "iOS 6", "last 2 versions", "Firefox >= 20", "Firefox ESR"]},
 	"filters": false,
 	"rem": false,
@@ -8,7 +8,7 @@
 	"opacity": false,
 
 	"import": false,
-	"minifier": false,
+	"minifier": true,
 	"mqpacker": false,
 
 	"sass": true,

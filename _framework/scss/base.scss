@@ -108,6 +108,13 @@ pre > code:not(.expandable).hljs.html:before {
 	-moz-box-shadow: 0px 3px 15px -7px rgba(228,79,38,1);
 	box-shadow: 0px 3px 15px -7px rgba(228,79,38,1);
 }
+.content-section pre > code:not(.expandable).hljs.json:before {
+	content: 'JSON';
+	background: linear-gradient(135deg,#959595,#323232);
+	-webkit-box-shadow: 0px 3px 15px -7px rgba(#959595,1);
+	-moz-box-shadow: 0px 3px 15px -7px rgba(#959595,1);
+	box-shadow: 0px 3px 15px -7px rgba(#959595,1);
+}
 .nowrap {
 	white-space: nowrap !important;
 }
@@ -330,6 +337,7 @@ code.expandable > .expandable-button:hover {
 	display: block;
 	margin-left: 45px;
 	width: auto;
+    color: #000;
 }
 .txtbox-primary-color {
 	border-color: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.16);
@@ -937,7 +945,7 @@ a.navigation-menu-item:after {
 	font-size: 26pt;
 	letter-spacing: 0.5pt;
 	position: relative;
-	margin: 20px 0;
+	margin: 40px 0;
 }
 .content-message-content {
 	color: $text-color-gray;
@@ -953,7 +961,6 @@ a.navigation-menu-item:after {
 	font-weight: $font-weight-semibold;
 	color: $text-color-dark;
 }
-.content-message-content a,
 .inline-btn {
 	display: inline-block;
 	text-decoration: none;
@@ -967,12 +974,10 @@ a.navigation-menu-item:after {
 	cursor: pointer;
 	z-index: 0;
 }
-.content-message-content a:hover,
 .inline-btn:hover {
 	color: #fff;
 	text-shadow: 0px 1px 6px rgba(0, 0, 0, 0.16);
 }
-.content-message-content a:before,
 .inline-btn:before {
 	content: '';
 	position: absolute;
@@ -986,7 +991,6 @@ a.navigation-menu-item:after {
 	border-bottom: 1px dotted $primary-color;
 	transition: height 0.3s, border 0.3s, background-color 0.15s;
 }
-.content-message-content a:hover:before,
 .inline-btn:hover:before {
 	height: 100%;
 	background: $primary-color;
@@ -1006,10 +1010,10 @@ a.navigation-menu-item:after {
 }
 .content-message-content-list-item {
 	position: relative;
-	margin: 0px 0px 25px 0px;
+	margin: 0px 0px 40px 0px;
 	width: 50%;
 	float: left;
-	padding: 10px;
+	padding: 20px;
 	z-index: 1;
 }
 @media (max-width: $shrink-width) {
@@ -1038,18 +1042,16 @@ a.navigation-menu-item:after {
 	float: left;
 	color: $text-color-dark;
 	font-weight: $font-weight-semibold;
-	font-size: 14pt;
+	font-size: 15pt;
 	position: relative;
 	margin-bottom: 16px;
 }
 @media (min-width: $shrink-width) {
-	.content-message-content-list-item > .content-message-content-list-item-bullet,
 	.content-message-content-list-item > .content-message-content-list-item-title {
-		font-size: 13pt;
+		font-size: 11.5pt;
 	}
 }
 @media (min-width:$max-width) {
-	.content-message-content-list-item > .content-message-content-list-item-bullet,
 	.content-message-content-list-item > .content-message-content-list-item-title {
 		font-size: 14pt;
 	}
@@ -1059,6 +1061,14 @@ a.navigation-menu-item:after {
 	margin-right: 15px;
 	text-align: center;
 	color: #fff;
+    font-family: $code-font-family;
+    font-weight: $code-font-weight-bold;
+    font-size: 14pt !important;
+}
+.content-message-content-list-item > .content-message-content-list-item-bullet > i.mdi {
+    font-size: 14pt !important;
+    display: table;
+    margin: 0px auto;
 }
 .content-message-content-list-item > .content-message-content-list-item-bullet:before{
 	content: '';
@@ -1074,10 +1084,6 @@ a.navigation-menu-item:after {
 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.69) -webkit-linear-gradient(-45deg,rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.4) 1%, rgba($secondary-color-r, $secondary-color-g, $secondary-color-b, 0.4) 100%);
 	background: rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.69) linear-gradient(135deg, rgba($primary-color-r, $primary-color-g, $primary-color-b, 0.4) 1%, rgba($secondary-color-r, $secondary-color-g, $secondary-color-b, 0.4) 100%);
 	z-index: -1;
-	-webkit-box-shadow: 0px 3px 17px -4px rgba(63,183,252,0.71);
-	-moz-box-shadow: 0px 3px 17px -4px rgba(63,183,252,0.71);
-	box-shadow: 0px 3px 17px -4px rgba(63,183,252,0.71);
-	
 }
 .content-message-content-list-item > .content-message-content-list-item-title ,
 .content-message-content-list-item > .content-message-content-list-item-content  {
@@ -1092,6 +1098,15 @@ a.navigation-menu-item:after {
 .content-message-full > .content-message-title {
 	display: inline-block;
 }
+.three-col-content {
+   
+}
+
+
+
+
+
+
 #content-navigable > .container {
 	height: 100%;
 }
@@ -2838,6 +2853,7 @@ td.cell-secondary {
 .sponsors {
 	width: 100%;
 	display: table;
+    padding: 0px 12px;
 }
 .sponsors-sponsor {
 	background: #fff;
@@ -2887,11 +2903,19 @@ a.button-dontate {
 	background: linear-gradient(to right,  $primary-color 0%,$secondary-color 100%);
 	box-shadow: 0 1px 3px $control-boxshadow-color, 0 1px 2px $control-boxshadow-color;
 	overflow: hidden;
+    z-index: 0;
+    position: relative;
+    text-decoration: none !important;
+    font-weight: $font-weight-semibold;
+    transition: color 0.3s;
 }
 a.button-dontate:active {
 	box-shadow: none;
 }
 a.button-dontate:before {
+    content: '';
+    position: absolute;
+    display: block;
 	border: none !important;
 	border-radius: 2px !important;
 	background: #fff !important;
@@ -2901,6 +2925,8 @@ a.button-dontate:before {
 	bottom: 2px;
 	left: 2px;
 	right: 2px;
+    z-index: -1;
+    transition: height 0.3s, border 0.3s, background-color 0.15s;
 }
 .content-section:nth-child(2n + 0) a.button-dontate:before {
 	background: $content-section-color !important;
@@ -2922,11 +2948,13 @@ a.button-dontate:after {
 	transition: opacity 0.3s, transform 0.3s;
 	z-index: -1;
 }
+a.button-dontate:hover {
+	color: #fff;
+}
 a.button-dontate:hover:after {
 	opacity: 1;
 	transform: translate(-50%, -50%) scale(1) ;
 }
-
 a.inline-btn:after {
 	font: normal normal normal 24px/1 "Material Design Icons";
 	font-size: 10pt;
