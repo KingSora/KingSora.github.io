@@ -149,7 +149,14 @@ $(document).ready(function() {
 						$.getScript(_jsPath + newMainHash + _jsExtension).always(function() {
 							pagePathChange(newHash, oldHash);
 							hideLoading();
-						});			
+						}).fail(function(){
+                            if(arguments[0].readyState==0){
+                                //script failed to load
+                            }else{
+                                //script loaded but failed to parse
+                                console.error(arguments);
+                            }
+                        })		
 					});
                     
 					/*

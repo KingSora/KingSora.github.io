@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/OverlayScrollbars/frameworks/react/static/css/main.2afaf7d3.chunk.css",
-    "main.js": "/OverlayScrollbars/frameworks/react/static/js/main.774f9ff9.chunk.js",
-    "main.js.map": "/OverlayScrollbars/frameworks/react/static/js/main.774f9ff9.chunk.js.map",
+    "main.js": "/OverlayScrollbars/frameworks/react/static/js/main.5565aba3.chunk.js",
+    "main.js.map": "/OverlayScrollbars/frameworks/react/static/js/main.5565aba3.chunk.js.map",
     "runtime~main.js": "/OverlayScrollbars/frameworks/react/static/js/runtime~main.6aaf21d4.js",
     "runtime~main.js.map": "/OverlayScrollbars/frameworks/react/static/js/runtime~main.6aaf21d4.js.map",
-    "static/css/2.8505c642.chunk.css": "/OverlayScrollbars/frameworks/react/static/css/2.8505c642.chunk.css",
-    "static/js/2.78d13a7a.chunk.js": "/OverlayScrollbars/frameworks/react/static/js/2.78d13a7a.chunk.js",
-    "static/js/2.78d13a7a.chunk.js.map": "/OverlayScrollbars/frameworks/react/static/js/2.78d13a7a.chunk.js.map",
+    "static/css/2.b6cbe73a.chunk.css": "/OverlayScrollbars/frameworks/react/static/css/2.b6cbe73a.chunk.css",
+    "static/js/2.397675c9.chunk.js": "/OverlayScrollbars/frameworks/react/static/js/2.397675c9.chunk.js",
+    "static/js/2.397675c9.chunk.js.map": "/OverlayScrollbars/frameworks/react/static/js/2.397675c9.chunk.js.map",
     "index.html": "/OverlayScrollbars/frameworks/react/index.html",
-    "precache-manifest.386ed44ca5e12c471436efd5ea411430.js": "/OverlayScrollbars/frameworks/react/precache-manifest.386ed44ca5e12c471436efd5ea411430.js",
+    "precache-manifest.8d6ef69fd3e33053881d650f1224449c.js": "/OverlayScrollbars/frameworks/react/precache-manifest.8d6ef69fd3e33053881d650f1224449c.js",
     "service-worker.js": "/OverlayScrollbars/frameworks/react/service-worker.js",
-    "static/css/2.8505c642.chunk.css.map": "/OverlayScrollbars/frameworks/react/static/css/2.8505c642.chunk.css.map",
+    "static/css/2.b6cbe73a.chunk.css.map": "/OverlayScrollbars/frameworks/react/static/css/2.b6cbe73a.chunk.css.map",
     "static/css/main.2afaf7d3.chunk.css.map": "/OverlayScrollbars/frameworks/react/static/css/main.2afaf7d3.chunk.css.map",
     "static/media/App.css": "/OverlayScrollbars/frameworks/react/static/media/react.7844928c.svg"
   }

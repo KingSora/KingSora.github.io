@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ce2e70155e11a8133c49c28bb24b58fb",
+    "revision": "ff1a107ece7f27b26e11674b4204866b",
     "url": "/OverlayScrollbars/frameworks/react/index.html"
   },
   {
-    "revision": "719dac3d0abbcb1b3641",
-    "url": "/OverlayScrollbars/frameworks/react/static/css/2.8505c642.chunk.css"
+    "revision": "36b20e3c5b7b83f34631",
+    "url": "/OverlayScrollbars/frameworks/react/static/css/2.b6cbe73a.chunk.css"
   },
   {
-    "revision": "4a2c4ea661580021ef93",
+    "revision": "21c2123002b596c6b840",
     "url": "/OverlayScrollbars/frameworks/react/static/css/main.2afaf7d3.chunk.css"
   },
   {
-    "revision": "719dac3d0abbcb1b3641",
-    "url": "/OverlayScrollbars/frameworks/react/static/js/2.78d13a7a.chunk.js"
+    "revision": "36b20e3c5b7b83f34631",
+    "url": "/OverlayScrollbars/frameworks/react/static/js/2.397675c9.chunk.js"
   },
   {
-    "revision": "4a2c4ea661580021ef93",
-    "url": "/OverlayScrollbars/frameworks/react/static/js/main.774f9ff9.chunk.js"
+    "revision": "21c2123002b596c6b840",
+    "url": "/OverlayScrollbars/frameworks/react/static/js/main.5565aba3.chunk.js"
   },
   {
     "revision": "d65fa28b079d6c287cca",
