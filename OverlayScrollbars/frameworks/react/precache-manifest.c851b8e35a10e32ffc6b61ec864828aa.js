@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c6a7d853365421edccf498171b3f7199",
+    "revision": "ad5198f8fd3b644170958acdbb91e134",
     "url": "/OverlayScrollbars/frameworks/react/index.html"
   },
   {
-    "revision": "6265930609839ecd359b",
-    "url": "/OverlayScrollbars/frameworks/react/static/css/2.843fd486.chunk.css"
+    "revision": "fa9a11224fa5a865db4c",
+    "url": "/OverlayScrollbars/frameworks/react/static/css/2.20a3abc1.chunk.css"
   },
   {
     "revision": "4cec9f31ee1dbd02fdad",
     "url": "/OverlayScrollbars/frameworks/react/static/css/main.2afaf7d3.chunk.css"
   },
   {
-    "revision": "6265930609839ecd359b",
-    "url": "/OverlayScrollbars/frameworks/react/static/js/2.c233ed28.chunk.js"
+    "revision": "fa9a11224fa5a865db4c",
+    "url": "/OverlayScrollbars/frameworks/react/static/js/2.4642da1a.chunk.js"
   },
   {
     "revision": "4cec9f31ee1dbd02fdad",
