@@ -1640,7 +1640,22 @@ body.resizing * {
 	white-space: nowrap;
 	color: #fff;
 	font-weight: $font-weight-semibold;
-	padding: 10px 10px;
+	padding: 10px;
+    margin: 0 20px 20px 20px;
+    position: relative;
+    
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: -20px;
+        bottom: -20px;
+        left: -20px;
+        margin: -1px;
+        border: 20px solid rgba(green, 0.2);
+        border-top: none;
+    }
 }
 
 
