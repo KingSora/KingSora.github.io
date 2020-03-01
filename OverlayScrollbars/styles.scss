@@ -1594,6 +1594,7 @@ body.resizing * {
 	border: 2px solid $primary-color;
 	border-radius: 4px;
 	padding: 10px;
+    z-index: 0;
 }
 .capabilitiesdemo-absolute {
 	height: 40px;
@@ -1641,7 +1642,7 @@ body.resizing * {
 	color: #fff;
 	font-weight: $font-weight-semibold;
 	padding: 10px;
-    margin: 0 20px 20px 20px;
+    margin: 20px;
     position: relative;
     
     &:before {
@@ -1649,12 +1650,12 @@ body.resizing * {
         display: block;
         position: absolute;
         top: 0;
-        right: -20px;
-        bottom: -20px;
-        left: -20px;
+        right: 0;
+        bottom: 0;
+        left: 0;
         margin: -1px;
-        border: 20px solid rgba(green, 0.2);
-        border-top: none;
+        outline: 20px solid rgba(green, 0.2);
+        z-index: -1;
     }
 }
 
