@@ -162,258 +162,685 @@ $('.capabilitiesdemo-slot-4 .capabilitiesdemo-slot-resizer').on('resizer', funct
 
 $('.resizer-handle').on(strMouseTouchDownEvent, resizerMouseDown);
 
-$('#capabilites-reset').on('click', function() { 
-	$('#capabilites-host-direction > .dropdown-value').text($('#capabilites-host-direction > .dropdown-list > div').first().text());
-	$('#capabilites-host-direction').trigger('dropdownvaluechanged');
-	$('#capabilites-host-boxsizing > .dropdown-value').text($('#capabilites-host-boxsizing > .dropdown-list > div').first().text());
-	$('#capabilites-host-boxsizing').trigger('dropdownvaluechanged');
-	$('#capabilites-host-width > .dropdown-value').text($('#capabilites-host-width > .dropdown-list > div').first().text());
-	$('#capabilites-host-width').trigger('dropdownvaluechanged');
-	$('#capabilites-host-height > .dropdown-value').text($('#capabilites-host-height > .dropdown-list > div').first().text());
-	$('#capabilites-host-height').trigger('dropdownvaluechanged');
-	$('#capabilites-host-float > .dropdown-value').text($('#capabilites-host-float > .dropdown-list > div').first().text());
-	$('#capabilites-host-float').trigger('dropdownvaluechanged');
-	$('#capabilites-host-border > .dropdown-value').text($('#capabilites-host-border > .dropdown-list > div').first().text());
-	$('#capabilites-host-border').trigger('dropdownvaluechanged');
-	$('#capabilites-host-margin > .dropdown-value').text($('#capabilites-host-margin > .dropdown-list > div').first().text());
-	$('#capabilites-host-margin').trigger('dropdownvaluechanged');
-	$('#capabilites-host-padding > .dropdown-value').text($('#capabilites-host-padding > .dropdown-list > div').first().text());
-	$('#capabilites-host-padding').trigger('dropdownvaluechanged');
-	$('#capabilites-env-width > .dropdown-value').text($('#capabilites-env-width > .dropdown-list > div').first().text());
-	$('#capabilites-env-width').trigger('dropdownvaluechanged');
-	$('#capabilites-env-height > .dropdown-value').text($('#capabilites-env-height > .dropdown-list > div').first().text());
-	$('#capabilites-env-height').trigger('dropdownvaluechanged');
-	$('.capabilitiesdemo-absolute').removeClass('hidden');
-	$('.capabilitiesdemo-resize').removeClass('hidden');
-	$('.capabilitiesdemo-hundred').removeClass('hidden');
-	$('.capabilitiesdemo-end').removeClass('hidden');	
-	$('#capabilites-min-max').prop('checked', true).trigger('change');
-	$('#capabilites-padding-absolute').prop('checked', false).trigger('change');
-	$('.capabilitiesdemo-slot-content').removeAttr('style');
-	$('.capabilitiesdemo-slot-resizer').removeAttr('style');
-});
+var absoluteElms = $('.capabilitiesdemo-absolute');
+var resizeElms = $('.capabilitiesdemo-resize');
+var hundredElms = $('.capabilitiesdemo-hundred');
+var endElms = $('.capabilitiesdemo-end');
 
-$('#capabilites-content-absolute').on('click', function() { 
-	$('.capabilitiesdemo-absolute').toggleClass('hidden');
-});
-$('#capabilites-content-resize').on('click', function() { 
-	$('.capabilitiesdemo-resize').toggleClass('hidden');
-});
-$('#capabilites-content-hundred').on('click', function() { 
-	$('.capabilitiesdemo-hundred').toggleClass('hidden');
-});
-$('#capabilites-content-end').on('click', function() { 
-	$('.capabilitiesdemo-end').toggleClass('hidden');
-});
+var resetBtn = $('#capabilites-reset');
+var updateBtn = $('#capabilites-update');
+var runBtn = $('#capabilites-run');
 
-$('#capabilites-host-direction').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'direction-rtl',
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "RTL") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-});
-$('#capabilites-host-boxsizing').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'boxsizing-contentbox',
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "content-box") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-});
-$('#capabilites-host-width').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'width-auto',
-		'width-hundred'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "Auto") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "100%") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-});
-$('#capabilites-host-height').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'height-auto',
-		'height-hundred'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "Auto") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "100%") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-});
-$('#capabilites-host-float').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'float-left',
-		'float-right'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "Left") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "Right") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-	$('.capabilitiesdemo-slot-content').removeAttr('style');
-});
-$('#capabilites-host-border').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'border-eight',
-		'border-none'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "8px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "None") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-});
-$('#capabilites-host-margin').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'margin-ten',
-		'margin-twenty'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "10px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "20px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-});
-$('#capabilites-host-padding').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'padding-twenty',
-		'padding-thirty',
-		'padding-none'
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
-	if(value === "20px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
-	}
-	else if(value === "30px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
-	}
-	else if(value === "0px") {
-		$('.capabilitiesdemo-slot-resizer').addClass(classes[2]);
-	}
-});
-$('#capabilites-env-width').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'width-auto',
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-env').removeClass(classes[i]);
-	if(value === "Auto") {
-		$('.capabilitiesdemo-env').addClass(classes[0]);
-	}
-});
-$('#capabilites-env-height').on('dropdownvaluechanged', function(event, value) { 
-	var classes = [ 
-		'height-auto',
-	];
-	var i;
-	for(i = 0; i < classes.length; i++)
-		$('.capabilitiesdemo-env').removeClass(classes[i]);
-	if(value === "Auto") {
-		$('.capabilitiesdemo-env').addClass(classes[0]);
-	}
-});
+var toggleAbsoluteContainerBtn = $('#capabilites-content-absolute');
+var toggleResizeContainerBtn = $('#capabilites-content-resize');
+var toggleHundredContainerBtn = $('#capabilites-content-hundred');
+var toggleEndContainerBtn = $('#capabilites-content-end');
+
+var directionDropdown = $('#capabilites-host-direction');
+var boxsizingDropdown = $('#capabilites-host-boxsizing');
+var widthDropdown = $('#capabilites-host-width');
+var heightDropdown = $('#capabilites-host-height');
+var floatDropdown = $('#capabilites-host-float');
+var borderDropdown = $('#capabilites-host-border');
+var marginDropdown = $('#capabilites-host-margin');
+var paddingDropdown = $('#capabilites-host-padding');
+var envWidthDropdown = $('#capabilites-env-width');
+var envHeightDropdown = $('#capabilites-env-height');
+
+var clipAlwaysCheckbox = $('#capabilites-clip-always');
+var paddingAbsoluteCheckbox = $('#capabilites-padding-absolute');
+var minMaxCheckbox = $('#capabilites-min-max');
+
+(function setupCapabilities() {
+	toggleAbsoluteContainerBtn.on('click', function() { 
+		$('.capabilitiesdemo-absolute').toggleClass('hidden');
+	});
+	toggleResizeContainerBtn.on('click', function() { 
+		$('.capabilitiesdemo-resize').toggleClass('hidden');
+	});
+	toggleHundredContainerBtn.on('click', function() { 
+		$('.capabilitiesdemo-hundred').toggleClass('hidden');
+	});
+	toggleEndContainerBtn.on('click', function() { 
+		$('.capabilitiesdemo-end').toggleClass('hidden');
+	});
+
+	directionDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'direction-rtl',
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "RTL") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+	});
+	boxsizingDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'boxsizing-contentbox',
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "content-box") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+	});
+	widthDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'width-auto',
+			'width-hundred'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "Auto") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "100%") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+	});
+	heightDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'height-auto',
+			'height-hundred'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "Auto") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "100%") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+	});
+	floatDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'float-left',
+			'float-right'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "Left") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "Right") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+		$('.capabilitiesdemo-slot-content').removeAttr('style');
+	});
+	borderDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'border-eight',
+			'border-none'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "8px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "None") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+	});
+	marginDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'margin-ten',
+			'margin-twenty'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "10px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "20px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+	});
+	paddingDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'padding-twenty',
+			'padding-thirty',
+			'padding-none'
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-slot-resizer').removeClass(classes[i]);
+		if(value === "20px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[0]);
+		}
+		else if(value === "30px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[1]);
+		}
+		else if(value === "0px") {
+			$('.capabilitiesdemo-slot-resizer').addClass(classes[2]);
+		}
+	});
+	envWidthDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'width-auto',
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-env').removeClass(classes[i]);
+		if(value === "Auto") {
+			$('.capabilitiesdemo-env').addClass(classes[0]);
+		}
+	});
+	envHeightDropdown.on('dropdownvaluechanged', function(event, value) { 
+		var classes = [ 
+			'height-auto',
+		];
+		var i;
+		for(i = 0; i < classes.length; i++)
+			$('.capabilitiesdemo-env').removeClass(classes[i]);
+		if(value === "Auto") {
+			$('.capabilitiesdemo-env').addClass(classes[0]);
+		}
+	});
+
+	minMaxCheckbox.on('change', function() { 
+		if($(this).is(":checked"))
+			$('.capabilitiesdemo-slot-resizer').removeClass('infinite');
+		else
+			$('.capabilitiesdemo-slot-resizer').addClass('infinite');
+		$('.capabilitiesdemo-slot-content').removeAttr('style');
+	}).prop('checked', true);
+	paddingAbsoluteCheckbox.on('change', function() { 
+		if($(this).is(":checked")) {
+			plugin.options('paddingAbsolute', true);
+			pluginTextarea.options('paddingAbsolute', true);
+		}
+		else {
+			plugin.options('paddingAbsolute', false);
+			pluginTextarea.options('paddingAbsolute', false);
+		}
+	}).prop('checked', false);
+	clipAlwaysCheckbox.on('change', function() { 
+		if($(this).is(":checked")) {
+			plugin.options('clipAlways', true);
+			pluginTextarea.options('clipAlways', true);
+		}
+		else {
+			plugin.options('clipAlways', false);
+			pluginTextarea.options('clipAlways', false);
+		}
+	}).prop('checked', false);
 
 
-var txt = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-$('#capabilitiesdemo-target-textarea').val(txt);
-$('#capabilitiesdemo-native-textarea').val(txt);
+	var txt = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+	$('#capabilitiesdemo-target-textarea').val(txt);
+	$('#capabilitiesdemo-native-textarea').val(txt);
 
-var plugin = window.i = $('#capabilitiesdemo-target').overlayScrollbars({ 
-	normalizeRTL : false,
-	clipAlways : false,
-	callbacks : {
-		onScroll : function() { 
-			$('#capabilitiesdemo-native').scrollTop($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.y);
-			$('#capabilitiesdemo-native').scrollLeft($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.x);
-		},
-	}
-}).overlayScrollbars();
-var pluginTextarea = window.t = $('#capabilitiesdemo-target-textarea').overlayScrollbars({ 
-	normalizeRTL : false,
-	clipAlways : false,
-	callbacks : {
-		onScroll : function() { 
-			$('#capabilitiesdemo-native-textarea').scrollTop($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.y);
-			$('#capabilitiesdemo-native-textarea').scrollLeft($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.x);
-		},
-	}
-}).overlayScrollbars();
+	var plugin = window.i = $('#capabilitiesdemo-target').overlayScrollbars({ 
+		normalizeRTL : false,
+		clipAlways : false,
+		callbacks : {
+			onScroll : function() { 
+				$('#capabilitiesdemo-native').scrollTop($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.y);
+				$('#capabilitiesdemo-native').scrollLeft($('#capabilitiesdemo-target').overlayScrollbars().scroll().position.x);
+			},
+		}
+	}).overlayScrollbars();
+	var pluginTextarea = window.t = $('#capabilitiesdemo-target-textarea').overlayScrollbars({ 
+		normalizeRTL : false,
+		clipAlways : false,
+		callbacks : {
+			onScroll : function() { 
+				$('#capabilitiesdemo-native-textarea').scrollTop($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.y);
+				$('#capabilitiesdemo-native-textarea').scrollLeft($('#capabilitiesdemo-target-textarea').overlayScrollbars().scroll().position.x);
+			},
+		}
+	}).overlayScrollbars();
 
-$('#capabilitiesdemo-target-textarea').on('keyup', function() { 
-	$('#capabilitiesdemo-native-textarea').val($('#capabilitiesdemo-target-textarea').val());
-});
-$('#capabilitiesdemo-native-textarea').on('keyup', function() { 
-	$('#capabilitiesdemo-target-textarea').val($('#capabilitiesdemo-native-textarea').val());
-	pluginTextarea.update();
-});
+	$('#capabilitiesdemo-target-textarea').on('keyup', function() { 
+		$('#capabilitiesdemo-native-textarea').val($('#capabilitiesdemo-target-textarea').val());
+	});
+	$('#capabilitiesdemo-native-textarea').on('keyup', function() { 
+		$('#capabilitiesdemo-target-textarea').val($('#capabilitiesdemo-native-textarea').val());
+		pluginTextarea.update();
+	});
 
-$('#capabilites-min-max').on('change', function() { 
-	if($(this).is(":checked"))
-		$('.capabilitiesdemo-slot-resizer').removeClass('infinite');
-	else
-		$('.capabilitiesdemo-slot-resizer').addClass('infinite');
-	$('.capabilitiesdemo-slot-content').removeAttr('style');
-}).prop('checked', true);
+	resetBtn.on('click', function() { 
+		$('#capabilites-host-direction > .dropdown-value').text($('#capabilites-host-direction > .dropdown-list > div').first().text());
+		$('#capabilites-host-direction').trigger('dropdownvaluechanged');
+		$('#capabilites-host-boxsizing > .dropdown-value').text($('#capabilites-host-boxsizing > .dropdown-list > div').first().text());
+		$('#capabilites-host-boxsizing').trigger('dropdownvaluechanged');
+		$('#capabilites-host-width > .dropdown-value').text($('#capabilites-host-width > .dropdown-list > div').first().text());
+		$('#capabilites-host-width').trigger('dropdownvaluechanged');
+		$('#capabilites-host-height > .dropdown-value').text($('#capabilites-host-height > .dropdown-list > div').first().text());
+		$('#capabilites-host-height').trigger('dropdownvaluechanged');
+		$('#capabilites-host-float > .dropdown-value').text($('#capabilites-host-float > .dropdown-list > div').first().text());
+		$('#capabilites-host-float').trigger('dropdownvaluechanged');
+		$('#capabilites-host-border > .dropdown-value').text($('#capabilites-host-border > .dropdown-list > div').first().text());
+		$('#capabilites-host-border').trigger('dropdownvaluechanged');
+		$('#capabilites-host-margin > .dropdown-value').text($('#capabilites-host-margin > .dropdown-list > div').first().text());
+		$('#capabilites-host-margin').trigger('dropdownvaluechanged');
+		$('#capabilites-host-padding > .dropdown-value').text($('#capabilites-host-padding > .dropdown-list > div').first().text());
+		$('#capabilites-host-padding').trigger('dropdownvaluechanged');
+		$('#capabilites-env-width > .dropdown-value').text($('#capabilites-env-width > .dropdown-list > div').first().text());
+		$('#capabilites-env-width').trigger('dropdownvaluechanged');
+		$('#capabilites-env-height > .dropdown-value').text($('#capabilites-env-height > .dropdown-list > div').first().text());
+		$('#capabilites-env-height').trigger('dropdownvaluechanged');
+		$('.capabilitiesdemo-absolute').removeClass('hidden');
+		$('.capabilitiesdemo-resize').removeClass('hidden');
+		$('.capabilitiesdemo-hundred').removeClass('hidden');
+		$('.capabilitiesdemo-end').removeClass('hidden');	
+		$('#capabilites-min-max').prop('checked', true).trigger('change');
+		$('#capabilites-padding-absolute').prop('checked', false).trigger('change');
+		$('.capabilitiesdemo-slot-content').removeAttr('style');
+		$('.capabilitiesdemo-slot-resizer').removeAttr('style');
+	});
+	updateBtn.on('click', function() { 
+		plugin.update();
+		pluginTextarea.update();
+	});
+})();
 
-$('#capabilites-padding-absolute').on('change', function() { 
-	if($(this).is(":checked")) {
-		plugin.options('paddingAbsolute', true);
-		pluginTextarea.options('paddingAbsolute', true);
+var runTestsFunc = (function capabilitiesTests() {
+	var tests = window.tests = {
+		passed: [],
+		failed: []
+	};
+	
+	function objHasFalses(obj) {
+		var hasFalses = false;
+		$.each(obj, function(prop, value) { 
+			if(typeof value === 'object') {
+				hasFalses = objHasFalses(value);
+			}
+			if (value === false || hasFalses) {
+				hasFalses = true;
+				return false;
+			}
+		});
+		return hasFalses;
 	}
-	else {
-		plugin.options('paddingAbsolute', false);
-		pluginTextarea.options('paddingAbsolute', false);
+	function getDropdownValue(dropdown) {
+		return dropdown.find('.dropdown-value').first().text();
 	}
-}).prop('checked', false);
+	function getCheckboxValue(checkbox) {
+		return checkbox.prop('checked');
+	}
+	function wait(ms) {
+		return function() { 
+			return new Promise(r => setTimeout(r, ms));
+		};
+	}
+	function isEqualBCR(a, b) {
+		return Math.floor(a.width) === Math.floor(b.width) && Math.floor(a.height) === Math.floor(b.height);
+	}
+	function getBCR(elm) {
+		var bcr = elm[0].getBoundingClientRect();
+		return {
+			width: bcr.width,
+			height: bcr.height
+		};
+	}
+	function compareElmsBCR(a, b) {
+		return isEqualBCR(getBCR(a), getBCR(b));
+	}
+	function testPassed() {
+		var pluginElm = $('#capabilitiesdemo-target');
+		var nativeElm = $('#capabilitiesdemo-native');
+		var pluginTextareaElm = $('#capabilitiesdemo-target-textarea').closest('.os-host-textarea').first();
+		var nativeTextareaElm = $('#capabilitiesdemo-native-textarea');
+		
+		var pluginElmBCR = getBCR(pluginElm);
+		var nativeElmBCR = getBCR(nativeElm);
+		var pluginTextareaElmBCR = getBCR(pluginTextareaElm);
+		var nativeTextareaElmBCR = getBCR(nativeTextareaElm);
+		
+		var generalPassed = isEqualBCR(pluginElmBCR, nativeElmBCR);
+		var textareaPassed = isEqualBCR(pluginTextareaElmBCR, nativeTextareaElmBCR);
+		
+		
+		return {
+			child: {
+				hundred: compareElmsBCR(pluginElm.find(hundredElms), nativeElm.find(hundredElms)),
+				end: compareElmsBCR(pluginElm.find(endElms), nativeElm.find(endElms))
+			},
+			host: {
+				general: {
+					passed: generalPassed,
+					size: {
+						plugin: pluginElmBCR,
+						native: nativeElmBCR
+					}
+				},
+				textarea: {
+					passed: textareaPassed,
+					size: {
+						plugin: pluginTextareaElmBCR,
+						native: nativeTextareaElmBCR
+					}
+				}
+			}
+		};
+	}
+	function testFinished(name) {
+		return function() { 
+			return new Promise(function(resolve) {
+				setTimeout(function() { 
+					var result = testPassed();
+					var testFailed = objHasFalses(result);
+					var testResultObj = { 
+						name: name, 
+						setting: {
+							absolutePadding: getCheckboxValue(paddingAbsoluteCheckbox),
+							minMax: getCheckboxValue(minMaxCheckbox),
+							clip: getCheckboxValue(clipAlwaysCheckbox),
+							dir: getDropdownValue(directionDropdown),
+							box: getDropdownValue(boxsizingDropdown),
+							width: getDropdownValue(widthDropdown),
+							height: getDropdownValue(heightDropdown),
+							float: getDropdownValue(floatDropdown),
+							border: getDropdownValue(borderDropdown),
+							margin: getDropdownValue(marginDropdown),
+							padding: getDropdownValue(paddingDropdown),
+							envWidth: getDropdownValue(envWidthDropdown),
+							envHeight: getDropdownValue(envHeightDropdown),
+							containers: {
+								absolute: {
+									hidden: absoluteElms.first().hasClass('hidden'),
+									size: {
+										width: absoluteElms.first().css('width'),
+										height: absoluteElms.first().css('height'),
+									}
+								},
+								resize: {
+									hidden: resizeElms.first().hasClass('hidden'),
+									size: {
+										width: resizeElms.first().css('width'),
+										height: resizeElms.first().css('height'),
+									}
+								},
+								hundred: {
+									hidden: hundredElms.first().hasClass('hidden')
+								},
+								end: {
+									hidden: endElms.first().hasClass('hidden')
+								},
+							}
+						},
+						result: result 
+					};
+					
+					if(testFailed) {
+						tests.failed.push(testResultObj);
+					}
+					else {
+						tests.passed.push(testResultObj);
+					}
+					
+					resolve();
+				}, 100);
+			});
+		}
+	}
+	function setResizeElmSize(width, height) {
+		var resizeElms = $('.capabilitiesdemo-resize');
+		if(typeof width === 'number') {
+			resizeElms.css('width', width);
+		}
+		if(typeof height === 'number') {
+			resizeElms.css('height', height);
+		}
+	}
+	function hideElement(elm, hide) {
+		if(hide) {
+			elm.addClass('hidden');
+		}
+		else {
+			elm.removeClass('hidden');
+		}
+	}
+	function setDropdownValue(dropdown, value) {
+		dropdown.find('.dropdown-list').first().children().each(function(index, elm) {
+			elm = $(elm);			
+			if(elm.text().toLowerCase() === value.toLowerCase()) {
+				elm.trigger('click');
+			}
+		});
+	}
+	function checkCheckbox(checkbox, checked) {
+		checkbox.prop('checked', checked).trigger('change');
+	}
+	
 
-$('#capabilites-clip-always').on('change', function() { 
-	if($(this).is(":checked")) {
-		plugin.options('clipAlways', true);
-		pluginTextarea.options('clipAlways', true);
-	}
-	else {
-		plugin.options('clipAlways', false);
-		pluginTextarea.options('clipAlways', false);
-	}
-}).prop('checked', false);
+	//resize
+	var setWideContent = setResizeElmSize.bind(this, 500, 0);
+	var setHighContent = setResizeElmSize.bind(this, 0, 500);
+	var setMinContent = setResizeElmSize.bind(this, 0, 0);
+	var setMaxContent = setResizeElmSize.bind(this, 500, 500);
+	
+	var setWidthFixed = setDropdownValue.bind(this, widthDropdown, 'fixed');
+	var setWidthAuto = setDropdownValue.bind(this, widthDropdown, 'auto');
+	var setWidth100 = setDropdownValue.bind(this, widthDropdown, '100%');
+	
+	var setHeightFixed = setDropdownValue.bind(this, heightDropdown, 'fixed');
+	var setHeightAuto = setDropdownValue.bind(this, heightDropdown, 'auto');
+	var setHeight100 = setDropdownValue.bind(this, heightDropdown, '100%');
+	
+	var setFloatNone = setDropdownValue.bind(this, floatDropdown, 'none');
+	var setFloatLeft = setDropdownValue.bind(this, floatDropdown, 'left');
+	var setFloatRight = setDropdownValue.bind(this, floatDropdown, 'right');
 
-$('#capabilites-update').on('click', function() { 
-	plugin.update();
-	pluginTextarea.update();
-});
+	var setPadding10 = setDropdownValue.bind(this, paddingDropdown, '10px');
+	var setPadding20 = setDropdownValue.bind(this, paddingDropdown, '20px');
+	var setPadding30 = setDropdownValue.bind(this, paddingDropdown, '30px');
+	var setPadding0 = setDropdownValue.bind(this, paddingDropdown, '0px');
+
+	var setMargin0 = setDropdownValue.bind(this, marginDropdown, '0px');
+	var setMargin10 = setDropdownValue.bind(this, marginDropdown, '10px');
+	var setMargin20 = setDropdownValue.bind(this, marginDropdown, '20px');
+
+	var setBorder2 = setDropdownValue.bind(this, borderDropdown, '2px');
+	var setBorder8 = setDropdownValue.bind(this, borderDropdown, '8px');
+	var setBorderNone = setDropdownValue.bind(this, borderDropdown, 'none');
+
+	//box-sizing
+	var setBorderBox = setDropdownValue.bind(this, boxsizingDropdown, 'border-box');
+	var setContentBox = setDropdownValue.bind(this, boxsizingDropdown, 'content-box');
+
+	//hide
+	var hideAbsoluteElms = hideElement.bind(this, absoluteElms, true);
+	var hideResizeElms = hideElement.bind(this, resizeElms, true);
+	var hideHundredElms = hideElement.bind(this, hundredElms, true);
+	var hideEndElms = hideElement.bind(this, endElms, true);
+	
+	//show
+	var showAbsoluteElms = hideElement.bind(this, absoluteElms, false);
+	var showResizeElms = hideElement.bind(this, resizeElms, false);
+	var showHundredElms = hideElement.bind(this, hundredElms, false);
+	var showEndElms = hideElement.bind(this, endElms, false);
+	
+	//checkbox
+	var checkMinMaxCheckbox = checkCheckbox.bind(this, minMaxCheckbox, true);
+	var uncheckMinMaxCheckbox = checkCheckbox.bind(this, minMaxCheckbox, false);
+	var checkAbsolutePaddingCheckbox = checkCheckbox.bind(this, paddingAbsoluteCheckbox, true);
+	var uncheckAbsolutePaddingCheckbox = checkCheckbox.bind(this, paddingAbsoluteCheckbox, false);
+	
+	window.testSetting = function(obj) {
+		resetBtn.trigger('click');
+		
+		if(obj.containers.absolute.hidden) {
+			absoluteElms.addClass('hidden');
+		}
+		else {
+			absoluteElms.removeClass('hidden');
+		}
+		absoluteElms.css(obj.containers.absolute.size);
+		
+		if(obj.containers.resize.hidden) {
+			resizeElms.addClass('hidden');
+		}
+		else {
+			resizeElms.removeClass('hidden');
+		}
+		resizeElms.css(obj.containers.resize.size);
+		
+		if(obj.containers.hundred.hidden) {
+			hundredElms.addClass('hidden');
+		}
+		else {
+			hundredElms.removeClass('hidden');
+		}
+		
+		if(obj.containers.end.hidden) {
+			endElms.addClass('hidden');
+		}
+		else {
+			endElms.removeClass('hidden');
+		}
+		
+		if(obj.absolutePadding) {
+			checkAbsolutePaddingCheckbox();
+		}
+		else {
+			uncheckAbsolutePaddingCheckbox();
+		}
+		
+		if(obj.minMax) {
+			checkMinMaxCheckbox();
+		}
+		else {
+			uncheckMinMaxCheckbox();
+		}
+		
+		setDropdownValue(widthDropdown, obj.width);
+		setDropdownValue(heightDropdown, obj.height);
+		setDropdownValue(paddingDropdown, obj.padding);
+		setDropdownValue(marginDropdown, obj.margin);
+		setDropdownValue(floatDropdown, obj.float);
+		setDropdownValue(envWidthDropdown, obj.envWidth);
+		setDropdownValue(envHeightDropdown, obj.envHeight);
+		setDropdownValue(directionDropdown, obj.dir);
+		setDropdownValue(boxsizingDropdown, obj.box);
+		setDropdownValue(borderDropdown, obj.border);
+	}
+	
+	function minMaxSizeDetectionTest() {
+		hideAbsoluteElms();
+		hideHundredElms();
+		hideEndElms();
+		
+		setFloatLeft();
+		setWidthAuto();
+		setHeightAuto();
+		
+		function runContentTest(contentFunc) {
+			return function() { 
+				return new Promise(function(resolve) {
+					Promise.resolve()
+						.then(contentFunc)
+						.then(testFinished('ContentTest'))
+						.then(resolve);
+				});
+			}
+		}
+		
+		function runAllContentTests() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(runContentTest(setMinContent))
+					.then(runContentTest(setMaxContent))
+					.then(runContentTest(setWideContent))
+					.then(runContentTest(setHighContent))
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMax() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(checkMinMaxCheckbox)
+					.then(runAllContentTests)
+					.then(uncheckMinMaxCheckbox)
+					.then(runAllContentTests)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMaxWithPadding() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(uncheckAbsolutePaddingCheckbox)
+					.then(runAllContentTestsWithMinMax)
+					.then(checkAbsolutePaddingCheckbox)
+					.then(runAllContentTestsWithMinMax)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorderBox)
+					.then(runAllContentTestsWithMinMaxWithPadding)
+					.then(setContentBox)
+					.then(runAllContentTestsWithMinMaxWithPadding)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setPadding0)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
+					.then(setPadding10)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
+					.then(setPadding20)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
+					.then(setPadding30)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorder2)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
+					.then(setBorder8)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
+					.then(setBorderNone)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBordersWithMargins() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setMargin0)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(setMargin10)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(setMargin20)
+					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(resolve);
+			});
+		}
+		
+		Promise.resolve()
+			.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBordersWithMargins)
+			.then(function() { console.log(tests) });
+	}
+	
+	return minMaxSizeDetectionTest;
+})();
+
+runBtn.on('click', runTestsFunc);
+
 
 
 
