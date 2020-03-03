@@ -3681,11 +3681,15 @@
 
                         //measure and correct several sizes
                         var hostSize = getHostSize();
+                        var hostAbsoluteRectSize = {
+                            w: hostSize.w - _marginX - _borderX - (_isBorderBox ? 0 : _paddingX),
+                            h: hostSize.h - _marginY - _borderY - (_isBorderBox ? 0 : _paddingY)
+                        };
                         var contentGlueSize = {
                             //client/scrollSize + AbsolutePadding -> because padding is only applied to the paddingElement if its absolute, so you have to add it manually
                             //hostSize is clientSize -> so padding should be added manually, right? FALSE! Because content glue is inside hostElement, so we don't have to worry about padding
-                            w: MATH.max((widthAuto ? contentSize.w : scrollSize.w) + paddingAbsoluteX, hostSize.w),
-                            h: MATH.max((heightAuto ? contentSize.h : scrollSize.h) + paddingAbsoluteY, hostSize.h)
+                            w: MATH.max((widthAuto ? contentSize.w : scrollSize.w) + paddingAbsoluteX, hostAbsoluteRectSize.w),
+                            h: MATH.max((heightAuto ? contentSize.h : scrollSize.h) + paddingAbsoluteY, hostAbsoluteRectSize.h)
                         };
                         contentGlueSize.c = checkCacheAutoForce(contentGlueSize, _contentGlueSizeCache);
                         _contentGlueSizeCache = contentGlueSize;
@@ -3715,18 +3719,14 @@
                                 var borderSize = horizontal ? _borderX : _borderY;
                                 var paddingSize = horizontal ? _paddingX : _paddingY;
                                 var marginSize = horizontal ? _marginX : _marginY;
-                                var maxSize = contentGlueElementCSS[strWH] + (_isBorderBox ? borderSize : -paddingSize);
+                                var viewportSize = _viewportSize[wh] - borderSize - marginSize - (_isBorderBox ? 0 : paddingSize);
 
                                 //make contentGlue size -1 if element is not auto sized, to make sure that a resize event happens when the element shrinks
                                 if (!autoSize || (!autoSize && border.c))
-                                    contentGlueElementCSS[strWH] = hostSize[wh] - (_isBorderBox ? 0 : paddingSize + borderSize) - 1 - marginSize;
-
-                                //if size is auto and host is same size as max size, make content glue size +1 to make sure size changes will be detected
-                                if (autoSize && cssMaxValue['c' + wh] && cssMaxValue['i' + wh] === maxSize)
-                                    contentGlueElementCSS[strWH] = maxSize + (_isBorderBox ? 0 : paddingSize) + 1;
+                                    contentGlueElementCSS[strWH] = hostAbsoluteRectSize[wh] - 1;
 
                                 //if size is auto and host is smaller than size as min size, make content glue size -1 to make sure size changes will be detected (this is only needed if padding is 0)
-                                if (autoSize && (contentSize[wh] < _viewportSize[wh]) && (horizontal && _isTextarea ? !textareaAutoWrapping : true)) {
+                                if (autoSize && (contentSize[wh] < viewportSize) && (horizontal && _isTextarea ? !textareaAutoWrapping : true)) {
                                     if (_isTextarea)
                                         textareaCoverCSS[strWH] = parseToZeroOrNumber(_textareaCoverElement.css(strWH)) - 1;
                                     contentGlueElementCSS[strWH] -= 1;
