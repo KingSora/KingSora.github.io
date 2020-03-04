@@ -188,8 +188,165 @@ var envWidthDropdown = $('#capabilites-env-width');
 var envHeightDropdown = $('#capabilites-env-height');
 
 var clipAlwaysCheckbox = $('#capabilites-clip-always');
-var paddingAbsoluteCheckbox = $('#capabilites-padding-absolute');
+var absolutePaddingCheckbox = $('#capabilites-padding-absolute');
 var minMaxCheckbox = $('#capabilites-min-max');
+
+var defaultSetting = {
+   absolutePadding: false,
+   minMax: true,
+   clip: false,
+   dir: null,
+   box: null,
+   width: null,
+   height: null,
+   float: null,
+   border: null,
+   margin: null,
+   padding: null,
+   envWidth: null,
+   envHeight: null,
+   containers:  {
+     absolute:  {
+       hidden:  false,
+       size:  {
+         width: null,
+         height: null
+      }
+    },
+     resize:  {
+       hidden:  false,
+       size:  {
+         width: null,
+         height: null
+      }
+    },
+     hundred:  {
+       hidden:  false
+    },
+     end:  {
+       hidden:  false
+    }
+  }
+};
+
+function objHasFalses(obj) {
+	var hasFalses = false;
+	$.each(obj, function(prop, value) { 
+		if(typeof value === 'object') {
+			hasFalses = objHasFalses(value);
+		}
+		if (value === false || hasFalses) {
+			hasFalses = true;
+			return false;
+		}
+	});
+	return hasFalses;
+}
+function getDropdownValue(dropdown) {
+	return dropdown.find('.dropdown-value').first().text();
+}
+function getCheckboxValue(checkbox) {
+	return checkbox.prop('checked');
+}
+function setElmsSize(elm, width, height) {
+	elm.css('width', width === null ? '' : width);
+	elm.css('height', height === null ? '' : height);
+}
+function hideElements(elm, hide) {
+	if(hide) {
+		elm.addClass('hidden');
+	}
+	else {
+		elm.removeClass('hidden');
+	}
+}
+function setDropdownValue(dropdown, value) {
+	if(value === null) {
+		dropdown.find('.dropdown-list').first().children().first().trigger('click');
+	}
+	else {
+		dropdown.find('.dropdown-list').first().children().each(function(index, elm) {
+			elm = $(elm);			
+			if(elm.text().toLowerCase() === value.toLowerCase()) {
+				elm.trigger('click');
+			}
+		});
+	}
+}
+function checkCheckbox(checkbox, checked) {
+	checkbox.prop('checked', checked).trigger('change');
+}
+function applySetting(settingObj) {
+	hideElements(absoluteElms, settingObj.containers.absolute.hidden);
+	hideElements(resizeElms, settingObj.containers.resize.hidden);
+	hideElements(hundredElms, settingObj.containers.hundred.hidden);
+	hideElements(endElms, settingObj.containers.end.hidden);
+	
+	setElmsSize(resizeElms, settingObj.containers.resize.size.width, settingObj.containers.resize.size.height);
+	setElmsSize(absoluteElms, settingObj.containers.absolute.size.width, settingObj.containers.absolute.size.height);
+
+	checkCheckbox(absolutePaddingCheckbox, settingObj.absolutePadding);
+	checkCheckbox(minMaxCheckbox, settingObj.minMax);
+	
+	setDropdownValue(widthDropdown, settingObj.width);
+	setDropdownValue(heightDropdown, settingObj.height);
+	setDropdownValue(paddingDropdown, settingObj.padding);
+	setDropdownValue(marginDropdown, settingObj.margin);
+	setDropdownValue(floatDropdown, settingObj.float);
+	setDropdownValue(envWidthDropdown, settingObj.envWidth);
+	setDropdownValue(envHeightDropdown, settingObj.envHeight);
+	setDropdownValue(directionDropdown, settingObj.dir);
+	setDropdownValue(boxsizingDropdown, settingObj.box);
+	setDropdownValue(borderDropdown, settingObj.border);
+}
+function readSetting() {
+	return {
+		absolutePadding: getCheckboxValue(absolutePaddingCheckbox),
+		minMax: getCheckboxValue(minMaxCheckbox),
+		clip: getCheckboxValue(clipAlwaysCheckbox),
+		dir: getDropdownValue(directionDropdown),
+		box: getDropdownValue(boxsizingDropdown),
+		width: getDropdownValue(widthDropdown),
+		height: getDropdownValue(heightDropdown),
+		float: getDropdownValue(floatDropdown),
+		border: getDropdownValue(borderDropdown),
+		margin: getDropdownValue(marginDropdown),
+		padding: getDropdownValue(paddingDropdown),
+		envWidth: getDropdownValue(envWidthDropdown),
+		envHeight: getDropdownValue(envHeightDropdown),
+		containers: {
+			absolute: {
+				hidden: absoluteElms.first().hasClass('hidden'),
+				size: {
+					width: absoluteElms.first().css('width'),
+					height: absoluteElms.first().css('height'),
+				}
+			},
+			resize: {
+				hidden: resizeElms.first().hasClass('hidden'),
+				size: {
+					width: resizeElms.first().css('width'),
+					height: resizeElms.first().css('height'),
+				}
+			},
+			hundred: {
+				hidden: hundredElms.first().hasClass('hidden')
+			},
+			end: {
+				hidden: endElms.first().hasClass('hidden')
+			},
+		}
+	}
+}
+function resetCapabilities() {	
+	$('.capabilitiesdemo-slot-content').removeAttr('style');
+	$('.capabilitiesdemo-slot-resizer').removeAttr('style');
+	
+	applySetting(defaultSetting);
+}
+
+window.readSetting = readSetting;
+window.applySetting = applySetting;
 
 (function setupCapabilities() {
 	toggleAbsoluteContainerBtn.on('click', function() { 
@@ -352,7 +509,7 @@ var minMaxCheckbox = $('#capabilites-min-max');
 			$('.capabilitiesdemo-slot-resizer').addClass('infinite');
 		$('.capabilitiesdemo-slot-content').removeAttr('style');
 	}).prop('checked', true);
-	paddingAbsoluteCheckbox.on('change', function() { 
+	absolutePaddingCheckbox.on('change', function() { 
 		if($(this).is(":checked")) {
 			plugin.options('paddingAbsolute', true);
 			pluginTextarea.options('paddingAbsolute', true);
@@ -407,36 +564,7 @@ var minMaxCheckbox = $('#capabilites-min-max');
 		pluginTextarea.update();
 	});
 
-	resetBtn.on('click', function() { 
-		$('#capabilites-host-direction > .dropdown-value').text($('#capabilites-host-direction > .dropdown-list > div').first().text());
-		$('#capabilites-host-direction').trigger('dropdownvaluechanged');
-		$('#capabilites-host-boxsizing > .dropdown-value').text($('#capabilites-host-boxsizing > .dropdown-list > div').first().text());
-		$('#capabilites-host-boxsizing').trigger('dropdownvaluechanged');
-		$('#capabilites-host-width > .dropdown-value').text($('#capabilites-host-width > .dropdown-list > div').first().text());
-		$('#capabilites-host-width').trigger('dropdownvaluechanged');
-		$('#capabilites-host-height > .dropdown-value').text($('#capabilites-host-height > .dropdown-list > div').first().text());
-		$('#capabilites-host-height').trigger('dropdownvaluechanged');
-		$('#capabilites-host-float > .dropdown-value').text($('#capabilites-host-float > .dropdown-list > div').first().text());
-		$('#capabilites-host-float').trigger('dropdownvaluechanged');
-		$('#capabilites-host-border > .dropdown-value').text($('#capabilites-host-border > .dropdown-list > div').first().text());
-		$('#capabilites-host-border').trigger('dropdownvaluechanged');
-		$('#capabilites-host-margin > .dropdown-value').text($('#capabilites-host-margin > .dropdown-list > div').first().text());
-		$('#capabilites-host-margin').trigger('dropdownvaluechanged');
-		$('#capabilites-host-padding > .dropdown-value').text($('#capabilites-host-padding > .dropdown-list > div').first().text());
-		$('#capabilites-host-padding').trigger('dropdownvaluechanged');
-		$('#capabilites-env-width > .dropdown-value').text($('#capabilites-env-width > .dropdown-list > div').first().text());
-		$('#capabilites-env-width').trigger('dropdownvaluechanged');
-		$('#capabilites-env-height > .dropdown-value').text($('#capabilites-env-height > .dropdown-list > div').first().text());
-		$('#capabilites-env-height').trigger('dropdownvaluechanged');
-		$('.capabilitiesdemo-absolute').removeClass('hidden');
-		$('.capabilitiesdemo-resize').removeClass('hidden');
-		$('.capabilitiesdemo-hundred').removeClass('hidden');
-		$('.capabilitiesdemo-end').removeClass('hidden');	
-		$('#capabilites-min-max').prop('checked', true).trigger('change');
-		$('#capabilites-padding-absolute').prop('checked', false).trigger('change');
-		$('.capabilitiesdemo-slot-content').removeAttr('style');
-		$('.capabilitiesdemo-slot-resizer').removeAttr('style');
-	});
+	resetBtn.on('click', resetCapabilities);
 	updateBtn.on('click', function() { 
 		plugin.update();
 		pluginTextarea.update();
@@ -449,32 +577,13 @@ var runTestsFunc = (function capabilitiesTests() {
 		failed: []
 	};
 	
-	function objHasFalses(obj) {
-		var hasFalses = false;
-		$.each(obj, function(prop, value) { 
-			if(typeof value === 'object') {
-				hasFalses = objHasFalses(value);
-			}
-			if (value === false || hasFalses) {
-				hasFalses = true;
-				return false;
-			}
-		});
-		return hasFalses;
-	}
-	function getDropdownValue(dropdown) {
-		return dropdown.find('.dropdown-value').first().text();
-	}
-	function getCheckboxValue(checkbox) {
-		return checkbox.prop('checked');
-	}
 	function wait(ms) {
 		return function() { 
 			return new Promise(r => setTimeout(r, ms));
 		};
 	}
 	function isEqualBCR(a, b) {
-		return Math.round(a.width) === Math.round(b.width) && Math.round(a.height) === Math.round(b.height);
+		return Math.floor(a.width) === Math.floor(b.width) && Math.floor(a.height) === Math.floor(b.height);
 	}
 	function getBCR(elm) {
 		var bcr = elm[0].getBoundingClientRect();
@@ -532,43 +641,7 @@ var runTestsFunc = (function capabilitiesTests() {
 					var testFailed = objHasFalses(result);
 					var testResultObj = { 
 						name: name, 
-						setting: {
-							absolutePadding: getCheckboxValue(paddingAbsoluteCheckbox),
-							minMax: getCheckboxValue(minMaxCheckbox),
-							clip: getCheckboxValue(clipAlwaysCheckbox),
-							dir: getDropdownValue(directionDropdown),
-							box: getDropdownValue(boxsizingDropdown),
-							width: getDropdownValue(widthDropdown),
-							height: getDropdownValue(heightDropdown),
-							float: getDropdownValue(floatDropdown),
-							border: getDropdownValue(borderDropdown),
-							margin: getDropdownValue(marginDropdown),
-							padding: getDropdownValue(paddingDropdown),
-							envWidth: getDropdownValue(envWidthDropdown),
-							envHeight: getDropdownValue(envHeightDropdown),
-							containers: {
-								absolute: {
-									hidden: absoluteElms.first().hasClass('hidden'),
-									size: {
-										width: absoluteElms.first().css('width'),
-										height: absoluteElms.first().css('height'),
-									}
-								},
-								resize: {
-									hidden: resizeElms.first().hasClass('hidden'),
-									size: {
-										width: resizeElms.first().css('width'),
-										height: resizeElms.first().css('height'),
-									}
-								},
-								hundred: {
-									hidden: hundredElms.first().hasClass('hidden')
-								},
-								end: {
-									hidden: endElms.first().hasClass('hidden')
-								},
-							}
-						},
+						setting: readSetting(),
 						result: result 
 					};
 					
@@ -584,41 +657,12 @@ var runTestsFunc = (function capabilitiesTests() {
 			});
 		}
 	}
-	function setResizeElmSize(width, height) {
-		var resizeElms = $('.capabilitiesdemo-resize');
-		if(typeof width === 'number') {
-			resizeElms.css('width', width);
-		}
-		if(typeof height === 'number') {
-			resizeElms.css('height', height);
-		}
-	}
-	function hideElement(elm, hide) {
-		if(hide) {
-			elm.addClass('hidden');
-		}
-		else {
-			elm.removeClass('hidden');
-		}
-	}
-	function setDropdownValue(dropdown, value) {
-		dropdown.find('.dropdown-list').first().children().each(function(index, elm) {
-			elm = $(elm);			
-			if(elm.text().toLowerCase() === value.toLowerCase()) {
-				elm.trigger('click');
-			}
-		});
-	}
-	function checkCheckbox(checkbox, checked) {
-		checkbox.prop('checked', checked).trigger('change');
-	}
-	
 
 	//resize
-	var setWideContent = setResizeElmSize.bind(this, 500, 0);
-	var setHighContent = setResizeElmSize.bind(this, 0, 500);
-	var setMinContent = setResizeElmSize.bind(this, 0, 0);
-	var setMaxContent = setResizeElmSize.bind(this, 500, 500);
+	var setWideContent = setElmsSize.bind(this, resizeElms, 500, 0);
+	var setHighContent = setElmsSize.bind(this, resizeElms, 0, 500);
+	var setMinContent = setElmsSize.bind(this, resizeElms, 0, 0);
+	var setMaxContent = setElmsSize.bind(this, resizeElms, 500, 500);
 	
 	var setWidthFixed = setDropdownValue.bind(this, widthDropdown, 'fixed');
 	var setWidthAuto = setDropdownValue.bind(this, widthDropdown, 'auto');
@@ -650,83 +694,24 @@ var runTestsFunc = (function capabilitiesTests() {
 	var setContentBox = setDropdownValue.bind(this, boxsizingDropdown, 'content-box');
 
 	//hide
-	var hideAbsoluteElms = hideElement.bind(this, absoluteElms, true);
-	var hideResizeElms = hideElement.bind(this, resizeElms, true);
-	var hideHundredElms = hideElement.bind(this, hundredElms, true);
-	var hideEndElms = hideElement.bind(this, endElms, true);
+	var hideAbsoluteElms = hideElements.bind(this, absoluteElms, true);
+	var hideResizeElms = hideElements.bind(this, resizeElms, true);
+	var hideHundredElms = hideElements.bind(this, hundredElms, true);
+	var hideEndElms = hideElements.bind(this, endElms, true);
 	
 	//show
-	var showAbsoluteElms = hideElement.bind(this, absoluteElms, false);
-	var showResizeElms = hideElement.bind(this, resizeElms, false);
-	var showHundredElms = hideElement.bind(this, hundredElms, false);
-	var showEndElms = hideElement.bind(this, endElms, false);
+	var showAbsoluteElms = hideElements.bind(this, absoluteElms, false);
+	var showResizeElms = hideElements.bind(this, resizeElms, false);
+	var showHundredElms = hideElements.bind(this, hundredElms, false);
+	var showEndElms = hideElements.bind(this, endElms, false);
 	
 	//checkbox
 	var checkMinMaxCheckbox = checkCheckbox.bind(this, minMaxCheckbox, true);
 	var uncheckMinMaxCheckbox = checkCheckbox.bind(this, minMaxCheckbox, false);
-	var checkAbsolutePaddingCheckbox = checkCheckbox.bind(this, paddingAbsoluteCheckbox, true);
-	var uncheckAbsolutePaddingCheckbox = checkCheckbox.bind(this, paddingAbsoluteCheckbox, false);
-	
-	window.testSetting = function(obj) {
-		resetBtn.trigger('click');
+	var checkAbsolutePaddingCheckbox = checkCheckbox.bind(this, absolutePaddingCheckbox, true);
+	var uncheckAbsolutePaddingCheckbox = checkCheckbox.bind(this, absolutePaddingCheckbox, false);
 		
-		if(obj.containers.absolute.hidden) {
-			absoluteElms.addClass('hidden');
-		}
-		else {
-			absoluteElms.removeClass('hidden');
-		}
-		absoluteElms.css(obj.containers.absolute.size);
-		
-		if(obj.containers.resize.hidden) {
-			resizeElms.addClass('hidden');
-		}
-		else {
-			resizeElms.removeClass('hidden');
-		}
-		resizeElms.css(obj.containers.resize.size);
-		
-		if(obj.containers.hundred.hidden) {
-			hundredElms.addClass('hidden');
-		}
-		else {
-			hundredElms.removeClass('hidden');
-		}
-		
-		if(obj.containers.end.hidden) {
-			endElms.addClass('hidden');
-		}
-		else {
-			endElms.removeClass('hidden');
-		}
-		
-		if(obj.absolutePadding) {
-			checkAbsolutePaddingCheckbox();
-		}
-		else {
-			uncheckAbsolutePaddingCheckbox();
-		}
-		
-		if(obj.minMax) {
-			checkMinMaxCheckbox();
-		}
-		else {
-			uncheckMinMaxCheckbox();
-		}
-		
-		setDropdownValue(widthDropdown, obj.width);
-		setDropdownValue(heightDropdown, obj.height);
-		setDropdownValue(paddingDropdown, obj.padding);
-		setDropdownValue(marginDropdown, obj.margin);
-		setDropdownValue(floatDropdown, obj.float);
-		setDropdownValue(envWidthDropdown, obj.envWidth);
-		setDropdownValue(envHeightDropdown, obj.envHeight);
-		setDropdownValue(directionDropdown, obj.dir);
-		setDropdownValue(boxsizingDropdown, obj.box);
-		setDropdownValue(borderDropdown, obj.border);
-	}
-	
-	function minMaxSizeDetectionTest() {
+	function content() {
 		hideAbsoluteElms();
 		hideHundredElms();
 		hideEndElms();
@@ -735,11 +720,11 @@ var runTestsFunc = (function capabilitiesTests() {
 		setWidthAuto();
 		setHeightAuto();
 		
-		function runContentTest(contentFunc) {
+		function runContentTest(setContentSizeFunc) {
 			return function() { 
 				return new Promise(function(resolve) {
 					Promise.resolve()
-						.then(contentFunc)
+						.then(setContentSizeFunc)
 						.then(testFinished('ContentTest'))
 						.then(resolve);
 				});
@@ -757,86 +742,86 @@ var runTestsFunc = (function capabilitiesTests() {
 			});
 		}
 		
-		function runAllContentTestsWithMinMax() {
-			return new Promise(function(resolve) {
-				Promise.resolve()
-					.then(checkMinMaxCheckbox)
-					.then(runAllContentTests)
-					.then(uncheckMinMaxCheckbox)
-					.then(runAllContentTests)
-					.then(resolve);
-			});
-		}
-		
-		function runAllContentTestsWithMinMaxWithPadding() {
-			return new Promise(function(resolve) {
-				Promise.resolve()
-					.then(uncheckAbsolutePaddingCheckbox)
-					.then(runAllContentTestsWithMinMax)
-					.then(checkAbsolutePaddingCheckbox)
-					.then(runAllContentTestsWithMinMax)
-					.then(resolve);
-			});
-		}
-		
-		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox() {
-			return new Promise(function(resolve) {
-				Promise.resolve()
-					.then(setBorderBox)
-					.then(runAllContentTestsWithMinMaxWithPadding)
-					.then(setContentBox)
-					.then(runAllContentTestsWithMinMaxWithPadding)
-					.then(resolve);
-			});
-		}
-		
-		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings() {
-			return new Promise(function(resolve) {
-				Promise.resolve()
-					.then(setPadding0)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
-					.then(setPadding10)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
-					.then(setPadding20)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
-					.then(setPadding30)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBox)
-					.then(resolve);
-			});
-		}
-		
-		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders() {
-			return new Promise(function(resolve) {
-				Promise.resolve()
-					.then(setBorder2)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
-					.then(setBorder8)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
-					.then(setBorderNone)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddings)
-					.then(resolve);
-			});
-		}
-		
-		function runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBordersWithMargins() {
+		function runAllContentTestsWithMargins() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setMargin0)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(runAllContentTests)
 					.then(setMargin10)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(runAllContentTests)
 					.then(setMargin20)
-					.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBorders)
+					.then(runAllContentTests)
 					.then(resolve);
 			});
 		}
 		
+		function runAllContentTestsWithMarginsWithBorders() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorder2)
+					.then(runAllContentTestsWithMargins)
+					.then(setBorder8)
+					.then(runAllContentTestsWithMargins)
+					.then(setBorderNone)
+					.then(runAllContentTestsWithMargins)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMarginsWithBordersWithPaddings() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setPadding0)
+					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(setPadding10)
+					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(setPadding20)
+					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(setPadding30)
+					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(checkMinMaxCheckbox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddings)
+					.then(uncheckMinMaxCheckbox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddings)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(uncheckAbsolutePaddingCheckbox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(checkAbsolutePaddingCheckbox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorderBox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(setContentBox)
+					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(resolve);
+			});
+		}
+
 		Promise.resolve()
-			.then(runAllContentTestsWithMinMaxWithAbsolutePaddingWithBoxWithPaddingsWithBordersWithMargins)
+			.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox)
 			.then(function() { console.log(tests) });
 	}
 	
-	return minMaxSizeDetectionTest;
+	return content;
 })();
 
 runBtn.on('click', runTestsFunc);
