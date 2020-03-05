@@ -571,8 +571,9 @@ window.applySetting = applySetting;
 	});
 })();
 
-var runTestsFunc = (function capabilitiesTests() {
-	var tests = window.tests = {
+(function capabilitiesTests() {
+	var waitForPluginTime = 100;
+	var testResults = window.testResults = {
 		passed: [],
 		failed: []
 	};
@@ -595,49 +596,11 @@ var runTestsFunc = (function capabilitiesTests() {
 	function compareElmsBCR(a, b) {
 		return isEqualBCR(getBCR(a), getBCR(b));
 	}
-	function testPassed() {
-		var pluginElm = $('#capabilitiesdemo-target');
-		var nativeElm = $('#capabilitiesdemo-native');
-		var pluginTextareaElm = $('#capabilitiesdemo-target-textarea').closest('.os-host-textarea').first();
-		var nativeTextareaElm = $('#capabilitiesdemo-native-textarea');
-		
-		var pluginElmBCR = getBCR(pluginElm);
-		var nativeElmBCR = getBCR(nativeElm);
-		var pluginTextareaElmBCR = getBCR(pluginTextareaElm);
-		var nativeTextareaElmBCR = getBCR(nativeTextareaElm);
-		
-		var generalPassed = isEqualBCR(pluginElmBCR, nativeElmBCR);
-		var textareaPassed = isEqualBCR(pluginTextareaElmBCR, nativeTextareaElmBCR);
-		
-		
-		return {
-			child: {
-				hundred: compareElmsBCR(pluginElm.find(hundredElms), nativeElm.find(hundredElms)),
-				end: compareElmsBCR(pluginElm.find(endElms), nativeElm.find(endElms))
-			},
-			host: {
-				general: {
-					passed: generalPassed,
-					size: {
-						plugin: pluginElmBCR,
-						native: nativeElmBCR
-					}
-				},
-				textarea: {
-					passed: textareaPassed,
-					size: {
-						plugin: pluginTextareaElmBCR,
-						native: nativeTextareaElmBCR
-					}
-				}
-			}
-		};
-	}
-	function testFinished(name) {
+	function testFinished(name, testPassedFunc) {
 		return function() { 
 			return new Promise(function(resolve) {
 				setTimeout(function() { 
-					var result = testPassed();
+					var result = testPassedFunc();
 					var testFailed = objHasFalses(result);
 					var testResultObj = { 
 						name: name, 
@@ -646,14 +609,14 @@ var runTestsFunc = (function capabilitiesTests() {
 					};
 					
 					if(testFailed) {
-						tests.failed.push(testResultObj);
+						testResults.failed.push(testResultObj);
 					}
 					else {
-						tests.passed.push(testResultObj);
+						testResults.passed.push(testResultObj);
 					}
 					
 					resolve();
-				}, 100);
+				}, waitForPluginTime);
 			});
 		}
 	}
@@ -710,8 +673,10 @@ var runTestsFunc = (function capabilitiesTests() {
 	var uncheckMinMaxCheckbox = checkCheckbox.bind(this, minMaxCheckbox, false);
 	var checkAbsolutePaddingCheckbox = checkCheckbox.bind(this, absolutePaddingCheckbox, true);
 	var uncheckAbsolutePaddingCheckbox = checkCheckbox.bind(this, absolutePaddingCheckbox, false);
+	
+	function containersSizeTests() {
+		resetBtn.trigger('click');
 		
-	function content() {
 		hideAbsoluteElms();
 		hideHundredElms();
 		hideEndElms();
@@ -720,111 +685,323 @@ var runTestsFunc = (function capabilitiesTests() {
 		setWidthAuto();
 		setHeightAuto();
 		
-		function runContentTest(setContentSizeFunc) {
+		function testPassed() {
+			var pluginElm = $('#capabilitiesdemo-target');
+			var nativeElm = $('#capabilitiesdemo-native');
+			var pluginTextareaElm = $('#capabilitiesdemo-target-textarea').closest('.os-host-textarea').first();
+			var nativeTextareaElm = $('#capabilitiesdemo-native-textarea');
+			
+			var pluginElmBCR = getBCR(pluginElm);
+			var nativeElmBCR = getBCR(nativeElm);
+			var pluginTextareaElmBCR = getBCR(pluginTextareaElm);
+			var nativeTextareaElmBCR = getBCR(nativeTextareaElm);
+			
+			var generalPassed = isEqualBCR(pluginElmBCR, nativeElmBCR);
+			var textareaPassed = isEqualBCR(pluginTextareaElmBCR, nativeTextareaElmBCR);
+			
+			
+			return {
+				child: {
+					hundred: compareElmsBCR(pluginElm.find(hundredElms), nativeElm.find(hundredElms)),
+					end: compareElmsBCR(pluginElm.find(endElms), nativeElm.find(endElms))
+				},
+				host: {
+					general: {
+						passed: generalPassed,
+						size: {
+							plugin: pluginElmBCR,
+							native: nativeElmBCR
+						}
+					},
+					textarea: {
+						passed: textareaPassed,
+						size: {
+							plugin: pluginTextareaElmBCR,
+							native: nativeTextareaElmBCR
+						}
+					}
+				}
+			};
+		}
+		
+		function runContainersSizeTest(setContentSizeFunc) {
 			return function() { 
 				return new Promise(function(resolve) {
 					Promise.resolve()
 						.then(setContentSizeFunc)
-						.then(testFinished('ContentTest'))
+						.then(testFinished('containersSizeTest', testPassed))
 						.then(resolve);
 				});
 			}
 		}
 		
-		function runAllContentTests() {
+		function runAllContainersSizeTests() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(runContentTest(setMinContent))
-					.then(runContentTest(setMaxContent))
-					.then(runContentTest(setWideContent))
-					.then(runContentTest(setHighContent))
+					.then(runContainersSizeTest(setMinContent))
+					.then(runContainersSizeTest(setMaxContent))
+					.then(runContainersSizeTest(setWideContent))
+					.then(runContainersSizeTest(setHighContent))
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMargins() {
+		function runAllContainersSizeTestsWithMargins() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setMargin0)
-					.then(runAllContentTests)
+					.then(runAllContainersSizeTests)
 					.then(setMargin10)
-					.then(runAllContentTests)
+					.then(runAllContainersSizeTests)
 					.then(setMargin20)
-					.then(runAllContentTests)
+					.then(runAllContainersSizeTests)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMarginsWithBorders() {
+		function runAllContainersSizeTestsWithMarginsWithBorders() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setBorder2)
-					.then(runAllContentTestsWithMargins)
+					.then(runAllContainersSizeTestsWithMargins)
 					.then(setBorder8)
-					.then(runAllContentTestsWithMargins)
+					.then(runAllContainersSizeTestsWithMargins)
 					.then(setBorderNone)
-					.then(runAllContentTestsWithMargins)
+					.then(runAllContainersSizeTestsWithMargins)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMarginsWithBordersWithPaddings() {
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddings() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setPadding0)
-					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
 					.then(setPadding10)
-					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
 					.then(setPadding20)
-					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
 					.then(setPadding30)
-					.then(runAllContentTestsWithMarginsWithBorders)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax() {
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(checkMinMaxCheckbox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddings)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
 					.then(uncheckMinMaxCheckbox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddings)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding() {
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(uncheckAbsolutePaddingCheckbox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
 					.then(checkAbsolutePaddingCheckbox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox() {
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setBorderBox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
 					.then(setContentBox)
-					.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
 					.then(resolve);
 			});
 		}
 
-		Promise.resolve()
-			.then(runAllContentTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox)
-			.then(function() { console.log(tests) });
+		runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox();
 	}
 	
-	return content;
+	function paddingTests() {
+		resetBtn.trigger('click');
+		
+		function getPadding(elm) {
+			return {
+				top: elm.css('padding-top'),
+				right: elm.css('padding-right'),
+				bottom: elm.css('padding-bottom'),
+				left: elm.css('padding-left')
+			}
+		}
+		function getInset(elm) {
+			return {
+				top: elm.css('top'),
+				right: elm.css('right'),
+				bottom: elm.css('bottom'),
+				left: elm.css('left')
+			}
+		}
+		function isTRBLEqual(a, b) {
+			return a.top === b.top &&
+				a.right === b.right &&
+				a.bottom === b.bottom &&
+				a.left === b.left;
+		}
+		function testPassed() {
+			var pluginElm = $('#capabilitiesdemo-target');
+			var nativeElm = $('#capabilitiesdemo-native');
+			var pluginTextareaElm = $('#capabilitiesdemo-target-textarea').closest('.os-host-textarea').first();
+			var nativeTextareaElm = $('#capabilitiesdemo-native-textarea');
+			
+			var generalOsInstance = pluginElm.overlayScrollbars();
+			var textareaOsInstance = $('#capabilitiesdemo-target-textarea').overlayScrollbars();
+			
+			var isPaddingAbsoluteGeneral = generalOsInstance.options().paddingAbsolute;
+			var isPaddingAbsoluteTextarea = textareaOsInstance.options().paddingAbsolute;
+			
+			var generalPaddingElm = $(generalOsInstance.getElements().padding);
+			var generalContentElm = $(generalOsInstance.getElements().content);
+			
+			var textareaPaddingElm = $(textareaOsInstance.getElements().padding);
+			var textareaContentElm = $(textareaOsInstance.getElements().target);
+			
+			var generalPaddingNative = getPadding(pluginElm);
+			var generalPaddingPlugin = isPaddingAbsoluteGeneral ? getInset(generalPaddingElm) : getPadding(generalContentElm);
+			var textareaPaddingNative = getPadding(pluginTextareaElm);
+			var textareaPaddingPlugin = isPaddingAbsoluteTextarea ? getInset(textareaPaddingElm) : getPadding(textareaContentElm);
+			
+			var generalPassed = isTRBLEqual(generalPaddingPlugin, generalPaddingNative);
+			var textareaPassed = isTRBLEqual(textareaPaddingPlugin, textareaPaddingNative);
+			
+			return {
+				general: {
+					passed: generalPassed,
+					padding: {
+						absolute: isPaddingAbsoluteGeneral,
+						plugin: generalPaddingPlugin,
+						native: generalPaddingNative
+					}
+				},
+				textarea: {
+					passed: textareaPassed,
+					padding: {
+						absolute: isPaddingAbsoluteTextarea,
+						plugin: textareaPaddingPlugin,
+						native: textareaPaddingNative
+					}
+				}
+			};
+		}
+		
+		function runPaddingTest(setContentSizeFunc) {
+			return function() { 
+				return new Promise(function(resolve) {
+					Promise.resolve()
+						.then(testFinished('runPaddingTest', testPassed))
+						.then(resolve);
+				});
+			}
+		}
+		
+		function runAllContainersSizeTests() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(runContainersSizeTest(setMinContent))
+					.then(runContainersSizeTest(setMaxContent))
+					.then(runContainersSizeTest(setWideContent))
+					.then(runContainersSizeTest(setHighContent))
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMargins() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setMargin0)
+					.then(runAllContainersSizeTests)
+					.then(setMargin10)
+					.then(runAllContainersSizeTests)
+					.then(setMargin20)
+					.then(runAllContainersSizeTests)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMarginsWithBorders() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorder2)
+					.then(runAllContainersSizeTestsWithMargins)
+					.then(setBorder8)
+					.then(runAllContainersSizeTestsWithMargins)
+					.then(setBorderNone)
+					.then(runAllContainersSizeTestsWithMargins)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddings() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setPadding0)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
+					.then(setPadding10)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
+					.then(setPadding20)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
+					.then(setPadding30)
+					.then(runAllContainersSizeTestsWithMarginsWithBorders)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(checkMinMaxCheckbox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
+					.then(uncheckMinMaxCheckbox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(uncheckAbsolutePaddingCheckbox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(checkAbsolutePaddingCheckbox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(resolve);
+			});
+		}
+		
+		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox() {
+			return new Promise(function(resolve) {
+				Promise.resolve()
+					.then(setBorderBox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(setContentBox)
+					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(resolve);
+			});
+		}
+
+		console.log(testPassed());
+	}
+	
+	window.tests = function() {
+		Promise.resolve()
+			//.then(containersSizeTests)
+			.then(paddingTests)
+	}
 })();
 
-runBtn.on('click', runTestsFunc);
+runBtn.on('click', function() { 
+	window.tests();
+});
 
 
 
