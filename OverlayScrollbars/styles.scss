@@ -1397,6 +1397,12 @@ body.resizing * {
 	padding: 10px 20px;
 	position: relative;
 }
+@media (min-width: $shrink-width) and (max-width: 1000px) {
+	.capabilitiesdemo-slot {
+        float: none;
+        width: auto;
+    }
+}
 .capabilitiesdemo-slot-1 {
 	z-index: 4;
 }

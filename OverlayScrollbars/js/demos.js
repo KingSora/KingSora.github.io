@@ -1051,8 +1051,8 @@ window.applySetting = applySetting;
                         }
                     }
                     log(JSON.stringify(testResults.failed))
+                    console.log(testResults);
                 })
-                .then(function() { console.log(testResults) })
                 .then(resolve);
         });
     }
