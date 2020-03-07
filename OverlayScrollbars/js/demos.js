@@ -1,3 +1,7 @@
+if(!window.Promise) {
+    !function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n():"function"==typeof define&&define.amd?define(n):n()}(0,function(){"use strict";function e(e){var n=this.constructor;return this.then(function(t){return n.resolve(e()).then(function(){return t})},function(t){return n.resolve(e()).then(function(){return n.reject(t)})})}function n(e){return!(!e||"undefined"==typeof e.length)}function t(){}function o(e){if(!(this instanceof o))throw new TypeError("Promises must be constructed via new");if("function"!=typeof e)throw new TypeError("not a function");this._state=0,this._handled=!1,this._value=undefined,this._deferreds=[],c(e,this)}function r(e,n){for(;3===e._state;)e=e._value;0!==e._state?(e._handled=!0,o._immediateFn(function(){var t=1===e._state?n.onFulfilled:n.onRejected;if(null!==t){var o;try{o=t(e._value)}catch(r){return void f(n.promise,r)}i(n.promise,o)}else(1===e._state?i:f)(n.promise,e._value)})):e._deferreds.push(n)}function i(e,n){try{if(n===e)throw new TypeError("A promise cannot be resolved with itself.");if(n&&("object"==typeof n||"function"==typeof n)){var t=n.then;if(n instanceof o)return e._state=3,e._value=n,void u(e);if("function"==typeof t)return void c(function(e,n){return function(){e.apply(n,arguments)}}(t,n),e)}e._state=1,e._value=n,u(e)}catch(r){f(e,r)}}function f(e,n){e._state=2,e._value=n,u(e)}function u(e){2===e._state&&0===e._deferreds.length&&o._immediateFn(function(){e._handled||o._unhandledRejectionFn(e._value)});for(var n=0,t=e._deferreds.length;t>n;n++)r(e,e._deferreds[n]);e._deferreds=null}function c(e,n){var t=!1;try{e(function(e){t||(t=!0,i(n,e))},function(e){t||(t=!0,f(n,e))})}catch(o){if(t)return;t=!0,f(n,o)}}var a=setTimeout;o.prototype["catch"]=function(e){return this.then(null,e)},o.prototype.then=function(e,n){var o=new this.constructor(t);return r(this,new function(e,n,t){this.onFulfilled="function"==typeof e?e:null,this.onRejected="function"==typeof n?n:null,this.promise=t}(e,n,o)),o},o.prototype["finally"]=e,o.all=function(e){return new o(function(t,o){function r(e,n){try{if(n&&("object"==typeof n||"function"==typeof n)){var u=n.then;if("function"==typeof u)return void u.call(n,function(n){r(e,n)},o)}i[e]=n,0==--f&&t(i)}catch(c){o(c)}}if(!n(e))return o(new TypeError("Promise.all accepts an array"));var i=Array.prototype.slice.call(e);if(0===i.length)return t([]);for(var f=i.length,u=0;i.length>u;u++)r(u,i[u])})},o.resolve=function(e){return e&&"object"==typeof e&&e.constructor===o?e:new o(function(n){n(e)})},o.reject=function(e){return new o(function(n,t){t(e)})},o.race=function(e){return new o(function(t,r){if(!n(e))return r(new TypeError("Promise.race accepts an array"));for(var i=0,f=e.length;f>i;i++)o.resolve(e[i]).then(t,r)})},o._immediateFn="function"==typeof setImmediate&&function(e){setImmediate(e)}||function(e){a(e,0)},o._unhandledRejectionFn=function(e){void 0!==console&&console&&console.warn("Possible Unhandled Promise Rejection:",e)};var l=function(){if("undefined"!=typeof self)return self;if("undefined"!=typeof window)return window;if("undefined"!=typeof global)return global;throw Error("unable to locate global object")}();"Promise"in l?l.Promise.prototype["finally"]||(l.Promise.prototype["finally"]=e):l.Promise=o});
+}
+
 window._framework.defaultPagePath = 'basic';
 window._framework.onPagePathChange = function(obj) { 
 	if(!obj.isEmpty && obj.path[0] === 'callbacks') {
@@ -578,12 +582,40 @@ window.applySetting = applySetting;
 		failed: []
 	};
 	
+    function beforeEveryTest() {
+        resetBtn.trigger('click');
+    }
+    function afterEveryTest() {
+        console.log(testResults);
+    }
 	function wait(ms) {
 		return function() { 
-			return new Promise(r => setTimeout(r, ms));
+			return new Promise(function(r) { setTimeout(r, ms) });
 		};
 	}
-	function isEqualBCR(a, b) {
+	function getPadding(elm) {
+        return {
+            top: elm.css('padding-top'),
+            right: elm.css('padding-right'),
+            bottom: elm.css('padding-bottom'),
+            left: elm.css('padding-left')
+        }
+    }
+    function getInset(elm) {
+        return {
+            top: elm.css('top'),
+            right: elm.css('right'),
+            bottom: elm.css('bottom'),
+            left: elm.css('left')
+        }
+    }
+    function isTRBLEqual(a, b) {
+        return a.top === b.top &&
+            a.right === b.right &&
+            a.bottom === b.bottom &&
+            a.left === b.left;
+    }
+    function isEqualBCR(a, b) {
 		return Math.floor(a.width) === Math.floor(b.width) && Math.floor(a.height) === Math.floor(b.height);
 	}
 	function getBCR(elm) {
@@ -675,16 +707,19 @@ window.applySetting = applySetting;
 	var uncheckAbsolutePaddingCheckbox = checkCheckbox.bind(this, absolutePaddingCheckbox, false);
 	
 	function containersSizeTests() {
-		resetBtn.trigger('click');
-		
-		hideAbsoluteElms();
-		hideHundredElms();
-		hideEndElms();
-		
-		setFloatLeft();
-		setWidthAuto();
-		setHeightAuto();
-		
+        
+        function prepare() {
+            console.log("containersSizeTests");
+
+            hideAbsoluteElms();
+            hideHundredElms();
+            hideEndElms();
+            
+            setFloatLeft();
+            setWidthAuto();
+            setHeightAuto();
+        }
+        
 		function testPassed() {
 			var pluginElm = $('#capabilitiesdemo-target');
 			var nativeElm = $('#capabilitiesdemo-native');
@@ -820,34 +855,24 @@ window.applySetting = applySetting;
 			});
 		}
 
-		runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox();
+		return function() {
+            return new Promise(function(resolve) {
+                Promise.resolve()
+                    .then(beforeEveryTest)
+                    .then(prepare)
+                    .then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox)
+                    .then(afterEveryTest)
+                    .then(resolve);
+            });
+        }
 	}
 	
 	function paddingTests() {
-		resetBtn.trigger('click');
-		
-		function getPadding(elm) {
-			return {
-				top: elm.css('padding-top'),
-				right: elm.css('padding-right'),
-				bottom: elm.css('padding-bottom'),
-				left: elm.css('padding-left')
-			}
-		}
-		function getInset(elm) {
-			return {
-				top: elm.css('top'),
-				right: elm.css('right'),
-				bottom: elm.css('bottom'),
-				left: elm.css('left')
-			}
-		}
-		function isTRBLEqual(a, b) {
-			return a.top === b.top &&
-				a.right === b.right &&
-				a.bottom === b.bottom &&
-				a.left === b.left;
-		}
+        
+        function prepare() {
+            console.log("paddingTests");
+        }
+        
 		function testPassed() {
 			var pluginElm = $('#capabilitiesdemo-target');
 			var nativeElm = $('#capabilitiesdemo-native');
@@ -878,7 +903,6 @@ window.applySetting = applySetting;
 				general: {
 					passed: generalPassed,
 					padding: {
-						absolute: isPaddingAbsoluteGeneral,
 						plugin: generalPaddingPlugin,
 						native: generalPaddingNative
 					}
@@ -886,7 +910,6 @@ window.applySetting = applySetting;
 				textarea: {
 					passed: textareaPassed,
 					padding: {
-						absolute: isPaddingAbsoluteTextarea,
 						plugin: textareaPaddingPlugin,
 						native: textareaPaddingNative
 					}
@@ -894,109 +917,145 @@ window.applySetting = applySetting;
 			};
 		}
 		
-		function runPaddingTest(setContentSizeFunc) {
+		function runPaddingTest(paddingSizeFunc) {
 			return function() { 
 				return new Promise(function(resolve) {
 					Promise.resolve()
-						.then(testFinished('runPaddingTest', testPassed))
+						.then(paddingSizeFunc)
+						.then(testFinished('paddingTest', testPassed))
 						.then(resolve);
 				});
 			}
 		}
 		
-		function runAllContainersSizeTests() {
+		function runAllPaddingTests() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(runContainersSizeTest(setMinContent))
-					.then(runContainersSizeTest(setMaxContent))
-					.then(runContainersSizeTest(setWideContent))
-					.then(runContainersSizeTest(setHighContent))
+					.then(runPaddingTest(setPadding0))
+					.then(runPaddingTest(setPadding10))
+					.then(runPaddingTest(setPadding20))
+					.then(runPaddingTest(setPadding30))
 					.then(resolve);
 			});
 		}
 		
-		function runAllContainersSizeTestsWithMargins() {
+		function runAllPaddingTestsWithSizeChange() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(setMargin0)
-					.then(runAllContainersSizeTests)
-					.then(setMargin10)
-					.then(runAllContainersSizeTests)
-					.then(setMargin20)
-					.then(runAllContainersSizeTests)
+					.then(setMinContent)
+					.then(runAllPaddingTests)
+					.then(setWideContent)
+					.then(runAllPaddingTests)
+                    .then(setHighContent)
+					.then(runAllPaddingTests)
+					.then(setMaxContent)
+					.then(runAllPaddingTests)
 					.then(resolve);
 			});
 		}
-		
-		function runAllContainersSizeTestsWithMarginsWithBorders() {
+        
+        function runAllPaddingTestsWithSizeChangeWithBorderMargin() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(setBorder2)
-					.then(runAllContainersSizeTestsWithMargins)
-					.then(setBorder8)
-					.then(runAllContainersSizeTestsWithMargins)
 					.then(setBorderNone)
-					.then(runAllContainersSizeTestsWithMargins)
+                    .then(setMargin0)
+					.then(runAllPaddingTestsWithSizeChange)
+					.then(setBorder2)
+                    .then(setMargin10)
+					.then(runAllPaddingTestsWithSizeChange)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddings() {
+		function runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSize() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(setPadding0)
-					.then(runAllContainersSizeTestsWithMarginsWithBorders)
-					.then(setPadding10)
-					.then(runAllContainersSizeTestsWithMarginsWithBorders)
-					.then(setPadding20)
-					.then(runAllContainersSizeTestsWithMarginsWithBorders)
-					.then(setPadding30)
-					.then(runAllContainersSizeTestsWithMarginsWithBorders)
+					.then(function() {
+                        setFloatNone();
+                        setWidthFixed();
+                        setHeightFixed();
+                    })
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMargin)
+					.then(function() {
+                        setFloatLeft();
+                        setWidthAuto();
+                        setHeightAuto();
+                    })
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMargin)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax() {
+		function runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMax() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(checkMinMaxCheckbox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSize)
 					.then(uncheckMinMaxCheckbox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddings)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSize)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding() {
+		function runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMaxWithAbsolutePadding() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
-					.then(uncheckAbsolutePaddingCheckbox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
 					.then(checkAbsolutePaddingCheckbox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMax)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMax)
+					.then(uncheckAbsolutePaddingCheckbox)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMax)
 					.then(resolve);
 			});
 		}
 		
-		function runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePaddingWithBox() {
+		function runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMaxWithAbsolutePaddingWithBox() {
 			return new Promise(function(resolve) {
 				Promise.resolve()
 					.then(setBorderBox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMaxWithAbsolutePadding)
 					.then(setContentBox)
-					.then(runAllContainersSizeTestsWithMarginsWithBordersWithPaddingsWithMinMaxWithAbsolutePadding)
+					.then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMaxWithAbsolutePadding)
 					.then(resolve);
 			});
 		}
-
-		console.log(testPassed());
+		
+        return function() {
+            return new Promise(function(resolve) {
+                Promise.resolve()
+                    .then(beforeEveryTest)
+                    .then(prepare)
+                    .then(runAllPaddingTestsWithSizeChangeWithBorderMarginWithFixedAutoSizeWithMinMaxWithAbsolutePaddingWithBox)
+                    .then(afterEveryTest)
+                    .then(resolve);
+            });
+        }
 	}
 	
 	window.tests = function() {
-		Promise.resolve()
-			//.then(containersSizeTests)
-			.then(paddingTests)
-	}
+        return new Promise(function(resolve) {
+            Promise.resolve()
+                .then(containersSizeTests())
+                .then(paddingTests())
+                .then(function() {
+                    function log(str, blockSize) {
+                        // blockSize is a parameter only to support the tests.
+                        if (blockSize === undefined) {
+                            blockSize = 1024;
+                        }
+                        var limit = Math.floor(str.length / blockSize);
+                        for (var k = 0; k < limit+1; k++) {
+                          if (k == limit)
+                              console.log(str.substring(blockSize*k, str.length));
+                          else
+                              console.log(str.substring(blockSize*k, blockSize*(k+1)));
+                        }
+                    }
+                    log(JSON.stringify(testResults.failed))
+                })
+                .then(function() { console.log(testResults) })
+                .then(resolve);
+        });
+    }
 })();
 
 runBtn.on('click', function() { 
