@@ -3427,7 +3427,6 @@ OverlayScrollbars(document.getElementById(otherId), { });
     supportTransition       : <span class="txtc-secondary-color">boolean</span>,
     restrictedMeasuring     : <span class="txtc-secondary-color">boolean</span>,
     nativeScrollbarStyling  : <span class="txtc-secondary-color">boolean</span>,
-    cssCalc                 : <span class="txtc-secondary-color">string | null</span>,
     nativeScrollbarSize : {
         x : <span class="txtc-secondary-color">number</span>,
         y : <span class="txtc-secondary-color">number</span>
@@ -3530,14 +3529,6 @@ OverlayScrollbars(document.getElementById(otherId), { });
                                     </div>
                                     <div class="plainobjectproperty-documentation-box">
                                         <div class="plainobjectproperty-documentation-box-title">
-                                            cssCalc
-                                        </div>
-                                        <div class="plainobjectproperty-documentation-box-content">
-                                            The name for the <a href="https://www.w3schools.com/cssref/func_calc.asp" target="_blank" rel="noopener" class="inline-btn">CSS calc function</a> (with vendor prefix) or null if the CSS calc function is not supported. 
-                                        </div>
-                                    </div>
-                                    <div class="plainobjectproperty-documentation-box">
-                                        <div class="plainobjectproperty-documentation-box-title">
                                             nativeScrollbarSize.x
                                         </div>
                                         <div class="plainobjectproperty-documentation-box-content">
@@ -3605,6 +3596,15 @@ OverlayScrollbars(document.getElementById(otherId), { });
                                             But if you set your direction to "right to left" (rtl), it can be that the scrollLeft offset goes from (0) to a negative value which respresents the maximum scrollLeft offset.<br>
                                             This is not specified anywhere so browsers are handling this differently.<br>
                                             "n" is shorthand for "negate" - we need to negate the scrollLeft offset to normalize RTL scroll.
+                                        </div>
+                                    </div>
+                                    <div class="plainobjectproperty-documentation-box">
+                                        <div class="plainobjectproperty-documentation-box-title">
+                                            cssCalc
+                                        </div>
+                                        <div class="plainobjectproperty-documentation-box-content">
+                                            <span><code class="code-inline">deprecated since v1.12.0</code></span><br>
+                                            The name for the <a href="https://www.w3schools.com/cssref/func_calc.asp" target="_blank" rel="noopener" class="inline-btn">CSS calc function</a> (with vendor prefix) or null if the CSS calc function is not supported. 
                                         </div>
                                     </div>
                                 </div>
