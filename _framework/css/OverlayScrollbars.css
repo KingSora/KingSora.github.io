@@ -2,13 +2,13 @@
  * OverlayScrollbars
  * https://github.com/KingSora/OverlayScrollbars
  *
- * Version: 1.11.0
+ * Version: 1.13.0
  *
  * Copyright KingSora | Rene Haas.
  * https://github.com/KingSora
  *
  * Released under the MIT license.
- * Date: 29.02.2020
+ * Date: 02.08.2020
  */
 
 /*
@@ -149,7 +149,6 @@ body.os-dragging * {
     right: 0;
     width: auto !important;
     height: auto !important;
-    z-index: 1;
 }
 .os-host-overflow > .os-padding {
     overflow: hidden;
