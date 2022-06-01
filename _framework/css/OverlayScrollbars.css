@@ -117,7 +117,7 @@ body.os-dragging * {
 }
 .os-viewport-native-scrollbars-invisible#os-dummy-scrollbar-size,
 .os-viewport-native-scrollbars-invisible.os-viewport {
-    scrollbar-width: none !important;
+    /*scrollbar-width: none !important;*/
 }
 .os-viewport-native-scrollbars-invisible#os-dummy-scrollbar-size::-webkit-scrollbar,
 .os-viewport-native-scrollbars-invisible.os-viewport::-webkit-scrollbar,
